@@ -1,0 +1,24 @@
+rpad (0.9.3) unstable; urgency=low
+
+  * Minor bugfixes
+
+ -- Tom Short <tshort@eprisolutions.com>  Mon, 11 Apr 2005 20:00:00 -0500
+
+rpad (0.9.1) unstable; urgency=low
+
+  * First debian version based on the Rpad package of Rpad
+
+  * Includes the local version plus the server version
+
+  * The server version is installed in /var/www/Rpad, and the apache and
+  apache2 config files are stuffed in /etc/apache/conf.d and
+  /etc/apache2/conf.d 
+
+ -- Tom Short <tshort@eprisolutions.com>  Mon, 11 Apr 2005 20:00:00 -0500
+
+rpad (0.9.0) unstable; urgency=low
+
+  * Initial debian release
+
+ -- Tom Short <tshort@eprisolutions.com>  Sun, 09 Dec 2004 20:16:00 -0500
+

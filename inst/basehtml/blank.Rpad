@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions.com
+(c) Copyright 2005. by EPRI Solutions, Inc.
+
+Licence
+=======
+
+    This is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+
+The file COPYING in the Rpad top-level directory is a copy of the 'GNU
+General Public License'.
+ -->
+
+  <head>
+    <title>Rpad page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="editor/Rpad_loader.js">
+    </script>
+  </head>
+
+  <body>
+<p>Enter text here<br></p>
+
+<div class="Rpad_input" rpad_type="R">
+# Enter R code here:<br>
+<br>
+</div>
+
+<p><br></p>
+<p><span contenteditable="false"><input onclick="javascript:top.Rpad_calculate()" value="Calculate [F9]" type=
+      "button"></span>
+</p>
+
+<br>
+
+  </body>
+</html>
+

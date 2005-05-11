@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bindings xmlns="http://www.mozilla.org/xbl">
+<!--
+	This work is licensed under a Creative Commons License.
+
+	You are free:
+
+	to copy, distribute, display, and perform the work
+	to make derivative works
+	to make commercial use of the work
+
+	Under the following conditions:
+
+	Attribution. You must give the original author credit
+
+	Author:  Dean Edwards/2004
+	Web:     http://dean.edwards.name/
+
+	License: http://creativecommons.org/licenses/by/1.0/
+-->
+<!-- keeping code tidy! -->
+
+<!-- provide mozilla browsers with a mechanism for
+     utilising microsoft's dhtml behaviors -->
+
+<!-- version 1.0.5 2004/05/28 -->
+
+<!-- reference your own behaviors here -->
+<binding id="combo.htc" extends="#behavior"/>
+<binding id="combobox.htc" extends="#behavior"/>
+<binding id="R-highlight.htc" extends="#behavior"/>
+<binding id="tablesort.htc" extends="#behavior"/>
+<binding id="tree.htc" extends="#behavior"/>
+<binding id="hilite.htc" extends="#behavior"/>
+<binding id="tabbox.htc" extends="#behavior"/>
+<binding id="tabbox2.htc" extends="#behavior"/>
+<binding id="tabbox3.htc" extends="#behavior"/>
+<binding id="searchlist.htc" extends="#behavior"/>
+<binding id="tooltip.htc" extends="#behavior"/>
+<binding id="pane.htc" extends="#behavior"/>
+
+<!-- example: binding to a table -->
+<binding id="test-table.htc" extends="#-moz-table">
+<implementation><constructor>
+// hard-code the table's behavior file
+this.addBehavior("test-table.htc");
+</constructor></implementation>
+</binding>
+
+<!-- DO NOT DELETE THIS -->
+<!-- begin: "default" behaviors -->
+<binding id="-moz-ie" extends="#behavior"/>
+<binding id="-moz-table" extends="#behavior"><implementation><constructor>if(getComputedStyle(this,null).MozBinding=="none")this.addBehavior("-moz-table")</constructor></implementation></binding>
+<!-- end: "default" behaviors -->
+<!-- begin: dhtml behaviors loader -->
+<binding id="behavior">
+<implementation>
+<constructor><![CDATA[
+if(!this.addBehavior)eval(function(A,r,s,e,n,a,l){s=function(e){return((e<a)?'':s(e/a))+n[l[176]](e%a+161)};while(++r<266)l[s(r)]=(r<177)?l[r]:(r<187)?'/'+l[r]+'/':'"'+l[r]+'"';while(A.match(e))A=A.replace(e,function(w){return l[w]});return A}('¬.«=«;«=¢(){if(¶[0]){¶[0].«=¶[0].¢ñ=¶.Ì;£ ¶[0]}£ ¢¬(¬).¯(¢ó,¡.§).¯(¢ô,¢ý)};«(«);Å.Î={¢þ:À ¬,¢ÿ:À ¬,£¡:¢(){¿(¡){¥ i,j;if(¢´)¢´.Ã(0);º(i=0;i<¢³.É;i++)¢³[i].Ã(0);º(i=0;i<ß.É;i++){º(j=0;j<ß[i].¢².É;j++){ß[i].¢²[j].Ã(0)}}if(¢±)¢±.Ã(0)}}};ÿ.¤.Ã=«(¢ Ã(·){if(·===0)¿(×(¡,¹).¢ë)·=¯(¢õ,£¢).¯(¢ö,££).¯(¢÷,£¢);if(!Å.Î[·]){¥ Ç=£¤;¥ Ú=¢øg;¥ Ù=¢ùg;¥ Ï=À ¢ê;¥ ¢ª=À ¢é;¢ Ý(¢®){¥ Ð=¢®.Ð.õ();£ Ð.»(Ð.¢«(£¥)+1)};¢ ¢¨(Þ){¿(Þ){¢è(Ý(Þ)){Ê £¦:¥ °=ª(£§)||£¢;°+=(°)?£¨:ª(£©);°=£ª+°+£«;£(ª(£¬)||£­)+£®+ª(£¯).»(2)+£°+°+£±;Ê £²:¥ §=ª(£³);¥ Â=ª(£´)||£µ+§+£¶;Â=£·+§+£°+Â+£¸;¥ ´=ª(£¹)||£¢;if(´)´+=£º;´=£»+´+£¼+§+£½;´=£¾+§+£°+´+£¸;¥ ¢­=£¿+§+£À+§+£Á+ª(£Â);£ Â+Ç+´+Ç+¢­;Ê £Ã:£ £¿+ª(£³)+£Ä+ª(£³);Ê £¯:¥ id=ª(£Å);£(id)?£Æ+id+£Ç+ª(£³)+£È:£¢;Ê £É:¢à:£ £¢}}};¢ ¢§(¬){¿(¢¬(¬))£ »(¢«(£Ê)+1,¢ß(£«))};Ï.¢Þ(£´,·,¸);Ï.¢Ý(¹);¥ ¢©=¢ª.¢Ü(Ï.¢Û,£Ë);¥ Û=[];¥ È=¢©.¢Ø.Ü;¥ ¨=£¢;º(¥ i=0;i<È.É;i++){¿(È[i])if(æ==å.ä){if(Ý(È[i])==£Ì){º(¥ j=0;j<Ü.É;j++)¨+=Ü[j].¢×}¢Ö{Û.¢¦(¢¨(È[i]))}}}¨=¢§(À ¬(¨));¨=¨.¯(¢úg,£Í);¥ $=[Û.¢¤(Ç)];¢ $¯(Á){£ £Î+$.¢¦(Á)};¢£(¨.Á(Ú))¨=¨.¯(Ú,$¯);¥ ¢¥=¨.Á(Ù)||[];¨=¨.¯(Ù,£¢);¨=¢¥.¢Ô(£Ï,¨).¢¤(Ç);¢£(¨.Á(¢û))¨=¨.¯(¢ûg,¢(Á,¢¢){£ $[¢¢-1]});¨+=£Ð;Å.Î[·]=À ¬(£­,£Ñ+¨+£«)}Å.Î[·].¢¡(¡,¡)});ÿ.¤.þ=«(¢ þ(¢Ñ){});³.¤.__¦(£Ò,¢(){£ Í(¡.ü)||0});³.¤.__µ(£Ò,¢(©){¡.ü=©+£Ó});³.¤.__¦(£Ô,¢(){£ Í(¡.ú)||0});³.¤.__µ(£Ô,¢(©){¡.ú=©+£Ó});³.¤.__¦(£Õ,¢(){£ Í(¡.ø)||0});³.¤.__µ(£Õ,¢(©){¡.ø=©+£Ó});³.¤.__¦(£Ö,¢(){£ Í(¡.ö)||0});³.¤.__µ(£Ö,¢(©){¡.ö=©+£Ó});¢Ð{¥ Æ=×(¡,¹);Æ=Æ.¢Ï}¢Î(¢Í){¥ ô=¢üg;¢ ó($){£ £×+$.õ()};¢ ò(¾){£ ¾.¯(ô,ó)};º(¥ ¾ in ¡.Æ){if(è ¡.Æ[¾]==£Ø){³.¤.__¦(¾,¢(){£ ¡.¢Ë(ò(¾))})}}}ñ.¤.__¦(£Ù,¢(){£ ¡.ï(£Ú)});ñ.¤.¼=¢ ¼(){£ Å.¢Ê(£Û)};­.¤.__¦(£Ù,¢(){£ ¡.ï(£Ú)});­.¤.__¦(£Ü,¢(){£(¡.Ó==¡.Ö)?¹:¡.Ó});­.¤.__¦(£Ý,¢(){if(!¶.Ì.Ø)¶.Ì.Ø=0;¥ ½=£Þ+¶.Ì.Ø++;î[½]=¡;¡.__¦(£Ý,¢(){£ ½});£ ½});­.¤.__¦(£ß,¢(){£ ×(¡,¹)});­.¤.__¦(£à,¢(){});­.¤.__¦(£á,¢(){£ ¡.ì});­.¤.__µ(£á,¢(©){¡.ì=©});­.¤.ë=¢ ë(§,°){¡.ê(§.»(2),°,¸)};­.¤.é=¢ é(§,°){¡.¢Å(§.»(2),°,¸)};­.¤.¼=¢ ¼(){£ ¡.Ö.¼()};­.¤.Ä=¢ Ä(§,®){if(!®)®=¡.Ö.¼();®.¢Ä(§.»(2),¸,¸);¡.¢Ã(®);if(è ¡[§]==£â)¡[§]()};­.¤.Õ=¢ Õ(±){£ ¢Â(±==¡||(±&&¡.Õ(±.ç)))};².¤.__¦(£ã,¢(){£(¡.Ô.æ==å.ä)?¡.Ô:¡.Ô.Ó});².¤.__¦(£ä,¢(){£(¡.Ë==£å)?¡.â:(¡.Ë==£æ)?¡.Ò:¹});².¤.__¦(£ç,¢(){£(¡.Ë==£æ)?¡.â:(¡.Ë==£å)?¡.Ò:¹});².¤.__¦(£è,¢(){£(¡.à==1)?1:(¡.à==2)?4:2});².¤.__¦(£é,¢(){£ ¢¾});².¤.__µ(£é,¢(©){if(¡.¢½&&!©){¡.¢¼();¡.__¦(£é,¢(){£ ¸})}});².¤.__µ(£ê,¢(©){if(©)¡.¢º()});².¤.__¦(£ë,¢(){£ ¡.¢¸});².¤.__¦(£ì,¢(){£ ¡.¢¶});«=¬.«;¬.«=¬.¤.«;',-1,0,/[\xa1-\xff]+/g,String,95,'this`function`return`prototype`var`defineGetter__`name`script`value`getAttribute`toString`Function`HTMLElement`event`replace`handler`element`Event`CSSStyleDeclaration`put`defineSetter__`arguments`url`false`null`for`slice`createEventObject`uniqueID`propertyName`with`new`match`get`addBehavior`fireEvent`document`style`SEPARATOR`behaviorNodes`length`case`type`callee`parseInt`behaviorUrns`httpRequest`tagName`returnValue`srcElement`parentNode`target`contains`ownerDocument`getComputedStyle`count`FUNCTIONS`BLOCKS`declarations`childNodes`getTagName`behaviorNode`rows`which`mouseover`relatedTarget`mouseout`ELEMENT_NODE`Node`nodeType`parentElement`typeof`removeEvent`addEventListener`attachEvent`textContent`innerText`window`getElementsByTagName`all`HTMLDocument`cssName`DASH_LOWER`UPPER`toLowerCase`width`pixelWidth`top`pixelTop`height`pixelHeight`left`pixelLeft`removeBehavior`Element`call`index`while`join`functions`push`getFunctionBody`asDeclaration`behaviorDOM`domParser`indexOf`String`init`node`x5c`x2f`tFoot`cells`tBodies`tHead`moz`layerY`offsetY`layerX`offsetX`stopPropagation`cancelBubble`preventDefault`cancelable`true`button`toElement`fromElement`Boolean`dispatchEvent`initEvent`removeEventListener`runtimeStyle`currentStyle`moz_id`Events`createEvent`getPropertyValue`string`error`catch`color`try`cookie`ondocumentready`oncontentready`concat`x5cx23`else`nodeValue`documentElement`xml`text`responseText`parseFromString`send`open`lastIndexOf`default`defaults`fire`method`setAttribute`property`onevent`attach`switch`DOMParser`XMLHttpRequest`MozBinding`table`none`edwards`dean`http`toSource`fromCharCode`¬`\\[[^\\]]*\\]`^·\\(`([\\¢°\\¢¯])[^#\\¢°\\¢¯]+#`\\)$`\\{[^\\{\\}]*\\}`\\n\\s*¢[^\\n]*\\n`#`#(\\d+)`[A-Z]`[¢ð://¢ï.¢î.§/]`¢í`-¢µ-ie`-¢µ-¢ì``$1`;`:`¢ç`°`()`¢æ`¢(®){î.®=®;£ `}`º`±`.ê(\x27`®`\x27,`,¸)`¢å`§`Â`¢(){£ ª(\x27`\x27)}`__¦(\x27`)`´`.¢¡(±,©);`¢(©){`¢ä(\x27`\x27,©)}`__µ(\x27`±.`=ª(\x27`\x27)||`©`¢ã`=`id`¥ `={¢â:¢(®){±.Ä(\x27`\x27,®)}}`¢á`{`¢Ú/¢Ù`¨`\\¢Õ`#`#1`;Ä(\x27¢Ó\x27);Ä(\x27¢Ò\x27)`¿(¡){`ý`px`û`ù`÷`-`¢Ì`ð`*`¢É`ç`½`¢È`¢Ç`¢Æ`í`¢`Ò`¢Á`á`ã`¢À`¢¿`Ñ`¢»`¢¹`¢·'.split('\x60')));
+addBehavior(0)
+]]></constructor>
+<!-- packed with http:/dean.edwards.name/packer/ -->
+</implementation>
+</binding>
+<!-- end: dhtml behaviors loader -->
+</bindings>
+

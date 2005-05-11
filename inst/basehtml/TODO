@@ -1,0 +1,43 @@
+Here are some ideas for improvements to Rpad. Many of these are from
+Eric Lecoutre.
+
+(*) IMPROVE STARTUP TIME -- Have one or more R processes waiting, and
+hand these off to the next requested page. (I think I've got this 
+almost done.)
+
+(*) TOGGLE EDITING -- Toggle between an editable version and a
+run-only version. I am sure this goes on the other way of your
+approach. Hide all the upper interface (hide only menu or hide menu 
+AND format toolbar).
+
+(*) PDF GRAPHIC LINK OPTION -- Allow the user to download a PDF file
+when the PNG graphic is clicked. 
+
+
+
+LONGER-TERM IDEAS {meaning they're harder}
+
+(*) POPUPS -- Find a good toolkit that does popup windows. Then we can
+create gui's for things like adding a button (where the user has to
+enter more data than an alert will allow). It would also be nice to
+have a popup showing status of server connections (loading, sending
+scripts to the server, and so on).
+
+(*) BETTER MENUS -- I'd like a menu bar that you could use with the
+keyboard. 
+
+(*) GENERAL TOOLKIT -- Maybe someone will develop a good general
+purpose javascript GUI toolkit that we can use for the Rpad GUI as
+well as in Rpad pages. netwindows.org looks promising. The work of the
+whatWG is also promising.
+
+(*) FILE UPLOAD -- Add capability to upload data files. I thought this
+would be easy at first, but while XMLHttp can transmit data,
+javascript can't arbitrarily access files on the user's computer. You
+might be able to build a form in a hidden frame and submit the form (I
+don't know how to do that on either the browser or server side).
+
+(*) EMACS Rpad MODE -- It would be nice to have a mode that could
+syntax highlight HTML, javascript, and R code all in the same Rpad
+file. 
+

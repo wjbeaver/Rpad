@@ -1,0 +1,44 @@
+#importFrom(grDevices, check.options, dev.cur, dev.off, x11, png)
+#importFrom(utils, browseURL)
+#importFrom(lattice, lset, trellis.device)
+
+import(graphics)
+import(utils)
+import(R2HTML)
+
+export(processRpadCommands,
+       Rpad,
+       startRpadServer,
+       stopRpadServer,
+       ROutputFormat,
+       HTMLon,
+       HTMLoff,
+       HTMLh1,
+       HTMLh2,
+       HTMLh3,
+       HTMLh4,
+       HTMLh5,
+       HTMLargs,
+       HTMLtag,
+       HTMLetag,
+       HTMLradio,
+       HTMLcheckbox,
+       HTMLselect,
+       HTMLinput,
+       HTMLlink,
+       HTMLimg,
+       HTMLembed,
+       fspdf,
+       graphoptions,
+       newgraph,
+       showgraph,
+       RpadPlotName,
+       RpadURL,
+       RpadBaseURL,
+       RpadBaseFile,
+       RpadIsLocal
+       
+)
+
+S3method(HTML, data.frame)
+S3method(print, HTMLchunk)

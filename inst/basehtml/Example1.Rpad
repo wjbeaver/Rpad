@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions.com
+(c) Copyright 2005 by EPRI Solutions, Inc.
+
+Licence
+=======
+
+    This is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+
+The file COPYING in the Rpad top-level directory is a copy of the 'GNU
+General Public License'.
+ -->
+
+  <head>
+    <title>Rpad Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="editor/Rpad_loader.js">
+    </script>
+  </head>
+
+  <body>
+<table><tr valign="top"><td>
+<p>Here is a basic R input section followed by the output: </p>
+
+
+    <div class="Rpad_input" rpad_type="R">
+      data(iris)<br>
+      dataset = iris<br>
+      options(width=50)<br>
+      summary(dataset)<br>
+    </div>
+
+<p>Now let's do some fancy HTML output: <span contenteditable="false"><input onclick=
+      "javascript:top.Rpad_calculate()" value="Calculate" type=
+      "button"></span>
+</p>
+
+    <div class="Rpad_input" rpad_type="R">
+      HTMLon()<br>
+      HTML(head(dataset))<br>
+    </div>
+</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> <td>
+<p>Here's a simple distribution plotting example with a lognormal
+distribution with meanlog=10 and variable logsd:</p>
+
+      <p><span contenteditable="false"><input class="Rpad_input" name=
+      "sdlog" rpad_type="Rvariable" value="2"></span>
+      Standard deviation<br></p>
+
+    <div class="Rpad_input" rpad_type="R">
+plot(function(x) dlnorm(x, meanlog = 5, sdlog = sdlog), 0, 100,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main = "lognormal density", ylab="",
+xlab="", col="red")<br>
+HTMLon()<br>
+showgraph()<br>
+    </div>
+<p>Here is another graphic: </p>
+
+    <div class="Rpad_input" rpad_type="R">
+data(volcano)<br>
+z <- 2 * volcano; x <- 10 * (1:nrow(z)); y <- 10 * (1:ncol(z))<br>
+persp(x, y, z, theta = 135, phi = 30, col = "green3", <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale = FALSE, ltheta = -120, shade = 0.75, border = NA, box = FALSE)<br>
+HTMLon()<br>
+showgraph()<br>
+    </div>
+
+
+</td></tr></table>
+
+<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright
+  2005 EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+  </body>
+</html>
+
