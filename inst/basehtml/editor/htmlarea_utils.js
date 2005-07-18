@@ -244,8 +244,25 @@ HTMLArea.prototype._createLink = function(link) {
 
 // retrieve the HTML
 HTMLArea.prototype.getHTML = function() {
-    return _Rpad.innerHTML;
-//	return HTMLArea.getHTML(_Rpad, true, this);
+
+// need to do this on gecko or textarea changes won't get saved
+// note that others are still problematic (inputs)
+    if (HTMLArea.is_gecko) {
+      var el = _Rpad_editor._doc.getElementsByTagName("textarea");
+      for (var i=0; i < el.length; i++)
+          el[i].innerHTML = el[i].value;
+    }
+
+// Using innerHTML has the following advantages over using DOM traversal:
+//      * it's the most complete way to save 
+// The advantage of using getHTML (DOM traversal) are:
+//      * you can leave out junk that Rpad puts in
+//      * the HTML output isn't as junky as innerHTML (on IE anyway)
+//      * it doesn't have the IE bug where input elements have "name" attribute fixed
+
+//    return _Rpad.innerHTML;
+
+	return HTMLArea.getHTML(_Rpad, true, this);
 };
 
 // retrieve the HTML (fastest version, but uses innerHTML)
@@ -464,8 +481,8 @@ HTMLArea.htmlEncode = function(str) {
 	return str;
 };
 
-// Retrieves the HTML code from the given node.	 This is a replacement for
-// getting innerHTML, using standard DOM calls.
+// Replaces the version in htmlarea.js to not "avoid certain attributes".
+//
 HTMLArea.getHTML = function(root, outputRoot, editor) {
 	var html = "";
 	switch (root.nodeType) {
@@ -501,9 +518,10 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 					continue;
 				}
 				var name = a.nodeName.toLowerCase();
-				if (/_moz|contenteditable|_msh/.test(name)) {
+				if (/_moz|contenteditable/.test(name)) {
 					// avoid certain attributes
-					continue;
+// Don't avoid these attributes!!
+//					continue;
 				}
 				var value;
 				if (name != "style") {
@@ -518,7 +536,8 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 					// Using Gecko the values of href and src are converted to absolute links
 					// unless we get them using nodeValue()
 					if (typeof root[a.nodeName] != "undefined" && name != "href" && name != "src") {
-						value = root[a.nodeName];
+//						value = root[a.nodeName];
+						value = a.nodeValue;
 					} else {
 						value = a.nodeValue;
 						// IE seems not willing to return the original values - it converts to absolute
@@ -541,6 +560,9 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 			}
 			html += closed ? " />" : ">";
 		}
+		if (HTMLArea.is_ie && outputRoot && !closed && root.tagName.toLowerCase() == "script") {
+            html += root.text;
+        }
 		for (i = root.firstChild; i; i = i.nextSibling) {
 			html += HTMLArea.getHTML(i, true, editor);
 		}
@@ -549,10 +571,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		}
 		break;
 	    case 3: // Node.TEXT_NODE
-		// If a text node is alone in an element and all spaces, replace it with an non breaking one
-		// This partially undoes the damage done by moz, which translates '&nbsp;'s into spaces in the data element
-		if ( !root.previousSibling && !root.nextSibling && root.data.match(/^\s*$/i) ) html = '&nbsp;';
-		else html = HTMLArea.htmlEncode(root.data);
+		html = HTMLArea.htmlEncode(root.data);
 		break;
 	    case 8: // Node.COMMENT_NODE
 		html = "<!--" + root.data + "-->";

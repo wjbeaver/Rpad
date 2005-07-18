@@ -26,5 +26,10 @@
 # assign("RpadDir", envir = Rpad:::.RpadEnv,
 #        gsub("c:/Inetpub/wwwroot","", getwd(), ignore.case = TRUE) )
 
+## The following is the server timeout setting in 
+## minutes for the server version of Rpad.
+## If not specified, it defaults to 30 minutes.
+
+.RPADTIMEOUTMINUTES = 20
 
 

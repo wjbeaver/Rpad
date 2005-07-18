@@ -37,22 +37,26 @@ General Public License'.
 <p>Here is a basic R input section followed by the output: </p>
 
 
-    <div class="Rpad_input" rpad_type="R">
-      data(iris)<br>
-      dataset = iris<br>
-      options(width=50)<br>
-      summary(dataset)<br>
-    </div>
+<pre class="Rpad_input" rpad_type="R">
+data(iris)
+dataset = iris
+options(width=50)
+summary(dataset)
+</pre>
 
 <p>Now let's do some fancy HTML output: <span contenteditable="false"><input onclick=
       "javascript:top.Rpad_calculate()" value="Calculate" type=
       "button"></span>
 </p>
 
-    <div class="Rpad_input" rpad_type="R">
-      HTMLon()<br>
-      HTML(head(dataset))<br>
-    </div>
+<span contenteditable="false" class="RpadWrapper">
+<textarea class="Rpad_input" rpad_type="R" rows="4" cols="50">
+cat("\nSortable table (click the headings):")
+HTMLon()
+HTML(head(dataset))
+</textarea>
+</span>
+
 </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> <td>
 <p>Here's a simple distribution plotting example with a lognormal
 distribution with meanlog=10 and variable logsd:</p>
@@ -61,23 +65,24 @@ distribution with meanlog=10 and variable logsd:</p>
       "sdlog" rpad_type="Rvariable" value="2"></span>
       Standard deviation<br></p>
 
-    <div class="Rpad_input" rpad_type="R">
-plot(function(x) dlnorm(x, meanlog = 5, sdlog = sdlog), 0, 100,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main = "lognormal density", ylab="",
-xlab="", col="red")<br>
-HTMLon()<br>
-showgraph()<br>
-    </div>
+<pre class="Rpad_input" rpad_type="R">
+plot(function(x) dlnorm(x, meanlog = 5, sdlog = sdlog), 
+     0, 100, main = "lognormal density", ylab="",
+     xlab="", col="red")
+HTMLon()
+showgraph()
+</pre>
 <p>Here is another graphic: </p>
 
-    <div class="Rpad_input" rpad_type="R">
-data(volcano)<br>
-z <- 2 * volcano; x <- 10 * (1:nrow(z)); y <- 10 * (1:ncol(z))<br>
-persp(x, y, z, theta = 135, phi = 30, col = "green3", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale = FALSE, ltheta = -120, shade = 0.75, border = NA, box = FALSE)<br>
-HTMLon()<br>
-showgraph()<br>
-    </div>
+<pre class="Rpad_input" rpad_type="R">
+data(volcano)
+z <- 2 * volcano; x <- 10 * (1:nrow(z)); y <- 10 * (1:ncol(z))
+persp(x, y, z, theta = 135, phi = 30, col = "green3", 
+      scale = FALSE, ltheta = -120, shade = 0.75, 
+      border = NA, box = FALSE)
+HTMLon()
+showgraph()
+</pre>
 
 
 </td></tr></table>

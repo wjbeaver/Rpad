@@ -1,4 +1,50 @@
-************** Current
+**************  Version 0.9.6, 2005-07-18
+
+	Reverted back to using HTMLArea's getHTML instead innerHTML to
+	save documents. There are tradeoffs with each. Both are buggy, but
+	getHTML is more controllable and more flexible. It would be best
+	to switch to a more robust getHTML. FckEditor seems to have a more
+	robust version.
+
+**************  Version 0.9.6, 2005-06-20
+
+	Replaced \r\n with \n when saving so that TEXTAREA's won't get
+	double spaced after saving. Also tweaked the wrapping of
+	TEXTAREA's.
+
+	Replaced the JSCookMenu with a previous version so insert div,
+	textarea, etc. works again under Mozilla.
+
+	Reverted back to using innerHTML for inserting Rpad sections and
+	textareas. This simplifies the code, and we don't worry about
+	sections appearing in funny places. It does mean the user can do
+	weird things like put Rpad sections inside of Rpad sections.
+
+	Added a kludge to htmlarea_utils.js to improve saving of
+	TEXTAREA's. Under Mozilla, innerHTML doesn't get updated when the
+	user edits textareas (that's in the value property). Saving of
+	changes to INPUT's is still buggy under Mozilla.
+
+	Because TEXTAREA's now work better, some of the examples were
+	changed to include TEXTAREA's for code sections. 
+
+************** Version 0.9.4, 2005-06-13
+
+	Added an adjustable timeout period (defaults to 30 minutes) in
+	pipe.pm in the perl interface to R. Adjust .RPADTIMEOUTMINUTES in
+	.RpadStartup.R to change it.
+
+	Added initial support for file upload. See
+	basehtml/server/fileupload.pl and RpadExtras.R.
+
+	Added an option to change the quoting character in HTMLargs() in
+	HTML.R. 
+
+	Fixed a bug in Rpad_editor.js where PRE and TEXTAREA's got double
+	spaced in internet explorer. Because PRE's work better, I changed 
+	a bunch of the examples to use PRE's to format the R code better.
+	
+************** Version 0.9.3, 2005-05-13
 
         Per notice from Joel Hardi, removed --gui=none option from
 	Statistics-R_perl_interface/lib/Statistics/Rpad/Bridge/Linux.pm
@@ -8,7 +54,8 @@
 	method of extracting the html to using the standard innerHTML, but
 	I didn't get it fixed quite right. I changed
 	HTMLArea.prototype.getHTML (in htmlarea_replacements.js and
-	htmlarea_utils.js) to just use innerHTML. 
+	htmlarea_utils.js) to just use innerHTML. I'm still not sure it
+	uses innerHTML properly.
 	
 ************** Version 0.9.2, 2005-04-14
 

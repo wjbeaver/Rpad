@@ -130,7 +130,7 @@ General Public License'.
       startup. These sections have rpad_run="init" set in the html
       codes. For now, there's no gui to specify this. You either have
       to enter this code directly in the html (via the &lt;&gt; toolbar
-      button), copy and paste it from another Rpad page, or use another
+      button in IE), copy and paste it from another Rpad page, or use another
       text editor to add this. These "init" blocks are useful for
       reading in files or data and also for setting up GUI elements
       from server data (they only run once, so the user can change the
@@ -144,6 +144,15 @@ General Public License'.
       displaying images or for formatted blocks. To change to HTML
       formatting send '<htmlon/>' to the output. This is
       cat('<htmlon/>') in R scripts. To turn HTML mode off, send '<htmloff/>'.</p>
+
+      <p>The builtin page editor in Rpad is somewhat limited. It
+      doesn't generate very good HTML, and saving has some bugs in
+      it (it doesn't save anything in the HEAD, and on some browsers,
+      changes to INPUT blocks don't get saved right). For more
+      advanced and reliable editing, use an external text or HTML
+      editor. The builtin page editor is best used for online changes
+      and exploration. 
+      </p>
 
       <h2>Rpad package</h2>
 
@@ -260,7 +269,8 @@ follows. This makes it easier to paste R code into an HTML file: you
 don't need to use &lt;br/&gt;'s to separate lines, and whitespace is
 preserved. One disadvantage is that Mozile (the editing plugin for
 Mozilla) is a little buggy when editing PRE sections, so the user
-might get a little confused (the cursor doesn't work right all of the time).</p>
+might get a little confused (the cursor doesn't work right all of the
+time).</p> 
 
 <pre>
   &lt;div class=&quot;Rpad_input&quot; rpad_type=&quot;R&quot; rpad_run=&quot;init&quot;&gt;

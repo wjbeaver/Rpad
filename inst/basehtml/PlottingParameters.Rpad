@@ -59,20 +59,20 @@ significant number of parameters that you can tweak.</p>
 
 <script type="text/javascript">
 function updateInput(node, val) {
-var el=node.previousSibling.previousSibling;
-while(el.nodeName!="INPUT") el = el.previousSibling; 
-el.value = val; 
-node.style.display="none";
+  var el=node.previousSibling.previousSibling;
+  while(el.nodeName!="INPUT") el = el.previousSibling; 
+  el.value = val; 
+  node.style.display="none";
 }
 </script>
 
 <p>First, we'll start off with some data to plot (these could also be
 entered into a textarea or read from a file):</p>
 
-<div class="Rpad_input" rpad_type="R">
-x = seq(10)<br>
-y = (x + rnorm(x))^2<br>
-</div>
+<pre class="Rpad_input" rpad_type="R">
+x = seq(10)
+y = (x + rnorm(x))^2
+</pre>
 
 <p>Next, we'll use R to set up a gui. This runs when the page
 loads. Adjust any of the parameters, and hit the plot button (or
@@ -84,47 +84,49 @@ an R variable and enter an expression using rgb() as one example. The
 R code is hidden, but it's not that long or complicated.</p>
 
 <span class="wrapperForHidden" contenteditable="false">    
-<div class="Rpad_input" rpad_type="R"  id="guiGen" Rpad_run="init" style="DISPLAY: none">
-# The defines guiCommandFun and others.<br>
-# Something like this will probably be moved to RpadUtils at some point.<br>
-source(system.file('basehtml','guiGen.R',package="Rpad"))  <br>
-plotG <- guiCommandFun("plot",guiHeader="Plot parameters",<br>
-&nbsp;&nbsp;                x = guiInput("X series", default = "x"),<br>
-&nbsp;&nbsp;                y = guiInput("Y series", default = "y"),<br>
-&nbsp;&nbsp;                type = guiInput("Plot type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("p", "l", "b", "o", "h", "s", "S", "n"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  mapping = c("p" =
-"Points", "l" = "Lines", "b" = "Both", "o" = "Overlayed points and
-lines", "h" = "Vertical lines", "s" = "Stair-stepped", "S" =
-"Stair-stepped 2", "n" = "No plot"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                col = guiInput("Color", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = palette(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                lty = guiInput("Line type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                pch = guiInput("Point style", guiType = "guiPickPch"),<br>
-&nbsp;&nbsp;                main = guiInput("Main title", type = "Rstring"),<br>
-&nbsp;&nbsp;                xlab = guiInput("X-axis label",default = "X", type = "Rstring"),<br>
-&nbsp;&nbsp;                xLow = guiInput("X-axis min"),<br>
-&nbsp;&nbsp;                xHigh = guiInput("X-axis max"),<br>
-&nbsp;&nbsp;                ylab = guiInput("Y-axis label",default = "Y", type = "Rstring"),<br>
-&nbsp;&nbsp;                yLow = guiInput("Y-axis min"),<br>
-&nbsp;&nbsp;                yHigh = guiInput("Y-axis max"),<br>
-&nbsp;&nbsp;                log = guiInput("Log axes", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("x","y","xy"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  mapping = c("x" = "X axis", "y" = "Y axis", "xy" = "Both axes"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox")<br>
-&nbsp;&nbsp;                )<br>
-<br>
-HTMLon()<br>
-HTML(plotG(),varname="p")<br>
-</div>
+<pre class="Rpad_input" rpad_type="R"  id="guiGen" Rpad_run="init" style="DISPLAY: none">
+# The defines guiCommandFun and others.
+# Something like this will probably be moved to RpadUtils at some point.
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+plotG = guiCommandFun(
+    "plot",
+    guiHeader = "Plot parameters",
+    x = guiInput("X series", default = "x"),
+    y = guiInput("Y series", default = "y"),
+    type = guiInput("Plot type", 
+        choices = c("p", "l", "b", "o", "h", "s", "S", "n"),
+        mapping = c("p" = "Points", "l" = "Lines", "b" = "Both", 
+                    "o" = "Overlayed points and lines", 
+                    "h" = "Vertical lines", "s" = "Stair-stepped", 
+                    "S" = "Stair-stepped 2", "n" = "No plot"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    pch = guiInput("Point style", guiType = "guiPickPch"),
+    main = guiInput("Main title", type = "Rstring"),
+    xlab = guiInput("X-axis label",default = "X", type = "Rstring"),
+    xLow = guiInput("X-axis min"),
+    xHigh = guiInput("X-axis max"),
+    ylab = guiInput("Y-axis label",default = "Y", type = "Rstring"),
+    yLow = guiInput("Y-axis min"),
+    yHigh = guiInput("Y-axis max"),
+    log = guiInput("Log axes", 
+        choices = c("x","y","xy"),
+        mapping = c("x" = "X axis", "y" = "Y axis", "xy" = "Both axes"),
+        type = "Rstring",
+        guiType = "guiCombobox")
+)
+
+HTMLon()
+HTML(plotG(),varname="p")
+</pre>
 </span>
 
 <p>Now, let's do the plot:</p>
@@ -134,19 +136,20 @@ HTML(plotG(),varname="p")<br>
             "Plot"></span>                                 
 </p>                                                           
 <span class="wrapperForHidden" contenteditable="false">    
-<div class="Rpad_input" rpad_type="R" style="DISPLAY: none">
-# first, fix up the axis limits:<br>
-if (is.null(p[[1]]$xLow)) p[[1]]$xLow = min(p[[1]]$x)<br>
-if (is.null(p[[1]]$xHigh)) p[[1]]$xHigh = max(p[[1]]$x)<br>
-if (is.null(p[[1]]$yLow)) p[[1]]$yLow = min(p[[1]]$y)<br>
-if (is.null(p[[1]]$yHigh)) p[[1]]$yHigh = max(p[[1]]$y)<br>
-p[[1]]$xlim = c(p[[1]]$xLow, p[[1]]$xHigh)<br>
-p[[1]]$ylim = c(p[[1]]$yLow, p[[1]]$yHigh)<br>
-# plot it<br>
-runGuiCommand(p)<br>
-HTMLon()<br />
-showgraph(link=TRUE)<br />
-</div>
+<pre class="Rpad_input" rpad_type="R" style="DISPLAY: none">
+# first, fix up the axis limits:
+if (is.null(p[[1]]$xLow))  p[[1]]$xLow  = min(p[[1]]$x)
+if (is.null(p[[1]]$xHigh)) p[[1]]$xHigh = max(p[[1]]$x)
+if (is.null(p[[1]]$yLow))  p[[1]]$yLow  = min(p[[1]]$y)
+if (is.null(p[[1]]$yHigh)) p[[1]]$yHigh = max(p[[1]]$y)
+p[[1]]$xlim = c(p[[1]]$xLow, p[[1]]$xHigh)
+p[[1]]$ylim = c(p[[1]]$yLow, p[[1]]$yHigh)
+
+# plot it
+runGuiCommand(p)
+HTMLon()
+showgraph(link=TRUE)
+</pre>
 </span>
 
 <p>We can extend that example to other plotting functions. The
@@ -155,50 +158,52 @@ options as the standard plot but with advanced
 options for adding regression lines and groupings as seen below. <p>
 
 <table><tr><td><span class="wrapperForHidden" contenteditable="false">
-<div class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="init"  style="DISPLAY: none">
-require(car)<br>
-baseG = plotG() # these are the parameters to the base plot function<br>
-baseG$params$type = NULL # scatterplot doesn't have plot type or lty
-and col is a bit different<br>
-baseG$params$lty = NULL <br>
-baseG$params$col = NULL <br>
-scatterplotG <- guiCommandFun("scatterplot",guiHeader="Plot
-parameters", base=baseG,<br>
-&nbsp;&nbsp;                reg.line = guiInput("Show regression line",
-&nbsp;&nbsp;&nbsp;&nbsp;                  guiType = "guiLogical"),<br>
-&nbsp;&nbsp;                smooth = guiInput("Show regression curve",
-&nbsp;&nbsp;&nbsp;&nbsp;                  guiType = "guiLogical"),<br>
-&nbsp;&nbsp;                span = guiInput("Regression curve span"),<br>
-&nbsp;&nbsp;                boxplots = guiInput("Axis box plots",
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("x", "y", "xy", "none"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  mapping = c("x" = "X axis", "y" = "Y axis", "xy" = "Both axes", "none" = "None"),<br>
-guiType = "guiCombobox", type = "Rstring"),<br>
-&nbsp;&nbsp;                groups = guiInput("Grouping variable")<br>
-&nbsp;&nbsp;                )<br>
-<br>
-HTMLon()<br>
-HTML(scatterplotG(),varname="sp")<br>
-</div>
+<pre class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="init"  style="DISPLAY: none">
+require(car)
+baseG = plotG() # these are the parameters to the base plot function
+baseG$params$type = NULL # scatterplot doesn't have plot type or lty and col is a bit different
+baseG$params$lty = NULL 
+baseG$params$col = NULL 
+scatterplotG = guiCommandFun(
+    "scatterplot",
+    guiHeader = "Plot parameters", 
+    base = baseG,
+    reg.line = guiInput("Show regression line",
+         guiType = "guiLogical"),
+         smooth = guiInput("Show regression curve",
+         guiType = "guiLogical"),
+    span = guiInput("Regression curve span"),
+         boxplots = guiInput("Axis box plots",
+         choices = c("x", "y", "xy", "none"),
+         mapping = c("x" = "X axis", "y" = "Y axis", 
+                     "xy" = "Both axes", "none" = "None"),
+         guiType = "guiCombobox", type = "Rstring"),
+    groups = guiInput("Grouping variable")
+)
+
+HTMLon()
+HTML(scatterplotG(),varname="sp")
+</pre>
 </td><td>&nbsp;&nbsp;&nbsp;</td><td>
              <span contenteditable="false"><input type="button"
             onclick="javascript:top.Rpad_calculate()" value=
             "Plot"></span>  
 <span class="wrapperForHidden" contenteditable="false">
-<div class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
-# first, fix linear regression line<br>
-if (!is.null(sp[[1]]$reg.line) && sp[[1]]$reg.line) sp[[1]]$reg.line = lm<br>
-# fix up the axis limits:<br>
-if (is.null(sp[[1]]$xLow))  sp[[1]]$xLow = min(sp[[1]]$x)<br>
-if (is.null(sp[[1]]$xHigh)) sp[[1]]$xHigh = max(sp[[1]]$x)<br>
-if (is.null(sp[[1]]$yLow))  sp[[1]]$yLow = min(sp[[1]]$y)<br>
-if (is.null(sp[[1]]$yHigh)) sp[[1]]$yHigh = max(sp[[1]]$y)<br>
-sp[[1]]$xlim = c(sp[[1]]$xLow, sp[[1]]$xHigh)<br>
-sp[[1]]$ylim = c(sp[[1]]$yLow, sp[[1]]$yHigh)<br>
-# plot it<br>
-runGuiCommand(sp, legend.plot = FALSE)<br>
-HTMLon()<br />
-showgraph(link=TRUE)<br />
-</div></span>
+<pre class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
+# first, fix linear regression line
+if (!is.null(sp[[1]]$reg.line) && sp[[1]]$reg.line) sp[[1]]$reg.line = lm
+# fix up the axis limits:
+if (is.null(sp[[1]]$xLow))  sp[[1]]$xLow = min(sp[[1]]$x)
+if (is.null(sp[[1]]$xHigh)) sp[[1]]$xHigh = max(sp[[1]]$x)
+if (is.null(sp[[1]]$yLow))  sp[[1]]$yLow = min(sp[[1]]$y)
+if (is.null(sp[[1]]$yHigh)) sp[[1]]$yHigh = max(sp[[1]]$y)
+sp[[1]]$xlim = c(sp[[1]]$xLow, sp[[1]]$xHigh)
+sp[[1]]$ylim = c(sp[[1]]$yLow, sp[[1]]$yHigh)
+# plot it
+runGuiCommand(sp, legend.plot = FALSE)
+HTMLon()
+showgraph(link=TRUE)
+</pre></span>
 </td></tr></table>
 
 <p>See this <span contenteditable="false"><a href="PlottingParameters2.Rpad" target="_blank">link</a></span> for another example that shows that you can have even more flexibility by

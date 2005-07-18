@@ -44,8 +44,8 @@ General Public License'.
       allows the user to paste in new data if they want. This is the state.x77 data that comes
       as a built-in dataset with R (from 1977 census data). </p>
 
-<span contenteditable="false" class="wrapperForTextArea">
-<textarea class="Rpad_input" rpad_type="file" name="states.csv" rows="5" cols="60">
+<span contenteditable="false" class="RpadWrapper">
+<textarea class="Rpad_input" rpad_type="file" name="states.csv" rows="5" cols="80">
 "state","Population","Income","Illiteracy","Life.Exp","Murder","HS.Grad","Frost","Area"
 "Alabama",3615,3624,2.1,69.05,15.1,41.3,20,50708
 "Alaska",365,6315,1.5,69.31,11.3,66.7,152,566432
@@ -99,14 +99,22 @@ General Public License'.
 "Wyoming",376,4566,0.6,70.29,6.9,62.9,173,97203
 </textarea></span>
 
-      <p>Now, we can read in and plot this data:</p>
+<p>Now for some R code. Textareas can also be used for R code blocks.
+This has the advantage that the user can edit the code
+on Mozilla browsers without the Mozile plugin. It also allows larger
+code chunks that don't take up as much screen space.
+</p>
 
-      <div class="Rpad_input" rpad_type="R">
-         a = read.csv('states.csv')<br>
-         plot(a$Population, a$HS.Grad)<br>
-         HTMLon()<br>
-         showgraph()<br>
-      </div>
+<p>Read in and plot this data:</p>
+
+<span contenteditable="false" class="RpadWrapper">
+<textarea class="Rpad_input" rpad_type="R" rows="6" cols="80">
+a = read.csv('states.csv')
+plot(a$Population, a$HS.Grad)
+HTMLon()
+showgraph()
+</textarea>
+</span>
 
       <p>You can also use HTML input boxes, so the user can enter
       single-valued data into R. There are two types of R variables
@@ -129,18 +137,18 @@ General Public License'.
       <p>After fiddling with some of the inputs, hit F9 or the
       calculate button and see that the following outputs change:</p>
 
-      <div class="Rpad_input" rpad_type="R">
-         cat("myvar =",myvar,"\n")<br>
-         cat("myname =",myname,"\n")<br>
-      </div>
+<span contenteditable="false" class="RpadWrapper">
+<textarea class="Rpad_input" rpad_type="R" rows="3" cols="80">
+cat("myvar =",myvar,"\n")
+cat("myname =",myname,"\n")
+</textarea>
+</span>
 
       <p><span contenteditable="false"><input onclick=
       "javascript:top.Rpad_calculate()" value="Calculate" type=
       "button"></span> </p>
 
-</span>
-
-<br><br><br><sub>by Tom Short, tshort@eprisolutions..com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
   </body>
 </html>
 

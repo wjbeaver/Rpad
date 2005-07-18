@@ -290,7 +290,8 @@ function append_results(result,node) {
   resultNode.style.display = "";
   resultNode.innerHTML = result;
   resultNode.RpadParent = node;
-  var parentHasWrapper = node.parentNode.className == "wrapperForHidden";
+  var parentHasWrapper = node.parentNode.className == "wrapperForHidden" ||
+                         node.parentNode.className == "RpadWrapper";
   if (parentHasWrapper)
     node = node.parentNode;
   var missingResults = node.nextSibling == null || node.nextSibling.className != "Rpad_results";
@@ -326,7 +327,8 @@ function getTextContent(node) {
   }
   if (node.nodeType == 1) { // element node
     if (node.nodeName == "BR") return "\n";
-    if (node.nodeName == "TEXTAREA") return node.innerHTML;
+//    if (node.nodeName == "TEXTAREA") return node.innerHTML;
+    if (node.nodeName == "TEXTAREA") return node.value;
     if (node.nodeName == "INPUT") return node.value;
     var text = [];
     for (var chld = node.firstChild;chld;chld=chld.nextSibling) {
@@ -336,7 +338,8 @@ function getTextContent(node) {
 }  
 
 function Rpad_calculate() {
-  var node = _Rpad_editor._doc.getElementsByTagName("body")[0];
+//  var node = _Rpad_editor._doc.getElementsByTagName("body")[0];
+  var node = _Rpad;
   _Rpad_doKeepGoing = true;
   _serverTries = 0;
   Rpad_run_next_node(node);  
@@ -514,7 +517,7 @@ function hasNoFormParent(node) {
 }
 
 function Rpad_save() {
-  var contents = encodeURIComponent(_Rpad_editor.getHTML());
+  var contents = encodeURIComponent(_Rpad_editor.getHTML().replace(/\r\n/g,"\n"));
 //  var contents = encodeURIComponent(_Rpad.innerHTML);
   var filename = location.pathname.split('/'); 
   filename = filename[filename.length-1]; // the last part is the actual file name
@@ -541,7 +544,9 @@ function Rpad_save() {
 }
 
 function Rpad_save_as() {
-  var contents = encodeURIComponent(_Rpad_editor.getHTML());
+  var contents = encodeURIComponent(_Rpad_editor.getHTML().replace(/\r\n/g,"\n"));
+//alert(contents);
+//alert(_Rpad_editor._doc.body.innerHTML);
 //  var contents = encodeURIComponent(_Rpad.innerHTML);
   var filename = prompt('SAVE: Enter the file name (without extension)','test') + ".Rpad";
   var xmlhttp = myXmlHttp();

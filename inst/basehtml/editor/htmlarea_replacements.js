@@ -153,8 +153,10 @@ HTMLArea.prototype._editorEvent = function(ev) {
 
 // retrieve the HTML
 HTMLArea.prototype.getHTML = function() {
-    return this._doc.body.innerHTML;
-//	return HTMLArea.getHTML(_Rpad, true, this);
+//    return this._doc.body.innerHTML;
+//	return HTMLArea.getHTML(_Rpad_editor._doc.body, true, _Rpad_editor);
+//	return HTMLArea.getHTML(this._doc.body, true, this);
+	return HTMLArea.getHTML(this._doc.body, false, this);
 };
 
 
@@ -213,7 +215,8 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 					// Using Gecko the values of href and src are converted to absolute links
 					// unless we get them using nodeValue()
 					if (typeof root[a.nodeName] != "undefined" && name != "href" && name != "src") {
-						value = root[a.nodeName];
+//						value = root[a.nodeName];
+						value = a.nodeValue;
 					} else {
 						value = a.nodeValue;
 						// IE seems not willing to return the original values - it converts to absolute
@@ -236,6 +239,9 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 			}
 			html += closed ? " />" : ">";
 		}
+		if (HTMLArea.is_ie && outputRoot && !closed && root.tagName.toLowerCase() == "script") {
+            html += root.text;
+        }
 		for (i = root.firstChild; i; i = i.nextSibling) {
 			html += HTMLArea.getHTML(i, true, editor);
 		}

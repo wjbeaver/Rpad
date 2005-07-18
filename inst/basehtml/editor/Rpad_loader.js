@@ -33,30 +33,30 @@ var is_gecko  = (navigator.product == "Gecko");
 
 if (Rpad_editmode == "lite" || (is_gecko && Rpad_editmode != "heavy")) {  
 
-  document.write('<script src="editor/JSCookMenu/JSCookMenu.js"></script>');
-  document.write('<link rel="stylesheet" href="editor/JSCookMenu/ThemeOffice/theme.css" type="text/css">');
-  document.write('<script src="editor/JSCookMenu/ThemeOffice/theme.js"></script>');
+  document.write('<script src="editor/JSCookMenu/JSCookMenu.js" rpadIgnore="true"></script>');
+  document.write('<link rel="stylesheet" href="editor/JSCookMenu/ThemeOffice/theme.css" type="text/css" rpadIgnore="true">');
+  document.write('<script src="editor/JSCookMenu/ThemeOffice/theme.js" rpadIgnore="true"></script>');
    
-  document.write('<style type="text/css">@import url(editor/Rpad.css);</style>');
-  document.write('<script src="editor/htmlarea_utils.js" > </script>');
-  document.write('<script src="editor/Rpad_processing_asynch.js"   > </script>');
-  document.write('<script src="editor/Rpad_lite_editor.js"  > </script>');
+  document.write('<style type="text/css" rpadIgnore="true">@import url(editor/Rpad.css);</style>');
+  document.write('<script src="editor/htmlarea_utils.js" rpadIgnore="true"> </script>');
+  document.write('<script src="editor/Rpad_processing_asynch.js" rpadIgnore="true"  > </script>');
+  document.write('<script src="editor/Rpad_lite_editor.js" rpadIgnore="true" > </script>');
  
 } else { // heavy
 
-  document.write('<script src="editor/JSCookMenu/JSCookMenu.js"></script>');
-  document.write('<link rel="stylesheet" href="editor/JSCookMenu/ThemeOffice/theme.css" type="text/css">');
-  document.write('<script src="editor/JSCookMenu/ThemeOffice/theme.js"></script>');
+  document.write('<script src="editor/JSCookMenu/JSCookMenu.js" rpadIgnore="true"></script>');
+  document.write('<link rel="stylesheet" href="editor/JSCookMenu/ThemeOffice/theme.css" type="text/css" rpadIgnore="true">');
+  document.write('<script src="editor/JSCookMenu/ThemeOffice/theme.js" rpadIgnore="true"></script>');
       
-  document.write('<style type="text/css">@import url(editor/htmlarea/htmlarea.css);</style>');
-  document.write('<style type="text/css">@import url(editor/Rpad_wrapper.css);</style>');
-  document.write('<script type="text/javascript">_editor_url = "editor/htmlarea"; _editor_lang = "en";</script>');
-  document.write('<script src="editor/htmlarea/htmlarea.js" > </script>');
-  document.write('<script src="editor/htmlarea/lang/en.js"  > </script>');
-  document.write('<script src="editor/htmlarea/dialog.js"   > </script>');
+  document.write('<style type="text/css" rpadIgnore="true">@import url(editor/htmlarea/htmlarea.css);</style>');
+  document.write('<style type="text/css" rpadIgnore="true">@import url(editor/Rpad_wrapper.css);</style>');
+  document.write('<script type="text/javascript" rpadIgnore="true">_editor_url = "editor/htmlarea"; _editor_lang = "en";</script>');
+  document.write('<script src="editor/htmlarea/htmlarea.js" rpadIgnore="true"> </script>');
+  document.write('<script src="editor/htmlarea/lang/en.js" rpadIgnore="true" > </script>');
+  document.write('<script src="editor/htmlarea/dialog.js" rpadIgnore="true"  > </script>');
   
-  document.write('<script src="editor/Rpad_processing_asynch.js"   > </script>');
-  document.write('<script src="editor/htmlarea_replacements.js"  > </script>');
-  document.write('<script src="editor/Rpad_editor.js"  > </script>');
+  document.write('<script src="editor/Rpad_processing_asynch.js" rpadIgnore="true"  > </script>');
+  document.write('<script src="editor/htmlarea_replacements.js" rpadIgnore="true" > </script>');
+  document.write('<script src="editor/Rpad_editor.js" rpadIgnore="true" > </script>');
 
 }

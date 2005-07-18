@@ -33,7 +33,7 @@
   HTMLh3(text)
   HTMLh4(text)
   HTMLh5(text)
-  HTMLargs(...)
+  HTMLargs(..., quoteChar = "'")
   HTMLtag(tagName, ...)
   HTMLetag(tagName)
   HTMLradio(variableName, commonName = "radio", text = "", ...)
@@ -59,6 +59,7 @@
 \arguments{
   \item{Format}{ a string specifying the desired output format, like "html", "text", or "none" }
   \item{text}{ specifies the text to be displayed in the HTML output. }
+  \item{quoteChar} { specifies the quote character for HTML parameters. }
   \item{tagName}{ is a string specifying the HTML nodeName ("H1" or
     "DIV" for example). }
   \item{variableName, commonName}{ specify attributes of the radio

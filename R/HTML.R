@@ -134,13 +134,14 @@ function(x, file = .HTML.file, Border = 1, innerBorder = 0, classfirstline = "fi
 "print.HTMLchunk" <- function(x, file = "", ...)
   cat(file=file, x, "\n")
 
-"HTMLargs" <- function(...) {
+"HTMLargs" <- function(..., quoteChar = "'") {
   # returns a string with the arguments as a='arg1', b='arg2', and so on
+  # use "quoteChar" to switch from ' to "
   others <- list(...)
   names <- names(others)
   if (length(others) > 0) str <- " " else str <- ""
   for (i in seq(along = others))
-    str <- paste(str, names(others[i]), "= '", others[[i]], "' ", sep = "")
+    str <- paste(str, names(others[i]), "=", quoteChar, others[[i]], quoteChar, " ", sep = "")
   class(str) <- "HTMLchunk"
   str
 }

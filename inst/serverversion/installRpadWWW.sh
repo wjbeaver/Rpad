@@ -13,7 +13,7 @@ TREE=/.
 if [ $# -eq 1 ]; then
   RPAD=$1
 fi
-if [ $# -eq 1 ]; then
+if [ $# -eq 2 ]; then
   RPAD=$1
   TREE=$2
 fi
@@ -36,7 +36,7 @@ conf_d_name=`echo $RPAD | sed s^/^.^g`
 
 # apache configuration file (cgi or mod_perl)
 mkdir -p $TREE/etc/apache2/conf.d
-cat >> $TREE/etc/apache2/conf.d/$conf_d_name << EOF
+cat >> $TREE/etc/apache2/conf.d/Rpad$conf_d_name << EOF
 <Directory $RPAD/server*>  
   <IfModule mod_perl.c>
     <Files *.pl> # requires mod_perl
@@ -59,7 +59,7 @@ EOF
 
 # apache2 configuration file (cgi or mod_perl)
 mkdir -p $TREE/etc/apache/conf.d
-cat >> $TREE/etc/apache/conf.d/$conf_d_name << EOF
+cat >> $TREE/etc/apache/conf.d/Rpad$conf_d_name << EOF
 <Directory $RPAD/server*>  
   <IfModule mod_perl.c>
     <Files *.pl> # requires mod_perl

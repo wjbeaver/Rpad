@@ -30,6 +30,9 @@ General Public License'.
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="editor/Rpad_loader.js">
     </script>
+  </head>
+
+  <body>
 <style>
 .Tabbox, .Tabpanel, .Tabdisplay {
   behavior:url(js/tabbox.htc);
@@ -55,9 +58,6 @@ span.tablesortheader  {
 }
 
   </style>
-  </head>
-
-  <body>
       <h2>Advanced GUIs</h2>
 
 <p>Standard HTML widgets are somewhat limited. You can create more 
@@ -139,58 +139,59 @@ quick hacks to extend it).</p>
       "javascript:top.Rpad_calculate()" value="Run" type=
       "button"></span>
 
-<div class="Rpad_input" rpad_type="R">
- HTML.list = function (x, file = .HTML.file, first = TRUE, <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                         append = TRUE,
-collapsed = TRUE, align="left", ...)
-<br># This replaces the HTML.list in R2HTML.
-<br># It creates an expandable tree that's collapsed by default.
-<br># This uses Detlef Groth's tree.htc behavior.
-<br># The tree.htc is attached in the style heading of 
-<br># this html file.
-<br># Adding an expandable tree is as easy as wrapping standard HTML
-<br># lists with &lt;span class='tree'&gt;. 
-<br>
-{<br>
-&nbsp;&nbsp;  cat("\n", file = file, append = append, ...)<br>
-&nbsp;&nbsp;  if (first) { # IE needs contenteditable off<br>
-&nbsp;&nbsp;&nbsp;&nbsp;  cat("&lt;div 
-contenteditable='false'&gt;&lt;span class='tree'&gt;&lt;ul&gt;", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    file = file, append = TRUE, sep = "\n")<br>
-&nbsp;&nbsp;  }<br>
-&nbsp;&nbsp;  for (i in seq(along=x)) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;    cat('&lt;li style="list-style-image:
-url(img/', ifelse(collapsed,"plus","minus"),'.gif);',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ' color: rgb(0, 0, 51); cursor: pointer;"&gt;',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    file = file, append = TRUE, sep = "")<br>
-&nbsp;&nbsp;&nbsp;&nbsp;    cat(names(x)[i]) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;    cat("&lt;ul
-",ifelse(collapsed,"style='display:none'",""),"&gt;", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    file = file, append = TRUE, sep = "\n")<br>
-&nbsp;&nbsp;&nbsp;&nbsp;    HTML(x[[i]], file = file, first = FALSE,
-collapsed=collapsed, align=align, ...)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;    cat("&lt;/ul&gt;&lt;/li&gt;", file = file, append = TRUE, sep = "\n")<br>
-&nbsp;&nbsp;  }<br>
-&nbsp;&nbsp;  if (first) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;    cat("&lt;/ul&gt;&lt;/span&gt;&lt;/div&gt;", file = file, append = TRUE, sep = "\n")<br>
-&nbsp;&nbsp;  } <br>
-}<br>
-<br>
-l =
-list(a=list(aa=1,ab=data.frame(x=c(1,2,3),y=c(4,2,1)),ac=list(aca=1,acb=2)),<br>
-     data=data.frame(a=seq(5),l=LETTERS[1:5]))<br>
-HTMLon()<br>
-HTMLh3("A collapsed list (the default)")<br>
-HTML(l)<br>
-HTMLh3("A fully expanded list:")<br>
-HTML(l$a,collapsed=FALSE)<br>
-<br>
-HTMLh3("A big list:")<br>
-data(iris)<br>
-fit = unclass(lm(Petal.Width~Sepal.Length+Petal.Length+Sepal.Width,data=iris))<br>
-HTML(fit)<br>
- <br>
-</div>
+<pre class="Rpad_input" rpad_type="R">
+HTML.list = function (x, file = .HTML.file, first = TRUE,
+                      append = TRUE, collapsed = TRUE, align="left", ...)
+# This replaces the HTML.list in R2HTML.
+# It creates an expandable tree that's collapsed by default.
+# This uses Detlef Groth's tree.htc behavior.
+# The tree.htc is attached in the style heading of 
+# this html file.
+# Adding an expandable tree is as easy as wrapping standard HTML
+# lists with &lt;span class='tree'&gt;. 
+
+{
+  cat("\n", file = file, append = append, ...)
+  if (first) { # IE needs contenteditable off
+    cat("&lt;div contenteditable='false'&gt;&lt;span class='tree'&gt;&lt;ul&gt;", 
+        file = file, append = TRUE, sep = "\n")
+  }
+  for (i in seq(along=x)) {
+    cat('&lt;li style="list-style-image:url(img/', ifelse(collapsed,"plus","minus"),'.gif);',
+        ' color: rgb(0, 0, 51); cursor: pointer;"&gt;',
+        file = file, append = TRUE, sep = "")
+    cat(names(x)[i]) 
+    cat("&lt;ul", ifelse(collapsed,"style='display:none'", ""), "&gt;", 
+        file = file, append = TRUE, sep = "\n")
+    HTML(x[[i]], file = file, first = FALSE, collapsed=collapsed, align=align, ...)
+    cat("&lt;/ul&gt;&lt;/li&gt;", file = file, append = TRUE, sep = "\n")
+  }
+  if (first) {
+    cat("&lt;/ul&gt;&lt;/span&gt;&lt;/div&gt;", file = file, append = TRUE, sep = "\n")
+  } 
+}
+
+# make a list to use as an example:
+l = list(a = list(aa = 1, 
+                  ab = data.frame(x = c(1,2,3), 
+                                  y = c(4,2,1)),
+                  ac = list(aca = 1, 
+                            acb = 2)),
+         data = data.frame(a = seq(5), 
+                           l = LETTERS[1:5]))
+HTMLon()
+HTMLh3("A collapsed list (the default)")
+HTML(l)
+HTMLh3("A fully expanded list:")
+HTML(l$a,collapsed=FALSE)
+
+# make a big list:
+HTMLh3("A big list:")
+data(iris)
+fit = unclass(lm(Petal.Width~Sepal.Length+Petal.Length+Sepal.Width,data=iris))
+HTML(fit)
+ 
+</pre>
 
 <br><br><br><sub>by Tom Short, tshort@eprisolutions..com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
   </body>

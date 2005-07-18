@@ -34,9 +34,7 @@ function add_textarea_wrapper() {
     var d = document.getElementsByTagName("body")[0];
     var textarea = document.createElement('textarea');
     textarea.id = "Rpad";
-    var text = document.createTextNode(d.innerHTML)
-    textarea.setAttribute('wrap', 'off');
-	textarea.appendChild(text);
+    textarea.value = d.innerHTML;
     d.insertBefore(textarea,d.firstChild);
     while (d.firstChild.nextSibling) // zap the body's children
       d.removeChild(d.firstChild.nextSibling);
@@ -50,7 +48,6 @@ function resize_editor() {  // resize editor to fix window
     newHeight = document.body.offsetHeight - _Rpad_editor._toolbar.offsetHeight 
                 - _Rpad_editor._menuBar.offsetHeight - 25;
   } else {
-//alert('here');
     // Gecko
     newHeight = window.innerHeight - _Rpad_editor._toolbar.offsetHeight 
                 - _Rpad_editor._menuBar.offsetHeight - 20;
@@ -59,15 +56,11 @@ function resize_editor() {  // resize editor to fix window
     newHeight -= _Rpad_editor._statusBar.offsetHeight;
   }
   if (newHeight < 0) { newHeight = 50; }
-//newHeight='200px';
   _Rpad_editor._textArea.style.height = _Rpad_editor._iframe.style.height = newHeight+'px';
 }  
    
 var _Rpad_editor = null;
-
-//HTMLArea.loadPlugin("ContextMenu");
-//HTMLArea.loadPlugin("TableOperations");
-
+var _Rpad = null;
 
 // This is the main initialization routine.
 function initEditor() {
@@ -76,8 +69,6 @@ function initEditor() {
   var cfg = _Rpad_editor.config; // this is the default configuration
   cfg.width	   = "100%";
   cfg.height	   = "auto";
-//  _Rpad_editor.registerPlugin(ContextMenu);
-//  _Rpad_editor.registerPlugin(TableOperations);                                                                                                                                        
   cfg.toolbar = [                                                                                                                                                                        
     	  [                                                                                                                                                                              
     	  "bold", "italic", "underline", "separator",                                                                                                                                    
@@ -145,10 +136,12 @@ function initEditor() {
 
 
   resize_editor();
-   
+
   // set child window contents and event handlers, after a small delay
   setTimeout(function() {
     // setup event handlers
+    _Rpad = _Rpad_editor._doc.getElementsByTagName("body")[0];
+   
     window.onresize = resize_editor;
     // HTMLArea modifies onunload internally, so we want to change it back.
     window.onunload = stopRpad;
@@ -163,11 +156,6 @@ HTMLArea.prototype._createMenuBar = function() {
 
     this._htmlArea.appendChild(el);
     this._menuBar = el;
-//    var el = document.createElement("div");
-//    el.innerHTML = "test";
-//    el.className = "statusArea";
-//    this._htmlArea.appendChild(el);
-//    this._statusArea = el;
 };
 
 
@@ -175,7 +163,6 @@ HTMLArea.prototype.updateStatusArea = function(node) {
   var parent = this.getParentElement();
   if (node.tagName == 'SELECT' || node.tagName == 'INPUT') // try an INPUT or SELECT
     parent = node;
-//  window.status = parent.tagName+parent.className + parent.name;
 
   var str = ""
   var el = document.createElement("div");
@@ -208,10 +195,9 @@ HTMLArea.prototype.updateStatusArea = function(node) {
     var inp = document.createElement("input");
     inp.ID = "statusarea_name";
     inp.style.fontSize = "12";
-//    inp.value = parent.getAttribute("name");
     inp.value = parent.getAttribute("name");
-    inp.onchange = function() {parent.setAttribute("name",this.value);};
-    inp.onblur = function() {parent.setAttribute("name",this.value);};
+    inp.onchange = function() {parent.setAttribute("name",this.value);parent.name = this.value;};
+    inp.onblur = function() {parent.setAttribute("name",this.value);parent.name = this.value;};
     el.appendChild(inp);
   }
   var canHaveValue = parent.tagName.toLowerCase() == "input" &&
@@ -330,37 +316,13 @@ function Rpad_calculate_next(node) {
 }
 
 function Rpad_insert_Rpad(Rpadtype) {
-    var editor = _Rpad_editor;
-    editor.focusEditor();
-	var parent = editor.getParentElement();
-
-    // find the top level node just below the BODY
-    while (parent.parentNode.tagName.toLowerCase() != "body")
-      parent = parent.parentNode;
-
-    var el = editor._doc.createElement("DIV");
-    el.className = 'Rpad_input';
-    el.setAttribute('rpad_type', Rpadtype);
-    el.innerHTML = '&nbsp;';
-
-    parent.parentNode.insertBefore(el,parent);
+  _Rpad_editor.focusEditor();
+  _Rpad_editor.insertHTML("<pre class='Rpad_input' rpad_type='" + Rpadtype + "'># Enter code or file data here</pre>");
 }
 
 function Rpad_insert_Rpad_textarea(Rpadtype) {
-    var editor = _Rpad_editor;
-    editor.focusEditor();
-	var parent = editor.getParentElement();
-
-    // find the top level node just below the BODY
-    while (parent.parentNode.tagName.toLowerCase() != "body")
-      parent = parent.parentNode;
-
-    var el = editor._doc.createElement("span");
-    el.className = 'wrapperForTextArea';
-    el.contentEditable = 'false';
-    el.innerHTML = '<textarea class="Rpad_input" rpad_type=' + Rpadtype + ' rows="5" cols="60">&nbsp; </textarea>';
-
-    parent.parentNode.insertBefore(el,parent);
+  _Rpad_editor.focusEditor();
+  _Rpad_editor.insertHTML("<span contenteditable='false' class='RpadWrapper'><textarea class='Rpad_input' rpad_type='" + Rpadtype + "' rows='5' cols='80'># Enter code or file data here</textarea></span>");
 }
 
 function Rpad_insert_Rpad_input(Rpadtype) {

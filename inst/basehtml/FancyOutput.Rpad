@@ -57,6 +57,7 @@ Moz:(. </p>
     <div class="Rpad_input" rpad_type="R">
       data(iris)<br>
       data = iris<br>
+      cat("\nSortable table (click the headings):")<br>
       HTMLon()<br>
       HTML(data[1:5,])<br>
       HTML(summary(data))<br>

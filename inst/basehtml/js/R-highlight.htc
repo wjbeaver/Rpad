@@ -69,7 +69,8 @@ function parse() {
 function getText(node) {
   var text;
   if (node.nodeType == 3) {
-    text = node.nodeValue.replace(/\n/g,""); // text node
+    text = node.nodeValue; // text node
+//    text = text.replace(/\n/g, "");
     text = text.replace(/</g, "&lt;");
     return text;
   }
@@ -123,8 +124,8 @@ function wrap(text, color) {
 function tidy(text) {
 	text = text.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/ /g, "&nbsp;");
 	// a bit of browser-sniffing, tut tut
-//	if (/^ms/.test(element.uniqueID)) text = text.replace(/\r\n/g, "&nbsp;<br>\n");
-	text = text.replace(/\n/g, "&nbsp;<br>\n");
+	if (/^ms/.test(element.uniqueID)) text = text.replace(/\r|\r\n|\n/g, "&nbsp;<br>\n");
+//	text = text.replace(/\r|\r\n|\n/g, "&nbsp;<br>\n");
 	// esacpe out the placeholder used for parsing
 	return text.replace(new RegExp(PLACEHOLDER, "g"), "\\x" + PLACEHOLDER.charCodeAt(0).toString(16));
 };

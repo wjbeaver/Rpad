@@ -1,10 +1,6 @@
 Here are some ideas for improvements to Rpad. Many of these are from
 Eric Lecoutre.
 
-(*) IMPROVE STARTUP TIME -- Have one or more R processes waiting, and
-hand these off to the next requested page. (I think I've got this 
-almost done.)
-
 (*) TOGGLE EDITING -- Toggle between an editable version and a
 run-only version. I am sure this goes on the other way of your
 approach. Hide all the upper interface (hide only menu or hide menu 

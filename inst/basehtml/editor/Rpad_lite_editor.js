@@ -227,9 +227,10 @@ function _editorEvent(ev) {
 
 HTMLArea.prototype._updateStatusArea = function(node) {
   var parent = this.getParentElement();
-  if (node.tagName == 'SELECT' || node.tagName == 'INPUT') // try an INPUT or SELECT
+  // try an INPUT or SELECT
+  if (node.tagName == 'SELECT' || node.tagName == 'INPUT' || node.tagName == 'TEXTAREA') 
     parent = node;
-//  window.status = parent.tagName+parent.className + parent.name;
+  window.status = parent.tagName+parent.className + parent.name;
 
   var str = ""
   var el = document.createElement("div");
@@ -402,40 +403,18 @@ function _isInRpadDiv() {
 }
 
 function Rpad_insert_Rpad(Rpadtype) {
-    if (!_isInRpadDiv()) return;
-	var parent = _Rpad_editor.getParentElement();
-
-    // find the top level node 2 levels below the BODY
-    while (parent.parentNode.parentNode.tagName.toLowerCase() != "body")
-      parent = parent.parentNode;
-
-    var el = document.createElement("DIV");
-    el.className = 'Rpad_input';
-    el.setAttribute('rpad_type', Rpadtype);
-    el.innerHTML = '&nbsp;';
-
-    parent.parentNode.insertBefore(el,parent);
+  if (!_isInRpadDiv()) return;
+  _Rpad_editor.insertHTML("<pre class='Rpad_input' rpad_type='" + Rpadtype + "'># Enter code or file data here</pre>");
 }
 
 function Rpad_insert_Rpad_textarea(Rpadtype) {
-    if (!_isInRpadDiv()) return;
-	var parent = _Rpad_editor.getParentElement();
-
-    // find the top level node 2 levels below the BODY
-    while (parent.parentNode.parentNode.tagName.toLowerCase() != "body")
-      parent = parent.parentNode;
-
-    var el = document.createElement("span");
-    el.className = 'wrapperForTextArea';
-    el.contentEditable = 'false';
-    el.innerHTML = '<textarea class="Rpad_input" rpad_type=' + Rpadtype + ' rows="5" cols="60">&nbsp; </textarea>';
-
-    parent.parentNode.insertBefore(el,parent);
+  if (!_isInRpadDiv()) return;
+  _Rpad_editor.insertHTML("<span contenteditable='false' class='RpadWrapper'><textarea class='Rpad_input' rpad_type='" + Rpadtype + "' rows='5' cols='80'># Enter code or file data here</textarea></span>");
 }
 
 function Rpad_insert_Rpad_input(Rpadtype) {
   if (!_isInRpadDiv()) return;
-  _Rpad_editor.insertHTML("<span contenteditable='false'><input class='Rpad_input' rpad_type='" + Rpadtype + "'>&nbsp; </input></span>");
+  _Rpad_editor.insertHTML("<span contenteditable='false' class='RpadWrapper'><input class='Rpad_input' rpad_type='" + Rpadtype + "'>&nbsp; </input></span>");
 }
 
 function Rpad_insert_Rpad_span(Rpadtype) {

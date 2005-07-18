@@ -60,12 +60,12 @@ node.style.display="none";
 <p>We'll start off with some data to plot (these could also be
 entered into a textarea or read from a file):</p>
 
-<div class="Rpad_input" rpad_type="R">
-# load the helper script<br>
-source(system.file('basehtml','guiGen.R',package="Rpad"))  <br>
-x = seq(10)<br>
-y = (x + rnorm(x))^2<br>
-</div>
+<pre class="Rpad_input" rpad_type="R">
+# load the helper script
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+x = seq(10)
+y = (x + rnorm(x))^2
+</pre>
 
 
 <p>This example shows that you can have even more flexibility by
@@ -763,31 +763,31 @@ text </a></span></form></div></div>
             onclick="javascript:top.Rpad_calculate()" value=
             "Plot"></span>  
 <span class="wrapperForHidden" contenteditable="false">
-<div class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
-# adjust the par parameters in case the user<br />
-# wants to add more axes<br />
-newgraph(w=5)<br />
-par(mar=c(5,4,4,4)+.1)<br />
-# set up the plot<br />
-  plot.new()<br />
-# The following could use some work.<br />
-# It doesn't track changes in added series, and <br />
-# it would be nice to have some of these as parameters.<br />
-# lextract uses sapply to extract the common elements from a list of lists<br />
-  lextract = function(lst, element) sapply(lst, function(l) l[[element]])<br />
-  plot.window(xlim=range(lextract(s1,"x"), lextract(s2, "x"), na.rm=TRUE),<br />
-              ylim=range(lextract(s1,"y"), lextract(s2, "y"), na.rm=TRUE))<br />
-# plot it<br>
-  runGuiCommand(s1)<br />
-  runGuiCommand(s2)<br />
-  runGuiCommand(Box)<br />
-  runGuiCommand(Xaxis)<br />
-  runGuiCommand(Yaxis)<br />
-  runGuiCommand(XaxisLabel)<br />
-  runGuiCommand(YaxisLabel)<br />
-HTMLon()<br />
-showgraph(link=TRUE)<br />
-</div></span>
+<pre class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
+# adjust the par parameters in case the user
+# wants to add more axes
+newgraph(w=5)
+par(mar=c(5,4,4,4)+.1)
+# set up the plot
+plot.new()
+# The following could use some work.
+# It doesn't track changes in added series, and 
+# it would be nice to have some of these as parameters.
+# lextract uses sapply to extract the common elements from a list of lists
+lextract = function(lst, element) sapply(lst, function(l) l[[element]])
+plot.window(xlim=range(lextract(s1,"x"), lextract(s2, "x"), na.rm=TRUE),
+            ylim=range(lextract(s1,"y"), lextract(s2, "y"), na.rm=TRUE))
+# plot it
+runGuiCommand(s1)
+runGuiCommand(s2)
+runGuiCommand(Box)
+runGuiCommand(Xaxis)
+runGuiCommand(Yaxis)
+runGuiCommand(XaxisLabel)
+runGuiCommand(YaxisLabel)
+HTMLon()
+showgraph(link=TRUE)
+</pre></span>
 </td></tr></table>
 
 
@@ -798,100 +798,105 @@ showgraph(link=TRUE)<br />
 time. R could also be used to dynamically create the GUI. Here's the R
 code used to generate the GUI:</p><br>
 
+<pre class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="none">
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+seriesG = guiCommandFun(
+    "points",
+    guiHeader = "Series parameters",
+    x = guiInput("X series", default = "x"),
+    y = guiInput("Y series", default = "y"),
+    type = guiInput("Series type", 
+        choices = c("p", "l", "b", "o", "h", "s", "S", "n"),
+        mapping = c("p" = "Points", "l" = "Lines", "b" = "Both", 
+            "o" = "Overlayed points and lines", "h" = "Vertical lines", 
+            "s" = "Stair-stepped", "S" = "Stair-stepped 2", 
+            "n" = "No plot"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    pch = guiInput("Point style", guiType = "guiPickPch")
+)
 
-<div class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="none">
-source(system.file('basehtml','guiGen.R',package="Rpad"))  <br>
-seriesG <- guiCommandFun("points",guiHeader="Series parameters",<br>
-&nbsp;&nbsp;                        x = guiInput("X series", default = "x"),<br>
-&nbsp;&nbsp;                        y = guiInput("Y series", default = "y"),<br>
-&nbsp;&nbsp;                        type = guiInput("Series type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("p", "l", "b", "o", "h", "s", "S", "n"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          mapping = c("p" =
-"Points", "l" = "Lines", "b" = "Both", "o" = "Overlayed points and
-lines", "h" = "Vertical lines", "s" = "Stair-stepped", "S" =
-"Stair-stepped 2", "n" = "No plot"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                col = guiInput("Color", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = palette(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                        lty = guiInput("Line type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                        pch = guiInput("Point style", guiType = "guiPickPch")<br>
-&nbsp;&nbsp;                        )<br>
-axisG <- guiCommandFun("axis", useFunctionParameters=TRUE, <br>
-&nbsp;&nbsp;                side = guiInput("Side", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("1 - bottom", "2
-- left", "3 - top", "4 - right"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  optionvalue = c(1, 2, 3, 4),<br>
+axisG = guiCommandFun("axis", useFunctionParameters=TRUE, 
+    side = guiInput("Side", 
+        choices = c("1 - bottom", "2 - left", "3 - top", "4 - right"),
+        optionvalue = c(1, 2, 3, 4),
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox")
+)
 
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                col = guiInput("Color", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = palette(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                        lty = guiInput("Line type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          type = "Rstring",
-guiType = "guiCombobox")<br>
-)<br>
-boxG <- guiCommandFun("box",
-&nbsp;&nbsp;                        bty = guiInput("Box type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          optionvalue =
-c("n","O","L","7","C","U","]"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("n -
-None","O - normal box","L - left & bottom","7 - top & right","C -
-right missing","] - left missing"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                col = guiInput("Color", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = palette(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                        lty = guiInput("Line type", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                          type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                        lwd = guiInput("Line width"), <br>
-)<br>
-mtextG <- guiCommandFun("mtext", guiHeader="margin text", text=guiInput("Label",<br>
-&nbsp;&nbsp;type="Rstring"),text=guiInput("text",type="Rstring"),<br>
-&nbsp;&nbsp;las=guiInput("las",default=1), useFunctionParameters=TRUE,
-&nbsp;&nbsp;                col = guiInput("Color", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = palette(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                adj = guiInput("Justification", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("0 - left", "0.5
-- middle","1 - right"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  optionvalue = c(0, 0.5, 1),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  type = "Rstring",
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                font = guiInput("Font", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("1 - plain", "2
-- bold","3 - italics", "4 - bold italic"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  optionvalue = 1:4,<br>
-guiType = "guiCombobox"),<br>
-&nbsp;&nbsp;                side = guiInput("Side", <br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  choices = c("1 - bottom", "2
-- left", "3 - top", "4 - right"),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;                  optionvalue = c(1, 2, 3, 4),<br>
+boxG = guiCommandFun("box",
+    bty = guiInput("Box type", 
+        optionvalue = c("n","O","L","7","C","U","]"),
+        choices = c("n - None","O - normal box","L - left & bottom",
+            "7 - top & right","C - right missing","] - left missing"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lwd = guiInput("Line width"), 
+)
 
-guiType = "guiCombobox"),<br>
-)<br>
-<br>
-#HTMLon()<br>
-HTML(seriesG(pch=4), guiHeader="First series", varname="s1", expanded=FALSE)<br>
-HTML(seriesG(y="y/2",col="red",type="b"), guiHeader="More series", varname="s2", allowDuplication=TRUE, expanded=FALSE)<br>
-HTML(boxG(),varname="Box", allowDuplication=TRUE, expanded=FALSE)<br>
-HTML(axisG(side=1), guiHeader="X axis", varname="Xaxis", allowDuplication=TRUE, expanded=FALSE)<br>
-HTML(axisG(side=2), guiHeader="Y axis", varname="Yaxis", allowDuplication=TRUE, expanded=FALSE)<br>
-HTML(mtextG(side=1,text="X",line=3,las=0), guiHeader="X axis label", varname="XaxisLabel", allowDuplication=TRUE, expanded=FALSE)<br>
-HTML(mtextG(side=2,text="Y",line=3,las=0), guiHeader="Y axis label", varname="YaxisLabel", allowDuplication=TRUE, expanded=FALSE)<br>
-</div>
+mtextG <- guiCommandFun("mtext", 
+    guiHeader = "margin text", 
+#    text = guiInput("Label", type = "Rstring"), 
+    text = guiInput("text", type = "Rstring"),
+    las=guiInput("las",default=1), 
+    useFunctionParameters=TRUE,
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    adj = guiInput("Justification", 
+        choices = c("0 - left", "0.5 - middle","1 - right"),
+        optionvalue = c(0, 0.5, 1),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    font = guiInput("Font", 
+        choices = c("1 - plain", "2 - bold","3 - italics", "4 - bold italic"),
+        optionvalue = 1:4,
+        guiType = "guiCombobox"),
+    side = guiInput("Side", 
+        choices = c("1 - bottom", "2 - left", "3 - top", "4 - right"),
+        optionvalue = c(1, 2, 3, 4),
+        guiType = "guiCombobox"),
+)
+
+
+#HTMLon()
+HTML(seriesG(pch=4), guiHeader="First series", varname="s1", expanded=FALSE)
+HTML(seriesG(y="y/2",col="red",type="b"), guiHeader="More series",
+     varname="s2", allowDuplication=TRUE, expanded=FALSE)
+HTML(boxG(),varname="Box", allowDuplication=TRUE, expanded=FALSE)
+HTML(axisG(side=1), guiHeader="X axis", varname="Xaxis", 
+     allowDuplication=TRUE, expanded=FALSE)
+HTML(axisG(side=2), guiHeader="Y axis", varname="Yaxis", 
+     allowDuplication=TRUE, expanded=FALSE)
+HTML(mtextG(side=1,text="X",line=3,las=0), guiHeader="X axis label", 
+     varname="XaxisLabel", allowDuplication=TRUE, expanded=FALSE)
+HTML(mtextG(side=2,text="Y",line=3,las=0), guiHeader="Y axis label", 
+     varname="YaxisLabel", allowDuplication=TRUE, expanded=FALSE)
+</pre>
 
 
 <br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005

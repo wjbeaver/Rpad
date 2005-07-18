@@ -51,64 +51,64 @@ span.tree li {
 <a href="blank.Rpad">New Rpad page</a></span><br></p>
 
 <span class="wrapperForHidden" contenteditable="false">
-      <div class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
-        .threecolumns = function(lst) {<br>
-&nbsp;&nbsp;        n = length(lst)<br>
-&nbsp;&nbsp;        if (n <= 3) return(lst)<br>
-&nbsp;&nbsp;        ncol = 3<br>
-&nbsp;&nbsp;        nrow = ceiling(n / ncol)<br>
-&nbsp;&nbsp;        lst = as.matrix(append(lst, rep("", ncol * nrow - n)))<br>
-&nbsp;&nbsp;        dim(lst) = c(nrow, ncol)<br>
-&nbsp;&nbsp;        lst<br>
-        }<br>
-        .rpadfiles = grep('\\.html$|\\.rpad$', dir(), ignore.case =
-        TRUE, value = TRUE)<br>
-        .rpadfiles = paste("&lt;a href='", .rpadfiles, "'&gt;", .rpadfiles, " &lt;/a&gt;", sep="")<br>
-        .rpadfiles = .threecolumns(.rpadfiles)<br>
-        HTMLon()<br>
-        cat('&lt;span contenteditable="false"&gt;')<br>
-        HTML(.rpadfiles, Border = 0, classcellinside="dum", classtable="dum")<br>
-        cat('&lt;/span&gt;')
-      </div>
+<pre class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
+.threecolumns = function(lst) {
+    n = length(lst)
+    if (n <= 3) return(lst)
+    ncol = 3
+    nrow = ceiling(n / ncol)
+    lst = as.matrix(append(lst, rep("", ncol * nrow - n)))
+    dim(lst) = c(nrow, ncol)
+    lst
+}
+.rpadfiles = grep('\\.html$|\\.rpad$', dir(), ignore.case =
+TRUE, value = TRUE)
+.rpadfiles = paste("&lt;a href='", .rpadfiles, "'&gt;", .rpadfiles, " &lt;/a&gt;", sep="")
+.rpadfiles = .threecolumns(.rpadfiles)
+HTMLon()
+cat('&lt;span contenteditable="false"&gt;')
+HTML(.rpadfiles, Border = 0, classcellinside="dum", classtable="dum")
+cat('&lt;/span&gt;')
+</pre>
 </span>
 
 <p>*.Rdata R binary files  (click to load into R): </p>
 <span class="wrapperForHidden" contenteditable="false">
-      <div class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
-        .files = grep('\\.RData$', dir(), ignore.case = TRUE, value
-        = TRUE)<br>
-        .files = paste("&lt;a href=javascript:R_run_commands(\"load(\'",.files,"\')\",\"Rpad_calculate()\")&gt;",<br>
-          .files, "&lt;/a&gt;", sep="")<br>
-        .files = .threecolumns(.files)<br>
-        HTMLon()<br>
-        cat("&lt;span contenteditable=false&gt;")<br>
-        HTML(.files, Border = 0, classcellinside="dum", classtable="dum")<br>
-        cat("&lt;/span&gt;")<br>
-      </div>
+<pre class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
+.files = grep('\\.RData$', dir(), ignore.case = TRUE, value = TRUE)
+.files = paste("&lt;a href=javascript:R_run_commands(\"load(\'",
+               .files, "\')\", \"Rpad_calculate()\")&gt;",
+               .files, "&lt;/a&gt;", sep="")
+.files = .threecolumns(.files)
+HTMLon()
+cat("&lt;span contenteditable=false&gt;")
+HTML(.files, Border = 0, classcellinside="dum", classtable="dum")
+cat("&lt;/span&gt;")
+</pre>
 </span>
 
 <p>*.R files  (click to source into R): </p>
 <span class="wrapperForHidden" contenteditable="false">
-      <div class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
-        .files = grep('\\.R$', dir(), ignore.case = TRUE, value
-        = TRUE)<br>
-        .files = paste("&lt;a href=javascript:R_run_commands(\"source(\'",.files,"\')\",\"Rpad_calculate()\")&gt;",<br>
-          .files, "&lt;/a&gt;", sep="")<br>
-        .files = .threecolumns(.files)<br>
-        HTMLon()<br>
-        cat("&lt;span contenteditable=false&gt;")<br>
-        HTML(.files, Border = 0, classcellinside="dum", classtable="dum")<br>
-        cat("&lt;/span&gt;")<br>
-      </div>
+<pre class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
+.files = grep('\\.R$', dir(), ignore.case = TRUE, value = TRUE)
+.files = paste("&lt;a href=javascript:R_run_commands(\"source(\'",
+               .files, "\')\",\"Rpad_calculate()\")&gt;",
+               .files, "&lt;/a&gt;", sep="")
+.files = .threecolumns(.files)
+HTMLon()
+cat("&lt;span contenteditable=false&gt;")
+HTML(.files, Border = 0, classcellinside="dum", classtable="dum")
+cat("&lt;/span&gt;")
+</pre>
 </span>
 
 
 <p>R objects: </p>
 <span class="wrapperForHidden" contenteditable="false">
-      <div class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
-#        print(ls.str(), wid = 40, nchar.max = 20, vec.len=2)<br>
-        ls()<br>
-      </div>
+<pre class="Rpad_input" rpad_type="R" rpad_run="all" style="DISPLAY: none">
+# print(ls.str(), wid = 40, nchar.max = 20, vec.len=2)
+ls()
+</pre>
 </span>
 
 </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> <td width="25%">
@@ -130,7 +130,6 @@ span.tree li {
 <a  href="Example1.Rpad">General Example</a><br>
 <a  href="InputExamples.Rpad">Data input</a><br>
 <a  href="GuiExamples.Rpad">GUI Examples</a><br>
-<a  href="FancyOutput.Rpad">Fancy HTML output</a><br>
 <a  href="MoreGuiExamples.Rpad">More GUI Examples</a><br>
 <a  href="PlottingParameters.Rpad">Plot GUI</a><br>
 <a  href="PlottingParameters2.Rpad">Plot GUI part 2</a><br>

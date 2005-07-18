@@ -574,11 +574,11 @@
       print("Statistics::Rpad - Perl bridge started!") ;
       require(Rpad)       
       assign("RpadLocal", FALSE, envir = Rpad:::.RpadEnv)
+      .RPADTIMEOUTMINUTES = 30
       try(source("../../.RpadStartup.R"), silent = TRUE)
       newgraph()
       .PERLINPUTFILEX = 0 ;
       .PERLINPUTFILE = "" ;
-
       .PERLOUTPUTFILE <- file("$process_r","w")
       cat(0 , "\\n" , file=.PERLOUTPUTFILE)
       
@@ -617,14 +617,12 @@
           ## but without has a small sleep() time after some time
           ## without process files, soo, will save CPU.
           
-          if ( .PERLSLEEPDELAYX < 165 ) {
-            .PERLSLEEPDELAYX = .PERLSLEEPDELAYX + 1 ;
-            if      (.PERLSLEEPDELAYX == 50)  { .PERLSLEEPDELAY = 0.1 } ## 0.5s
-            else if (.PERLSLEEPDELAYX == 100) { .PERLSLEEPDELAY = 0.5 } ## 5.5s
-            else if (.PERLSLEEPDELAYX == 120) { .PERLSLEEPDELAY = 1 }   ## 15.5s
-            else if (.PERLSLEEPDELAYX == 165) { .PERLSLEEPDELAY = 2 }   ## 60.5s
-            else if (.PERLSLEEPDELAYX == 195) { .PERLSLEEPDELAY = 3 }   ## 120.5s
-          }
+          .PERLSLEEPDELAYX = .PERLSLEEPDELAYX + 1 ;
+          if      (.PERLSLEEPDELAYX == 50)  { .PERLSLEEPDELAY = 0.1 } ## 0.5s
+          else if (.PERLSLEEPDELAYX == 100) { .PERLSLEEPDELAY = 0.5 } ## 5.5s
+          else if (.PERLSLEEPDELAYX == 120) { .PERLSLEEPDELAY = 1 }   ## 15.5s
+          else if (.PERLSLEEPDELAYX == 165) { .PERLSLEEPDELAY = 2 }   ## 60.5s
+          else if ( (.PERLSLEEPDELAYX - 165) > .RPADTIMEOUTMINUTES*30 ) { quit() }  
         }
         
         cat("...\\n" , file=.PERLOUTPUTFILE)

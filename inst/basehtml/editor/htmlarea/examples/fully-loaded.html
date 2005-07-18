@@ -53,6 +53,7 @@ textarea { background-color: #fff; border: 1px solid 00f; }
 <script type="text/javascript">
 var editor = null;
 function initEditor() {
+alert(encodeURIComponent(document.getElementsByTagName("body")[0].innerHTML));
 
   // create an editor for the "ta" textbox
   editor = new HTMLArea("ta");
@@ -221,6 +222,13 @@ page reffered from &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 was the goal of this article.&lt;/p&gt;
 
 &lt;p name='hello'&gt;Hello&lt;/p&gt;
+&lt;pre&gt;
+XXXXXX
+YYYYYY
+ZZZZZZ
+111111
+222222
+&lt;/pre&gt;
 
 &lt;hr /&gt;
 &lt;address&gt;&lt;a href="http://students.infoiasi.ro/~mishoo/"&gt;Mihai Bazon&lt;/a&gt;&lt;/address&gt;

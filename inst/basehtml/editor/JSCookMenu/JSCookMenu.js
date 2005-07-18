@@ -125,8 +125,7 @@ function cmSplitItem (prefix, isMain, vertical)
 //
 function cmDrawSubMenu (subMenu, prefix, id, orient, nodeProperties)
 {
-//	var str = '<div unselectable="on" class="' + prefix + 'SubMenu" id="' + id + '" style="-moz-user-select: none;"><table summary="sub menu" cellspacing="' + nodeProperties.subSpacing + '" class="' + prefix + 'SubMenuTable">';
-	var str = '<div class="' + prefix + 'SubMenu" id="' + id + '"><table summary="sub menu" cellspacing="' + nodeProperties.subSpacing + '" class="' + prefix + 'SubMenuTable">';
+	var str = '<div unselectable="on" class="' + prefix + 'SubMenu" id="' + id + '" style="-moz-user-select: none;"><table summary="sub menu" cellspacing="' + nodeProperties.subSpacing + '" class="' + prefix + 'SubMenuTable">';
 	var strSub = '';
 
 	var item;
@@ -146,8 +145,7 @@ function cmDrawSubMenu (subMenu, prefix, id, orient, nodeProperties)
 		hasChild = (item.length > 5);
 		idSub = hasChild ? cmNewID () : null;
 
-//		str += '<tr unselectable="on" class="' + prefix + 'MenuItem"' + cmActionItem (item, prefix, 0, idSub, orient, nodeProperties) + ' style="-moz-user-select: none;" >';
-		str += '<tr class="' + prefix + 'MenuItem"' + cmActionItem (item, prefix, 0, idSub, orient, nodeProperties) + ' >';
+		str += '<tr unselectable="on" class="' + prefix + 'MenuItem"' + cmActionItem (item, prefix, 0, idSub, orient, nodeProperties) + ' style="-moz-user-select: none;" >';
 
 		if (item == _cmSplit)
 		{
@@ -166,19 +164,16 @@ function cmDrawSubMenu (subMenu, prefix, id, orient, nodeProperties)
 		classStr = prefix + 'Menu';
 		classStr += hasChild ? 'Folder' : 'Item';
 
-//		str += '<td unselectable="on" class="' + classStr + 'Left"  style="-moz-user-select: none;">';
-		str += '<td class="' + classStr + 'Left"  >';
+		str += '<td unselectable="on" class="' + classStr + 'Left"  style="-moz-user-select: none;">';
 
 		if (item[0] != null && item[0] != _cmNoAction)
 			str += item[0];
 		else
 			str += hasChild ? nodeProperties.folderLeft : nodeProperties.itemLeft;
 
-//		str += '<td unselectable="on" class="' + classStr + 'Text"  style="-moz-user-select: none;">' + item[1];
-		str += '<td class="' + classStr + 'Text"  >' + item[1];
+		str += '<td unselectable="on" class="' + classStr + 'Text"  style="-moz-user-select: none;">' + item[1];
 
-//		str += '<td unselectable="on" class="' + classStr + 'Right"  style="-moz-user-select: none;">';
-		str += '<td class="' + classStr + 'Right"  >';
+		str += '<td unselectable="on" class="' + classStr + 'Right"  style="-moz-user-select: none;">';
 
 		if (hasChild)
 		{

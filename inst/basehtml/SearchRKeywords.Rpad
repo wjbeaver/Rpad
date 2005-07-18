@@ -259,39 +259,38 @@ the search database.</sub>
 </td></tr></table>
 
 <span class="wrapperForHidden" contenteditable="false">
-      <div class="Rpad_input" rpad_type="R" style="DISPLAY: none">
-str = strsplit(Xselect,&quot; &quot;)[[1]][1]<br />
+<pre class="Rpad_input" rpad_type="R" style="DISPLAY: none">
+str = strsplit(Xselect,&quot; &quot;)[[1]][1]
 help(str,package=.packages(all.available=TRUE), chmhelp = FALSE, htmlhelp = FALSE,<br>
-pager=function(a,b,c,d) helpstr &lt;&lt;- gsub('_\b','',readLines(a)))<br />
-<br />
-idx=grep('^Examples:',helpstr)<br />
-if (length(idx)>0) {<br/>
-&nbsp;&nbsp;cat(paste(helpstr[1:idx],collapse="\n"))<br />
-&nbsp;&nbsp;cat(HTMLon())<br />
-&nbsp;&nbsp;cat('&lt;br&gt;&lt;span contenteditable="false"&gt;&lt;input
-&nbsp;&nbsp;type="button" value="Run Examples"
-&nbsp;&nbsp;onclick="top.Rpad_calculate_next(this);"
-&nbsp;&nbsp;class="runButton"/&gt;&lt;/span&gt;&lt;br&gt;')<br />
-&nbsp;&nbsp;cat('&lt;div class="Rpad_input" rpad_type="R" rpad_run="none"&gt;')<br />
-&nbsp;&nbsp;fixhtmlencodings = function (str) {  <br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str = gsub("&amp;","&amp;amp;",str)  <br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str = gsub("&lt;","&amp;lt;",str)  <br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str = gsub("&gt;","&amp;gt;",str)  <br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str = gsub("\n","\n&lt;BR/&gt;",str)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str = gsub(" ","&amp;#160;",str) # replace spaces with nonbreaking
-&nbsp;&nbsp;&nbsp;&nbsp;  spaces<br />
-&nbsp;&nbsp;&nbsp;&nbsp;  str<br />
-&nbsp;&nbsp;}<br />
-&nbsp;&nbsp;cat('require(',gsub(".*package:([a-zA-Z0-9\.]*) .*","\\1",helpstr[1]),')&lt;br&gt;')<br>
-&nbsp;&nbsp;cat('#newgraph(width=6) # uncomment this line to adjust the plot size&lt;br&gt;')<br>
-&nbsp;&nbsp;cat(fixhtmlencodings(paste(helpstr[(idx+1):NROW(helpstr)],collapse="\n")))<br/>
-&nbsp;&nbsp;cat("HTMLon(); showgraph() # the plot will be blank","if the examples don't plot anything")<br>
-&nbsp;&nbsp;cat('&lt;/div&gt;')<br />
-} else<br/>
-&nbsp;&nbsp;cat(paste(helpstr,collapse="\n"))<br />
-      </div>
+pager=function(a,b,c,d) helpstr &lt;&lt;- gsub('_\b','',readLines(a)))
+
+idx=grep('^Examples:',helpstr)
+if (length(idx)>0) {
+    cat(paste(helpstr[1:idx],collapse="\n"))
+    cat(HTMLon())
+    cat('&lt;br&gt;&lt;span contenteditable="false"&gt;&lt;input
+    type="button" value="Run Examples"
+    onclick="top.Rpad_calculate_next(this);"
+    class="runButton"/&gt;&lt;/span&gt;&lt;br&gt;')
+    cat('&lt;div class="Rpad_input" rpad_type="R" rpad_run="none"&gt;')
+    fixhtmlencodings = function (str) {  
+        str = gsub("&amp;","&amp;amp;",str)  
+        str = gsub("&lt;","&amp;lt;",str)  
+        str = gsub("&gt;","&amp;gt;",str)  
+        str = gsub("\n","\n&lt;BR/&gt;",str)
+        str = gsub(" ","&amp;#160;",str) # replace spaces with nonbreaking spaces
+        str
+    }
+    cat('require(',gsub(".*package:([a-zA-Z0-9\.]*) .*","\\1",helpstr[1]),')&lt;br&gt;')
+    cat('#newgraph(width=6) # uncomment this line to adjust the plot size&lt;br&gt;')
+    cat(fixhtmlencodings(paste(helpstr[(idx+1):NROW(helpstr)],collapse="\n")))
+    cat("HTMLon(); showgraph() # the plot will be blank","if the examples don't plot anything")
+    cat('&lt;/div&gt;')
+} else
+    cat(paste(helpstr,collapse="\n"))
+</pre>
 </span>
-<br><br><br><sub>by Tom Short, tshort@eprisolutions..com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
   </body>
 </html>
 
