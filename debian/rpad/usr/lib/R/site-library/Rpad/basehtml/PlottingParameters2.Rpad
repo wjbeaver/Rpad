@@ -1,0 +1,906 @@
+<html>
+<!-- by Tom Short, EPRI PEAC, tshort@eprisolutions.com
+(c) Copyright 2004 by EPRI PEAC
+
+Licence
+=======
+
+    This is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+
+The file COPYING in the Rpad top-level directory is a copy of the 'GNU
+General Public License'.
+ -->
+
+  <head>
+    <title>Plotting Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="editor/Rpad_loader.js">
+        
+    </script>
+  </head>
+
+  <body>
+<style>  TD {vertical-align: top;}
+</style>
+<script type="text/javascript">
+function duplicateGui(el) {
+  while (el.getAttribute("name") != "cmd_wrapper" && el.nodeName !=  "BODY")
+    el = el.parentNode;
+  if (el.nodeName != "BODY") {
+    el.parentNode.insertBefore(el.cloneNode(true),el.nextSibling);
+  }
+}
+</script>
+
+<h3>Plotting Example with a Flexible GUI Using Lower-Level Functions</h3>
+
+
+<script type="text/javascript">
+function updateInput(node, val) {
+var el=node.previousSibling.previousSibling;
+while(el.nodeName!="INPUT") el = el.previousSibling; 
+el.value = val; 
+node.style.display="none";
+}
+</script>
+
+<p>We'll start off with some data to plot (these could also be
+entered into a textarea or read from a file):</p>
+
+<pre class="Rpad_input" rpad_type="R">
+# load the helper script
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+x = seq(10)
+y = (x + rnorm(x))^2
+</pre>
+
+
+<p>This example shows that you can have even more flexibility by
+breaking down a plot into lower level functions (plot.window, points,
+axis, and so on). Each of the links below for the plot parameters
+expands when you click on it (and contracts when you click the link
+again). You can also duplicate elements, so you can add an extra axis or
+an extra data series. You could extend this concept to allow the user
+to add annotations, legends, or regression lines.<p>
+
+<table><tr><td>
+
+
+
+<div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> First series </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 's1' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( s1 , "Rcmd")' value= 'structure(list(params = structure(list(x = structure(list(name = "X series",      default = "x", type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput"), y = structure(list(name = "Y series",      default = "y", type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput"), type = structure(list(name = "Series type",      choices = c("p", "l", "b", "o", "h", "s", "S", "n"), mapping = structure(c("Points",      "Lines", "Both", "Overlayed points and lines", "Vertical lines",      "Stair-stepped", "Stair-stepped 2", "No plot"), .Names = c("p",      "l", "b", "o", "h", "s", "S", "n")), type = "Rstring"), .Names = c("name",  "choices", "mapping", "type"), class = "guiCombobox"), col = structure(list(     name = "Color", choices = c("black", "red", "green3", "blue",      "cyan", "magenta", "yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), lty = structure(list(     name = "Line type", choices = c("solid", "dotted", "dashed",      "dotdash", "longdash", "twodash"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), pch = structure(list(     name = "Point style", type = "Rvariable", default = 4), .Names = c("name",  "type", "default"), class = "guiPickPch")), .Names = c("x", "y",  "type", "col", "lty", "pch")), funname = "points", guiHeader = "Series parameters"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 's1idx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 's1idx' value= 's1idx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 's1[[s1idx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> X series </td><td><input name= 's1[[s1idx]]$x' value= 'x' rpad_type= 'Rvariable' id= 's1[[s1idx]]$x' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Y series </td><td><input name= 's1[[s1idx]]$y' value= 'y' rpad_type= 'Rvariable' id= 's1[[s1idx]]$y' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Series type </td><td><span style='position:relative'><input name= 's1[[s1idx]]$type' value= '' rpad_type= 'Rstring' id= 's1[[s1idx]]$type' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='Points' selected='selected'>Points</option> 
+<option value='Lines' >Lines</option> 
+<option value='Both' >Both</option> 
+<option value='Overlayed points and lines' >Overlayed points and lines</option> 
+<option value='Vertical lines' >Vertical lines</option> 
+<option value='Stair-stepped' >Stair-stepped</option> 
+<option value='Stair-stepped 2' >Stair-stepped 2</option> 
+<option value='No plot' >No plot</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 's1[[s1idx]]$col' value= '' rpad_type= 'Rstring' id= 's1[[s1idx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Line type </td><td><span style='position:relative'><input name= 's1[[s1idx]]$lty' value= '' rpad_type= 'Rstring' id= 's1[[s1idx]]$lty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='solid' selected='selected'>solid</option> 
+<option value='dotted' >dotted</option> 
+<option value='dashed' >dashed</option> 
+<option value='dotdash' >dotdash</option> 
+<option value='longdash' >longdash</option> 
+<option value='twodash' >twodash</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Point style </td><td><input name= 's1[[s1idx]]$pch' value= '4' rpad_type= 'Rvariable' id= 's1[[s1idx]]$pch' style= 'width:160px' > 
+</input> 
+<input id="button1" type="button" onclick="javascript:this.nextSibling.style.display='' 
+" value="..." /><span  style="display:none; position:relative; background-color:white;"><div style="background-color:white; width:190px; height: 190px; position:absolute;"><img src="js/pch1.png" onclick="javascript:updateInput(this.parentNode.parentNode,1);"> 
+
+<img src="js/pch2.png" onclick="javascript:updateInput(this.parentNode.parentNode,2);"> 
+
+<img src="js/pch3.png" onclick="javascript:updateInput(this.parentNode.parentNode,3);"> 
+
+<img src="js/pch4.png" onclick="javascript:updateInput(this.parentNode.parentNode,4);"> 
+
+<img src="js/pch5.png" onclick="javascript:updateInput(this.parentNode.parentNode,5);"> 
+
+<img src="js/pch6.png" onclick="javascript:updateInput(this.parentNode.parentNode,6);"> 
+
+<img src="js/pch7.png" onclick="javascript:updateInput(this.parentNode.parentNode,7);"> 
+
+<img src="js/pch8.png" onclick="javascript:updateInput(this.parentNode.parentNode,8);"> 
+
+<img src="js/pch9.png" onclick="javascript:updateInput(this.parentNode.parentNode,9);"> 
+
+<img src="js/pch10.png" onclick="javascript:updateInput(this.parentNode.parentNode,10);"> 
+
+<img src="js/pch11.png" onclick="javascript:updateInput(this.parentNode.parentNode,11);"> 
+
+<img src="js/pch12.png" onclick="javascript:updateInput(this.parentNode.parentNode,12);"> 
+
+<img src="js/pch13.png" onclick="javascript:updateInput(this.parentNode.parentNode,13);"> 
+
+<img src="js/pch14.png" onclick="javascript:updateInput(this.parentNode.parentNode,14);"> 
+
+<img src="js/pch15.png" onclick="javascript:updateInput(this.parentNode.parentNode,15);"> 
+
+<img src="js/pch16.png" onclick="javascript:updateInput(this.parentNode.parentNode,16);"> 
+
+<img src="js/pch17.png" onclick="javascript:updateInput(this.parentNode.parentNode,17);"> 
+
+<img src="js/pch18.png" onclick="javascript:updateInput(this.parentNode.parentNode,18);"> 
+
+<img src="js/pch19.png" onclick="javascript:updateInput(this.parentNode.parentNode,19);"> 
+
+<img src="js/pch20.png" onclick="javascript:updateInput(this.parentNode.parentNode,20);"> 
+
+<img src="js/pch21.png" onclick="javascript:updateInput(this.parentNode.parentNode,21);"> 
+
+<img src="js/pch22.png" onclick="javascript:updateInput(this.parentNode.parentNode,22);"> 
+
+<img src="js/pch23.png" onclick="javascript:updateInput(this.parentNode.parentNode,23);"> 
+
+<img src="js/pch24.png" onclick="javascript:updateInput(this.parentNode.parentNode,24);"> 
+
+<img src="js/pch25.png" onclick="javascript:updateInput(this.parentNode.parentNode,25);"> 
+</div></span></td> 
+</tr> 
+<td></td></table></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> More series </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 's2' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( s2 , "Rcmd")' value= 'structure(list(params = structure(list(x = structure(list(name = "X series",      default = "x", type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput"), y = structure(list(name = "Y series",      default = "y/2", type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), type = structure(list(     name = "Series type", choices = c("p", "l", "b", "o", "h",      "s", "S", "n"), mapping = structure(c("Points", "Lines",      "Both", "Overlayed points and lines", "Vertical lines", "Stair-stepped",      "Stair-stepped 2", "No plot"), .Names = c("p", "l", "b",      "o", "h", "s", "S", "n")), type = "Rstring", default = "b"), .Names = c("name",  "choices", "mapping", "type", "default"), class = "guiCombobox"),      col = structure(list(name = "Color", choices = c("black",      "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"     ), type = "Rstring", default = "red"), .Names = c("name",      "choices", "type", "default"), class = "guiCombobox"), lty = structure(list(         name = "Line type", choices = c("solid", "dotted", "dashed",          "dotdash", "longdash", "twodash"), type = "Rstring"), .Names = c("name",      "choices", "type"), class = "guiCombobox"), pch = structure(list(         name = "Point style", type = "Rvariable"), .Names = c("name",      "type"), class = "guiPickPch")), .Names = c("x", "y", "type",  "col", "lty", "pch")), funname = "points", guiHeader = "Series parameters"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 's2idx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 's2idx' value= 's2idx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 's2[[s2idx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> X series </td><td><input name= 's2[[s2idx]]$x' value= 'x' rpad_type= 'Rvariable' id= 's2[[s2idx]]$x' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Y series </td><td><input name= 's2[[s2idx]]$y' value= 'y/2' rpad_type= 'Rvariable' id= 's2[[s2idx]]$y' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Series type </td><td><span style='position:relative'><input name= 's2[[s2idx]]$type' value= 'b' rpad_type= 'Rstring' id= 's2[[s2idx]]$type' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='Points' selected='selected'>Points</option> 
+<option value='Lines' >Lines</option> 
+<option value='Both' >Both</option> 
+<option value='Overlayed points and lines' >Overlayed points and lines</option> 
+<option value='Vertical lines' >Vertical lines</option> 
+<option value='Stair-stepped' >Stair-stepped</option> 
+<option value='Stair-stepped 2' >Stair-stepped 2</option> 
+<option value='No plot' >No plot</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 's2[[s2idx]]$col' value= 'red' rpad_type= 'Rstring' id= 's2[[s2idx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Line type </td><td><span style='position:relative'><input name= 's2[[s2idx]]$lty' value= '' rpad_type= 'Rstring' id= 's2[[s2idx]]$lty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='solid' selected='selected'>solid</option> 
+<option value='dotted' >dotted</option> 
+<option value='dashed' >dashed</option> 
+<option value='dotdash' >dotdash</option> 
+<option value='longdash' >longdash</option> 
+<option value='twodash' >twodash</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Point style </td><td><input name= 's2[[s2idx]]$pch' value= '' rpad_type= 'Rvariable' id= 's2[[s2idx]]$pch' style= 'width:160px' > 
+</input> 
+<input id="button1" type="button" onclick="javascript:this.nextSibling.style.display='' 
+" value="..." /><span  style="display:none; position:relative; background-color:white;"><div style="background-color:white; width:190px; height: 190px; position:absolute;"><img src="js/pch1.png" onclick="javascript:updateInput(this.parentNode.parentNode,1);"> 
+
+<img src="js/pch2.png" onclick="javascript:updateInput(this.parentNode.parentNode,2);"> 
+
+<img src="js/pch3.png" onclick="javascript:updateInput(this.parentNode.parentNode,3);"> 
+
+<img src="js/pch4.png" onclick="javascript:updateInput(this.parentNode.parentNode,4);"> 
+
+<img src="js/pch5.png" onclick="javascript:updateInput(this.parentNode.parentNode,5);"> 
+
+<img src="js/pch6.png" onclick="javascript:updateInput(this.parentNode.parentNode,6);"> 
+
+<img src="js/pch7.png" onclick="javascript:updateInput(this.parentNode.parentNode,7);"> 
+
+<img src="js/pch8.png" onclick="javascript:updateInput(this.parentNode.parentNode,8);"> 
+
+<img src="js/pch9.png" onclick="javascript:updateInput(this.parentNode.parentNode,9);"> 
+
+<img src="js/pch10.png" onclick="javascript:updateInput(this.parentNode.parentNode,10);"> 
+
+<img src="js/pch11.png" onclick="javascript:updateInput(this.parentNode.parentNode,11);"> 
+
+<img src="js/pch12.png" onclick="javascript:updateInput(this.parentNode.parentNode,12);"> 
+
+<img src="js/pch13.png" onclick="javascript:updateInput(this.parentNode.parentNode,13);"> 
+
+<img src="js/pch14.png" onclick="javascript:updateInput(this.parentNode.parentNode,14);"> 
+
+<img src="js/pch15.png" onclick="javascript:updateInput(this.parentNode.parentNode,15);"> 
+
+<img src="js/pch16.png" onclick="javascript:updateInput(this.parentNode.parentNode,16);"> 
+
+<img src="js/pch17.png" onclick="javascript:updateInput(this.parentNode.parentNode,17);"> 
+
+<img src="js/pch18.png" onclick="javascript:updateInput(this.parentNode.parentNode,18);"> 
+
+<img src="js/pch19.png" onclick="javascript:updateInput(this.parentNode.parentNode,19);"> 
+
+<img src="js/pch20.png" onclick="javascript:updateInput(this.parentNode.parentNode,20);"> 
+
+<img src="js/pch21.png" onclick="javascript:updateInput(this.parentNode.parentNode,21);"> 
+
+<img src="js/pch22.png" onclick="javascript:updateInput(this.parentNode.parentNode,22);"> 
+
+<img src="js/pch23.png" onclick="javascript:updateInput(this.parentNode.parentNode,23);"> 
+
+<img src="js/pch24.png" onclick="javascript:updateInput(this.parentNode.parentNode,24);"> 
+
+<img src="js/pch25.png" onclick="javascript:updateInput(this.parentNode.parentNode,25);"> 
+</div></span></td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#' onClick='javascript:duplicateGui(this);return false;'>duplicate Series parameters </a></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> box </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 'Box' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( Box , "Rcmd")' value= 'structure(list(params =structure(list(bty = structure(list(name = "Box type",optionvalue = c("n", "O", "L", "7", "C", "U", "]"), choices = c("n - None",      "O - normal box", "L - left & bottom", "7 - top & right","C - right missing", "U - top missing", "] - left missing"), type ="Rstring"), .Names = c("name",  "optionvalue", "choices", "type"),class = "guiCombobox"), col = structure(list(     name = "Color",choices = c("black", "red", "green3", "blue",      "cyan", "magenta","yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices","type"), class = "guiCombobox"), lty = structure(list(     name ="Line type", choices = c("solid", "dotted", "dashed",      "dotdash","longdash", "twodash"), type = "Rstring"), .Names = c("name","choices", "type"), class = "guiCombobox"), lwd = structure(list(name = "Line width", type = "Rvariable"), .Names = c("name",  "type"),class = "guiInput")), .Names = c("bty", "col", "lty",  "lwd")),funname = "box", guiHeader = "box"), .Names = c("params",  "funname","guiHeader"), class = "guiCommand")' 
+rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Boxidx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 'Boxidx' value= 'Boxidx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Box[[Boxidx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> Box type </td><td><span style='position:relative'><input name= 'Box[[Boxidx]]$bty' value= '' rpad_type= 'Rstring' id= 'Box[[Boxidx]]$bty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='n' selected='selected'>n - None</option> 
+<option value='O' >O - normal box</option>
+<option value='L' >L - left & bottom</option>
+<option value='7' >7 - top & right</option>
+<option value='C' >C -right missing</option>
+<option value='U' >U - top missing</option>
+<option value=']' >] - left missing</option></select>
+</span></td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 'Box[[Boxidx]]$col' value= '' rpad_type= 'Rstring' id= 'Box[[Boxidx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Line type </td><td><span style='position:relative'><input name= 'Box[[Boxidx]]$lty' value= '' rpad_type= 'Rstring' id= 'Box[[Boxidx]]$lty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='solid' selected='selected'>solid</option> 
+<option value='dotted' >dotted</option> 
+<option value='dashed' >dashed</option> 
+<option value='dotdash' >dotdash</option> 
+<option value='longdash' >longdash</option> 
+<option value='twodash' >twodash</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Line width </td><td><input name= 'Box[[Boxidx]]$lwd' value= '' rpad_type= 'Rvariable' id= 'Box[[Boxidx]]$lwd' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#' onClick='javascript:duplicateGui(this);return false;'>duplicate box </a></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> X axis </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 'Xaxis' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( Xaxis , "Rcmd")' value= 'structure(list(params = structure(list(side = structure(list(     name = "Side", choices = c("1 - bottom", "2 - left", "3 - top",      "4 - right"), optionvalue = c(1, 2, 3, 4), type = "Rvariable",      default = 1), .Names = c("name", "choices", "optionvalue",  "type", "default"), class = "guiCombobox"), at = structure(list(     name = "at", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), labels = structure(list(     name = "labels", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), tick = structure(list(     name = "tick", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), line = structure(list(     name = "line", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), pos = structure(list(     name = "pos", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), outer = structure(list(     name = "outer", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), font = structure(list(     name = "font", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), vfont = structure(list(     name = "vfont", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), lty = structure(list(     name = "Line type", choices = c("solid", "dotted", "dashed",      "dotdash", "longdash", "twodash"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), lwd = structure(list(     name = "lwd", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), col = structure(list(     name = "Color", choices = c("black", "red", "green3", "blue",      "cyan", "magenta", "yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox")), .Names = c("side",  "at", "labels", "tick", "line", "pos", "outer", "font", "vfont",  "lty", "lwd", "col")), funname = "axis", guiHeader = "axis"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Xaxisidx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 'Xaxisidx' value= 'Xaxisidx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Xaxis[[Xaxisidx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> Side </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$side' value= '1' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$side' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - bottom</option> 
+<option value='2' >2 - left</option> 
+<option value='3' >3 - top</option> 
+<option value='4' >4 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> at </td><td><input name= 'Xaxis[[Xaxisidx]]$at' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$at' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> labels </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$labels' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$labels' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> tick </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$tick' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$tick' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> line </td><td><input name= 'Xaxis[[Xaxisidx]]$line' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$line' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> pos </td><td><input name= 'Xaxis[[Xaxisidx]]$pos' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$pos' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> outer </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$outer' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$outer' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> font </td><td><input name= 'Xaxis[[Xaxisidx]]$font' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$font' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> vfont </td><td><input name= 'Xaxis[[Xaxisidx]]$vfont' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$vfont' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Line type </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$lty' value= '' rpad_type= 'Rstring' id= 'Xaxis[[Xaxisidx]]$lty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='solid' selected='selected'>solid</option> 
+<option value='dotted' >dotted</option> 
+<option value='dashed' >dashed</option> 
+<option value='dotdash' >dotdash</option> 
+<option value='longdash' >longdash</option> 
+<option value='twodash' >twodash</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> lwd </td><td><input name= 'Xaxis[[Xaxisidx]]$lwd' value= '' rpad_type= 'Rvariable' id= 'Xaxis[[Xaxisidx]]$lwd' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 'Xaxis[[Xaxisidx]]$col' value= '' rpad_type= 'Rstring' id= 'Xaxis[[Xaxisidx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#' onClick='javascript:duplicateGui(this);return false;'>duplicate axis </a></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> Y axis </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 'Yaxis' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( Yaxis , "Rcmd")' value= 'structure(list(params = structure(list(side = structure(list(     name = "Side", choices = c("1 - bottom", "2 - left", "3 - top",      "4 - right"), optionvalue = c(1, 2, 3, 4), type = "Rvariable",      default = 2), .Names = c("name", "choices", "optionvalue",  "type", "default"), class = "guiCombobox"), at = structure(list(     name = "at", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), labels = structure(list(     name = "labels", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), tick = structure(list(     name = "tick", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), line = structure(list(     name = "line", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), pos = structure(list(     name = "pos", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), outer = structure(list(     name = "outer", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), font = structure(list(     name = "font", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), vfont = structure(list(     name = "vfont", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), lty = structure(list(     name = "Line type", choices = c("solid", "dotted", "dashed",      "dotdash", "longdash", "twodash"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), lwd = structure(list(     name = "lwd", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), col = structure(list(     name = "Color", choices = c("black", "red", "green3", "blue",      "cyan", "magenta", "yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox")), .Names = c("side",  "at", "labels", "tick", "line", "pos", "outer", "font", "vfont",  "lty", "lwd", "col")), funname = "axis", guiHeader = "axis"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Yaxisidx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 'Yaxisidx' value= 'Yaxisidx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'Yaxis[[Yaxisidx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> Side </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$side' value= '2' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$side' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - bottom</option> 
+<option value='2' >2 - left</option> 
+<option value='3' >3 - top</option> 
+<option value='4' >4 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> at </td><td><input name= 'Yaxis[[Yaxisidx]]$at' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$at' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> labels </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$labels' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$labels' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> tick </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$tick' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$tick' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> line </td><td><input name= 'Yaxis[[Yaxisidx]]$line' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$line' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> pos </td><td><input name= 'Yaxis[[Yaxisidx]]$pos' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$pos' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> outer </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$outer' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$outer' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> font </td><td><input name= 'Yaxis[[Yaxisidx]]$font' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$font' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> vfont </td><td><input name= 'Yaxis[[Yaxisidx]]$vfont' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$vfont' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Line type </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$lty' value= '' rpad_type= 'Rstring' id= 'Yaxis[[Yaxisidx]]$lty' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='solid' selected='selected'>solid</option> 
+<option value='dotted' >dotted</option> 
+<option value='dashed' >dashed</option> 
+<option value='dotdash' >dotdash</option> 
+<option value='longdash' >longdash</option> 
+<option value='twodash' >twodash</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> lwd </td><td><input name= 'Yaxis[[Yaxisidx]]$lwd' value= '' rpad_type= 'Rvariable' id= 'Yaxis[[Yaxisidx]]$lwd' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 'Yaxis[[Yaxisidx]]$col' value= '' rpad_type= 'Rstring' id= 'Yaxis[[Yaxisidx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#' onClick='javascript:duplicateGui(this);return false;'>duplicate axis </a></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> X axis label </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 'XaxisLabel' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( XaxisLabel , "Rcmd")' value= 'structure(list(params = structure(list(text = structure(list(     name = "text", type = "Rstring", default = "X"), .Names = c("name",  "type", "default"), class = "guiInput"), side = structure(list(     name = "Side", choices = c("1 - bottom", "2 - left", "3 - top",      "4 - right"), optionvalue = c(1, 2, 3, 4), type = "Rvariable",      default = 1), .Names = c("name", "choices", "optionvalue",  "type", "default"), class = "guiCombobox"), line = structure(list(     name = "line", default = 3, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), outer = structure(list(     name = "outer", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), at = structure(list(     name = "at", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), adj = structure(list(     name = "Justification", choices = c("0 - left", "0.5 - middle",      "1 - right"), optionvalue = c(0, 0.5, 1), type = "Rstring"), .Names = c("name",  "choices", "optionvalue", "type"), class = "guiCombobox"), cex = structure(list(     name = "cex", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), col = structure(list(     name = "Color", choices = c("black", "red", "green3", "blue",      "cyan", "magenta", "yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), font = structure(list(     name = "Font", choices = c("1 - plain", "2 - bold", "3 - italics",      "4 - bold italic"), optionvalue = as.integer(c(1, 2, 3, 4     )), type = "Rvariable"), .Names = c("name", "choices", "optionvalue",  "type"), class = "guiCombobox"), vfont = structure(list(name = "vfont",      default = NULL, type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput"), las = structure(list(name = "las",      default = 0, type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput")), .Names = c("text", "side", "line",  "outer", "at", "adj", "cex", "col", "font", "vfont", "las")),      funname = "mtext", guiHeader = "margin text"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'XaxisLabelidx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 'XaxisLabelidx' value= 'XaxisLabelidx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'XaxisLabel[[XaxisLabelidx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> text </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$text' value= 'X' rpad_type= 'Rstring' id= 'XaxisLabel[[XaxisLabelidx]]$text' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Side </td><td><span style='position:relative'><input name= 'XaxisLabel[[XaxisLabelidx]]$side' value= '1' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$side' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - bottom</option> 
+<option value='2' >2 - left</option> 
+<option value='3' >3 - top</option> 
+<option value='4' >4 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> line </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$line' value= '3' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$line' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> outer </td><td><span style='position:relative'><input name= 'XaxisLabel[[XaxisLabelidx]]$outer' value= '' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$outer' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> at </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$at' value= '' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$at' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Justification </td><td><span style='position:relative'><input name= 'XaxisLabel[[XaxisLabelidx]]$adj' value= '' rpad_type= 'Rstring' id= 'XaxisLabel[[XaxisLabelidx]]$adj' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='0' selected='selected'>0 - left</option> 
+<option value='0.5' >0.5 - middle</option> 
+<option value='1' >1 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> cex </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$cex' value= '' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$cex' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 'XaxisLabel[[XaxisLabelidx]]$col' value= '' rpad_type= 'Rstring' id= 'XaxisLabel[[XaxisLabelidx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Font </td><td><span style='position:relative'><input name= 'XaxisLabel[[XaxisLabelidx]]$font' value= '' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$font' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - plain</option> 
+<option value='2' >2 - bold</option> 
+<option value='3' >3 - italics</option> 
+<option value='4' >4 - bold italic</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> vfont </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$vfont' value= '' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$vfont' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> las </td><td><input name= 'XaxisLabel[[XaxisLabelidx]]$las' value= '0' rpad_type= 'Rvariable' id= 'XaxisLabel[[XaxisLabelidx]]$las' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#' onClick='javascript:duplicateGui(this);return false;'>duplicate margin text </a></span></form></div></div><div contenteditable='false'><a href='#' onclick='javascript:var el=this; while(el.nodeName!="DIV") el = el.nextSibling; if(el.style.display=="none") el.style.display=""; else el.style.display="none";return false;'> Y axis label </a><div  style='display:none' ><form><span contentEditable='false'> 
+<input name= 'YaxisLabel' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'attr( YaxisLabel , "Rcmd")' value= 'structure(list(params = structure(list(text = structure(list(     name = "text", type = "Rstring", default = "Y"), .Names = c("name",  "type", "default"), class = "guiInput"), side = structure(list(     name = "Side", choices = c("1 - bottom", "2 - left", "3 - top",      "4 - right"), optionvalue = c(1, 2, 3, 4), type = "Rvariable",      default = 2), .Names = c("name", "choices", "optionvalue",  "type", "default"), class = "guiCombobox"), line = structure(list(     name = "line", default = 3, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), outer = structure(list(     name = "outer", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiLogical"), at = structure(list(     name = "at", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), adj = structure(list(     name = "Justification", choices = c("0 - left", "0.5 - middle",      "1 - right"), optionvalue = c(0, 0.5, 1), type = "Rstring"), .Names = c("name",  "choices", "optionvalue", "type"), class = "guiCombobox"), cex = structure(list(     name = "cex", default = NULL, type = "Rvariable"), .Names = c("name",  "default", "type"), class = "guiInput"), col = structure(list(     name = "Color", choices = c("black", "red", "green3", "blue",      "cyan", "magenta", "yellow", "gray"), type = "Rstring"), .Names = c("name",  "choices", "type"), class = "guiCombobox"), font = structure(list(     name = "Font", choices = c("1 - plain", "2 - bold", "3 - italics",      "4 - bold italic"), optionvalue = as.integer(c(1, 2, 3, 4     )), type = "Rvariable"), .Names = c("name", "choices", "optionvalue",  "type"), class = "guiCombobox"), vfont = structure(list(name = "vfont",      default = NULL, type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput"), las = structure(list(name = "las",      default = 0, type = "Rvariable"), .Names = c("name", "default",  "type"), class = "guiInput")), .Names = c("text", "side", "line",  "outer", "at", "adj", "cex", "col", "font", "vfont", "las")),      funname = "mtext", guiHeader = "margin text"), .Names = c("params",  "funname", "guiHeader"), class = "guiCommand")' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'YaxisLabelidx' value= '0' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span name='cmd_wrapper'><table><span contentEditable='false'> 
+<input name= 'YaxisLabelidx' value= 'YaxisLabelidx + 1' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><span contentEditable='false'> 
+<input name= 'YaxisLabel[[YaxisLabelidx]]' value= 'list()' rpad_type= 'Rvariable' type= 'hidden' > 
+</input> 
+</span><tr> 
+<td> text </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$text' value= 'Y' rpad_type= 'Rstring' id= 'YaxisLabel[[YaxisLabelidx]]$text' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Side </td><td><span style='position:relative'><input name= 'YaxisLabel[[YaxisLabelidx]]$side' value= '2' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$side' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - bottom</option> 
+<option value='2' >2 - left</option> 
+<option value='3' >3 - top</option> 
+<option value='4' >4 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> line </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$line' value= '3' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$line' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> outer </td><td><span style='position:relative'><input name= 'YaxisLabel[[YaxisLabelidx]]$outer' value= '' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$outer' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='TRUE' selected='selected'>TRUE</option> 
+<option value='FALSE' >FALSE</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> at </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$at' value= '' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$at' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Justification </td><td><span style='position:relative'><input name= 'YaxisLabel[[YaxisLabelidx]]$adj' value= '' rpad_type= 'Rstring' id= 'YaxisLabel[[YaxisLabelidx]]$adj' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='0' selected='selected'>0 - left</option> 
+<option value='0.5' >0.5 - middle</option> 
+<option value='1' >1 - right</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> cex </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$cex' value= '' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$cex' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> Color </td><td><span style='position:relative'><input name= 'YaxisLabel[[YaxisLabelidx]]$col' value= '' rpad_type= 'Rstring' id= 'YaxisLabel[[YaxisLabelidx]]$col' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='black' selected='selected'>black</option> 
+<option value='red' >red</option> 
+<option value='green3' >green3</option> 
+<option value='blue' >blue</option> 
+<option value='cyan' >cyan</option> 
+<option value='magenta' >magenta</option> 
+<option value='yellow' >yellow</option> 
+<option value='gray' >gray</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> Font </td><td><span style='position:relative'><input name= 'YaxisLabel[[YaxisLabelidx]]$font' value= '' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$font' style= '0px;left:0px;z-index:1000;width:160px;' > 
+</input> 
+<select name= 'dummy' size= '1' id= 'dummy' style= 'position:absolute;top:0px;left:0px;z-index:0;width:175px;clip:rect(0px,175px, 22px, 160px);' onChange= 'javascript:var el=this; while(el.nodeName!="INPUT") el = el.previousSibling;el.value = this.options[this.selectedIndex].value;' ><option value='1' selected='selected'>1 - plain</option> 
+<option value='2' >2 - bold</option> 
+<option value='3' >3 - italics</option> 
+<option value='4' >4 - bold italic</option></select> 
+</span></td> 
+</tr> 
+<tr> 
+<td> vfont </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$vfont' value= '' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$vfont' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<tr> 
+<td> las </td><td><input name= 'YaxisLabel[[YaxisLabelidx]]$las' value= '0' rpad_type= 'Rvariable' id= 'YaxisLabel[[YaxisLabelidx]]$las' style= 'width:160px' > 
+</input> 
+</td> 
+</tr> 
+<td></td></table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='#'
+onClick='javascript:duplicateGui(this);return false;'>duplicate margin
+text </a></span></form></div></div> 
+
+
+
+
+</td><td>&nbsp;&nbsp;&nbsp;</td><td>
+             <span contenteditable="false"><input type="button"
+            onclick="javascript:top.Rpad_calculate()" value=
+            "Plot"></span>  
+<span class="wrapperForHidden" contenteditable="false">
+<pre class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
+# adjust the par parameters in case the user
+# wants to add more axes
+newgraph(w=5)
+par(mar=c(5,4,4,4)+.1)
+# set up the plot
+plot.new()
+# The following could use some work.
+# It doesn't track changes in added series, and 
+# it would be nice to have some of these as parameters.
+# lextract uses sapply to extract the common elements from a list of lists
+lextract = function(lst, element) sapply(lst, function(l) l[[element]])
+plot.window(xlim=range(lextract(s1,"x"), lextract(s2, "x"), na.rm=TRUE),
+            ylim=range(lextract(s1,"y"), lextract(s2, "y"), na.rm=TRUE))
+# plot it
+runGuiCommand(s1)
+runGuiCommand(s2)
+runGuiCommand(Box)
+runGuiCommand(Xaxis)
+runGuiCommand(Yaxis)
+runGuiCommand(XaxisLabel)
+runGuiCommand(YaxisLabel)
+HTMLon()
+showgraph(link=TRUE)
+</pre></span>
+</td></tr></table>
+
+
+<br><br><br><br><br>
+
+
+<p>This example uses a hardcoded GUI. This reduces page startup
+time. R could also be used to dynamically create the GUI. Here's the R
+code used to generate the GUI:</p><br>
+
+<pre class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="none">
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+seriesG = guiCommandFun(
+    "points",
+    guiHeader = "Series parameters",
+    x = guiInput("X series", default = "x"),
+    y = guiInput("Y series", default = "y"),
+    type = guiInput("Series type", 
+        choices = c("p", "l", "b", "o", "h", "s", "S", "n"),
+        mapping = c("p" = "Points", "l" = "Lines", "b" = "Both", 
+            "o" = "Overlayed points and lines", "h" = "Vertical lines", 
+            "s" = "Stair-stepped", "S" = "Stair-stepped 2", 
+            "n" = "No plot"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    pch = guiInput("Point style", guiType = "guiPickPch")
+)
+
+axisG = guiCommandFun("axis", useFunctionParameters=TRUE, 
+    side = guiInput("Side", 
+        choices = c("1 - bottom", "2 - left", "3 - top", "4 - right"),
+        optionvalue = c(1, 2, 3, 4),
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox")
+)
+
+boxG = guiCommandFun("box",
+    bty = guiInput("Box type", 
+        optionvalue = c("n","O","L","7","C","U","]"),
+        choices = c("n - None","O - normal box","L - left & bottom",
+            "7 - top & right","C - right missing","] - left missing"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lwd = guiInput("Line width"), 
+)
+
+mtextG <- guiCommandFun("mtext", 
+    guiHeader = "margin text", 
+#    text = guiInput("Label", type = "Rstring"), 
+    text = guiInput("text", type = "Rstring"),
+    las=guiInput("las",default=1), 
+    useFunctionParameters=TRUE,
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    adj = guiInput("Justification", 
+        choices = c("0 - left", "0.5 - middle","1 - right"),
+        optionvalue = c(0, 0.5, 1),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    font = guiInput("Font", 
+        choices = c("1 - plain", "2 - bold","3 - italics", "4 - bold italic"),
+        optionvalue = 1:4,
+        guiType = "guiCombobox"),
+    side = guiInput("Side", 
+        choices = c("1 - bottom", "2 - left", "3 - top", "4 - right"),
+        optionvalue = c(1, 2, 3, 4),
+        guiType = "guiCombobox"),
+)
+
+
+#HTMLon()
+HTML(seriesG(pch=4), guiHeader="First series", varname="s1", expanded=FALSE)
+HTML(seriesG(y="y/2",col="red",type="b"), guiHeader="More series",
+     varname="s2", allowDuplication=TRUE, expanded=FALSE)
+HTML(boxG(),varname="Box", allowDuplication=TRUE, expanded=FALSE)
+HTML(axisG(side=1), guiHeader="X axis", varname="Xaxis", 
+     allowDuplication=TRUE, expanded=FALSE)
+HTML(axisG(side=2), guiHeader="Y axis", varname="Yaxis", 
+     allowDuplication=TRUE, expanded=FALSE)
+HTML(mtextG(side=1,text="X",line=3,las=0), guiHeader="X axis label", 
+     varname="XaxisLabel", allowDuplication=TRUE, expanded=FALSE)
+HTML(mtextG(side=2,text="Y",line=3,las=0), guiHeader="Y axis label", 
+     varname="YaxisLabel", allowDuplication=TRUE, expanded=FALSE)
+</pre>
+
+
+<br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005
+  EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+  </body>
+</html>
+

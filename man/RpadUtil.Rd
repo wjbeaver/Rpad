@@ -41,6 +41,7 @@
 \seealso{\code{Rpad}, \code{RpadHTML}}
 
 \examples{
+\dontrun{
   # make some data
   x <- 1:10
   y2 <- x^3
@@ -49,6 +50,8 @@
   HTMLon()
   cat("<a href='", RpadBaseURL("testdata.RData"), sep="")
   cat("'>Click</a> to download the test data.")
+  unlink(RpadBaseFile("testdata.RData"))
+}
 }
 
 \keyword{ math }

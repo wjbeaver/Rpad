@@ -1,3 +1,31 @@
+**************  Version 1.1.1, 2006-03-05
+
+	Fix to RpadUtil.Rd to prevent the example from leaving behind 
+	a data file.
+
+	Changed it to load R2HTML if it is there using require.
+	
+**************  Version 1.1.0, 2006-02-17
+
+	This is the first release based on the Dojo toolkit. The
+	client-side code was completely revamped. The old client code is
+	still present, so old pages *should* work without change. 
+
+	The code for HTML generation was revamped. A new function "H" was
+	introduced to make it easier to generate proper html from within
+	R. This is the most likely source of incompatibility with previous
+	versions. 
+
+	The mini webserver in R/Tcl was rewritten. It is now based on
+	mini1.1.tcl from the tclhttpd webserver
+	(http://www.tcl.tk/software/tclhttpd/). It tries to keep socket
+	connections open if possible. That seems to reduce the problem of
+	the server locking up (until you hit a return at the R command
+	prompt). 
+
+	The little-used function "fspdf" was removed. 
+	
+
 **************  Version 0.9.6, 2005-07-18
 
 	Reverted back to using HTMLArea's getHTML instead innerHTML to
@@ -6,7 +34,7 @@
 	to switch to a more robust getHTML. FckEditor seems to have a more
 	robust version.
 
-**************  Version 0.9.6, 2005-06-20
+**************  Version 0.9.5, 2005-06-20
 
 	Replaced \r\n with \n when saving so that TEXTAREA's won't get
 	double spaced after saving. Also tweaked the wrapping of

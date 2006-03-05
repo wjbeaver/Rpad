@@ -1,0 +1,84 @@
+<html><head><title>R: Rpad utilities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for RpadUtil {Rpad}"><tr><td>RpadUtil {Rpad}</td><td align="right">R Documentation</td></tr></table>
+<h2>Rpad utilities</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Rpad utilities to generate filenames or URL's
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  RpadURL(filename = "")
+  RpadBaseURL(filename = "")
+  RpadBaseFile(filename = "")
+  RpadIsLocal()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>filename</code></td>
+<td>
+the name of a file. </td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+<code>RpadURL</code> returns the URL for the given filename: "./filename" for
+the local version of Rpad and "/Rpad/server/dd????????/filename" for
+the server version. Use this to output HTML links for the user.
+<br>
+<code>RpadBaseURL</code> returns the base URL: "filename" for the local
+version and "/Rpad/filename" for the client-server version. Use this
+to point the user to data files or other links on the server that is
+somewhere permanent. (The current R working directory is not
+permanent in the client-server version.)
+<br>
+<code>RpadBaseFile</code> returns the file name relative to the base R
+directory: "filename" for the local version and "../../filename" for
+the client-server version. Use this in R to read in data files or save
+data files somewhere permanent.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Tom Short, EPRI Solutions, Inc., (<a href="mailto:tshort@eprisolutions.com">tshort@eprisolutions.com</a>)
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code>Rpad</code>, <code>RpadHTML</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  # make some data
+  x &lt;- 1:10
+  y2 &lt;- x^3
+  save(x, y2, file = RpadBaseFile("testdata.RData"))
+  # output a link to the user:
+  HTMLon()
+  cat("&lt;a href='", RpadBaseURL("testdata.RData"), sep="")
+  cat("'&gt;Click&lt;/a&gt; to download the test data.")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>Rpad</em> version 1.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

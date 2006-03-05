@@ -1,3 +1,16 @@
+rpad (1.1.1) unstable; urgency=low
+
+  * See the main changelog for details
+
+ -- Tom Short <tshort@eprisolutions.com>  Tue, 05 Mar 2006 20:00:00 -0500
+	
+rpad (1.1.0) unstable; urgency=low
+
+  * First version of Rpad based on the Dojo toolkit
+  * See the main changelog for details
+
+ -- Tom Short <tshort@eprisolutions.com>  Tue, 17 Feb 2006 20:00:00 -0500
+	
 rpad (0.9.6) unstable; urgency=low
 
   * Minor bugfixes

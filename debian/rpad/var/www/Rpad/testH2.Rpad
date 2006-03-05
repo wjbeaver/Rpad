@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+   
+<title>Rpad GUI test</title>
+   
+<script type="text/javascript">
+    djConfig = {
+    	isDebug: true
+    };
+    rpadConfig = {
+        rpadRun: "init"
+    };
+</script>
+<script type="text/javascript" src="gui/dojo.js"></script>
+<script type="text/javascript" src="gui/Rpad.js"></script>
+<script type="text/javascript">
+	dojo.require("dojo.widget.TabPane");
+	dojo.require("dojo.widget.LinkPane");
+	dojo.require("dojo.widget.ContentPane");
+	dojo.require("dojo.widget.SortableTable");
+</script>
+	<style type="text/css">
+		/***
+			The following is just an example of how to use the table.
+			You can override any class names to be used if you wish.
+		***/
+		table {
+			font-family:Lucida Grande, Verdana;
+			font-size:0.8em;
+			border:1px solid #ccc;
+			cursor:default;
+		}
+		table tr td { padding:0.2em; }
+		table thead { background-color:#ccc; }
+		table thead tr td{ }
+		table thead tr td.selected { background-color:#999; }
+		table tbody {
+			/* Seems like only FF/Moz respects this, that is too bad. */
+/*			height:18em;
+			overflow:auto;
+			overflow-x:hidden;
+*/
+		}
+		table tbody tr { background-color:#fff; }
+		table tbody tr.alt { background-color:#ede; }
+		table tbody tr.selected,
+		table tbody tr.selected:hover { background-color:#ff3; }
+		table tbody tr:hover,
+/*		table tbody tr.alt:hover { background-color:#cfc; }
+*/                                     
+	</style>
+
+  <body>
+
+<p>Create a list dynamically: 
+</p>
+<pre dojoType="Rpad" rpadType="R">
+source(RpadBaseFile('HtmlTree.R'))
+data(state)
+HTMLon()
+H("ul",
+  H("li",
+    state.name[1:6]))
+</pre>
+
+<p>Create some tabs dynamically:
+</p>
+<pre dojoType="Rpad" rpadType="R">
+HTMLon()
+H("div",id="mainTabSet", dojoType="TabPane", style="width: 50%; height: 10em;",
+  H("div", dojoType="ContentPane", label="Tab 1",
+    HTMLselect("mystate", state.name, default=3),
+    BR,
+    HTMLinput("myvar", value = 3),
+    BR,
+    HTMLcheckbox("isAL", text = "Alabama"),
+    HTMLcheckbox("isWY", text = "Wyoming"),
+    HTMLcheckbox("isMT", text = "Montana")),
+  H("div", dojoType="ContentPane", label="Tab 2", 
+    "here's another tab",
+    HTMLradio("AL", commonName = "myState", text = "Alabama"),
+    HTMLradio("WY", commonName = "myState", text = "Wyoming"),
+    HTMLradio("MT", commonName = "myState", text = "Montana")))
+</pre>
+
+<p>Data frames
+</p>
+<pre dojoType="Rpad" rpadType="R">
+data(iris)
+HTMLon()
+H(head(iris))
+</pre>
+
+<p>Sortable data frames
+</p>
+<pre dojoType="Rpad" rpadType="R">
+data(iris)
+HTMLon()
+asDojoSortableTable(head(iris))
+</pre>
+
+</body>

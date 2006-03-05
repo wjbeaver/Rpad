@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions..com
+(c) Copyright 2005. by EPRI Solutions, Inc.
+
+Licence
+=======
+
+    This is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+
+The file COPYING in the Rpad top-level directory is a copy of the 'GNU
+General Public License'.
+ -->
+
+  <head>
+    <title>Plotting Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="editor/Rpad_loader.js">
+        
+    </script>
+  </head>
+
+  <body>
+<style>  TD {vertical-align: top;}
+</style>
+<script type="text/javascript">
+function duplicateGui(el) {
+  while (el.getAttribute("name") != "cmd_wrapper" && el.nodeName !=  "BODY")
+    el = el.parentNode;
+  if (el.nodeName != "BODY") {
+    el.parentNode.insertBefore(el.cloneNode(true),el.nextSibling);
+  }
+}
+</script>
+
+<h3>Plotting Example with a GUI</h3>
+
+<p>This is an example of how you can use R to generate a graphical
+interface for plotting input. Some work remains, but the example
+allows you to set up a large number of parameters that can be adjusted
+on typical graphs. It's not quite as interactive as double clicking on
+plot elements like Excel, but it is flexible enough to give the user
+wide latitude in adjusting plot parameters. The same approach could also be used for other
+applications that require a lot of data input or where there are a
+significant number of parameters that you can tweak.</p>
+
+<script type="text/javascript">
+function updateInput(node, val) {
+  var el=node.previousSibling.previousSibling;
+  while(el.nodeName!="INPUT") el = el.previousSibling; 
+  el.value = val; 
+  node.style.display="none";
+}
+</script>
+
+<p>First, we'll start off with some data to plot (these could also be
+entered into a textarea or read from a file):</p>
+
+<pre class="Rpad_input" rpad_type="R">
+x = seq(10)
+y = (x + rnorm(x))^2
+</pre>
+
+<p>Next, we'll use R to set up a gui. This runs when the page
+loads. Adjust any of the parameters, and hit the plot button (or
+F9). Note that the input boxes may either be R strings or R
+expressions. You can change the input type with the input box on the
+right side of the main Rpad toolbar. So for a color, you could enter red (with no
+quotes) in the default R string input box, or you could change it to
+an R variable and enter an expression using rgb() as one example. The
+R code is hidden, but it's not that long or complicated.</p>
+
+<span class="wrapperForHidden" contenteditable="false">    
+<pre class="Rpad_input" rpad_type="R"  id="guiGen" Rpad_run="init" style="DISPLAY: none">
+# The defines guiCommandFun and others.
+# Something like this will probably be moved to RpadUtils at some point.
+source(system.file('basehtml','guiGen.R',package="Rpad"))  
+plotG = guiCommandFun(
+    "plot",
+    guiHeader = "Plot parameters",
+    x = guiInput("X series", default = "x"),
+    y = guiInput("Y series", default = "y"),
+    type = guiInput("Plot type", 
+        choices = c("p", "l", "b", "o", "h", "s", "S", "n"),
+        mapping = c("p" = "Points", "l" = "Lines", "b" = "Both", 
+                    "o" = "Overlayed points and lines", 
+                    "h" = "Vertical lines", "s" = "Stair-stepped", 
+                    "S" = "Stair-stepped 2", "n" = "No plot"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    col = guiInput("Color", 
+        choices = palette(),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    lty = guiInput("Line type", 
+        choices = c("solid","dotted","dashed","dotdash","longdash","twodash"),
+        type = "Rstring",
+        guiType = "guiCombobox"),
+    pch = guiInput("Point style", guiType = "guiPickPch"),
+    main = guiInput("Main title", type = "Rstring"),
+    xlab = guiInput("X-axis label",default = "X", type = "Rstring"),
+    xLow = guiInput("X-axis min"),
+    xHigh = guiInput("X-axis max"),
+    ylab = guiInput("Y-axis label",default = "Y", type = "Rstring"),
+    yLow = guiInput("Y-axis min"),
+    yHigh = guiInput("Y-axis max"),
+    log = guiInput("Log axes", 
+        choices = c("x","y","xy"),
+        mapping = c("x" = "X axis", "y" = "Y axis", "xy" = "Both axes"),
+        type = "Rstring",
+        guiType = "guiCombobox")
+)
+
+HTMLon()
+HTML(plotG(),varname="p")
+</pre>
+</span>
+
+<p>Now, let's do the plot:</p>
+
+<p>             <span contenteditable="false"><input type="button"
+            onclick="javascript:top.Rpad_calculate()" value=
+            "Plot"></span>                                 
+</p>                                                           
+<span class="wrapperForHidden" contenteditable="false">    
+<pre class="Rpad_input" rpad_type="R" style="DISPLAY: none">
+# first, fix up the axis limits:
+if (is.null(p[[1]]$xLow))  p[[1]]$xLow  = min(p[[1]]$x)
+if (is.null(p[[1]]$xHigh)) p[[1]]$xHigh = max(p[[1]]$x)
+if (is.null(p[[1]]$yLow))  p[[1]]$yLow  = min(p[[1]]$y)
+if (is.null(p[[1]]$yHigh)) p[[1]]$yHigh = max(p[[1]]$y)
+p[[1]]$xlim = c(p[[1]]$xLow, p[[1]]$xHigh)
+p[[1]]$ylim = c(p[[1]]$yLow, p[[1]]$yHigh)
+
+# plot it
+runGuiCommand(p)
+HTMLon()
+showgraph(link=TRUE)
+</pre>
+</span>
+
+<p>We can extend that example to other plotting functions. The
+scatterplot function in John Fox's car package has most of the same
+options as the standard plot but with advanced
+options for adding regression lines and groupings as seen below. <p>
+
+<table><tr><td><span class="wrapperForHidden" contenteditable="false">
+<pre class="Rpad_input" rpad_type="R" id="guiGen" Rpad_run="init"  style="DISPLAY: none">
+require(car)
+baseG = plotG() # these are the parameters to the base plot function
+baseG$params$type = NULL # scatterplot doesn't have plot type or lty and col is a bit different
+baseG$params$lty = NULL 
+baseG$params$col = NULL 
+scatterplotG = guiCommandFun(
+    "scatterplot",
+    guiHeader = "Plot parameters", 
+    base = baseG,
+    reg.line = guiInput("Show regression line",
+         guiType = "guiLogical"),
+         smooth = guiInput("Show regression curve",
+         guiType = "guiLogical"),
+    span = guiInput("Regression curve span"),
+         boxplots = guiInput("Axis box plots",
+         choices = c("x", "y", "xy", "none"),
+         mapping = c("x" = "X axis", "y" = "Y axis", 
+                     "xy" = "Both axes", "none" = "None"),
+         guiType = "guiCombobox", type = "Rstring"),
+    groups = guiInput("Grouping variable")
+)
+
+HTMLon()
+HTML(scatterplotG(),varname="sp")
+</pre>
+</td><td>&nbsp;&nbsp;&nbsp;</td><td>
+             <span contenteditable="false"><input type="button"
+            onclick="javascript:top.Rpad_calculate()" value=
+            "Plot"></span>  
+<span class="wrapperForHidden" contenteditable="false">
+<pre class="Rpad_input" rpad_type="R"  style="DISPLAY: none">
+# first, fix linear regression line
+if (!is.null(sp[[1]]$reg.line) && sp[[1]]$reg.line) sp[[1]]$reg.line = lm
+# fix up the axis limits:
+if (is.null(sp[[1]]$xLow))  sp[[1]]$xLow = min(sp[[1]]$x)
+if (is.null(sp[[1]]$xHigh)) sp[[1]]$xHigh = max(sp[[1]]$x)
+if (is.null(sp[[1]]$yLow))  sp[[1]]$yLow = min(sp[[1]]$y)
+if (is.null(sp[[1]]$yHigh)) sp[[1]]$yHigh = max(sp[[1]]$y)
+sp[[1]]$xlim = c(sp[[1]]$xLow, sp[[1]]$xHigh)
+sp[[1]]$ylim = c(sp[[1]]$yLow, sp[[1]]$yHigh)
+# plot it
+runGuiCommand(sp, legend.plot = FALSE)
+HTMLon()
+showgraph(link=TRUE)
+</pre></span>
+</td></tr></table>
+
+<p>See this <span contenteditable="false"><a href="PlottingParameters2.Rpad" target="_blank">link</a></span> for another example that shows that you can have even more flexibility by
+breaking down a plot into lower level functions (plot.window, points,
+axis, and so on).<p>
+
+<p>Note that more work could be done with this. Some ideas include:<p>
+<ul>
+<li>Find a better way to specify parameters that are arrays. The most
+glaring example is for xlim and ylim.</li>
+<li>Add a selector for logical variables.</li>
+<li>Add one of the javascript color selectors available on the web. </li>
+<li>Improve the point style selector.</li>
+<li>Make a fancier GUI for expanding and collapsing collections of
+parameters.</li>
+<li>Add more detailed help for parameters. Investigate snatching this
+straight from the help files.</li>
+<li>Add an input box where the user can add extra parameters.</li>
+</ul>
+
+<br><br><br><sub>by Tom Short, tshort@eprisolutions..com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+  </body>
+</html>
+

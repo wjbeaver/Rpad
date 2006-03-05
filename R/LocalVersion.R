@@ -1,7 +1,4 @@
 
-
-
-
 # Rpad utility functions for running Rpad locally.
 # Here we use a local Tcl httpd server to receive Rpad commands.
 
@@ -50,11 +47,11 @@ function(defaultfile = "LocalDefault.Rpad", port = 8079) {
     assign("RpadLocal", TRUE, envir = .RpadEnv)
     assign("RpadDir",   ".",  envir = .RpadEnv)
     assign("RpadPort",  port, envir = .RpadEnv)
-    graphoptions(type="Rpng")
-    tclfile <- file.path(.find.package(package = "Rpad"), "tcl", "minihttpd.tcl")
+    graphoptions(type = "Rpng")
+    tclfile <- file.path(.find.package(package = "Rpad"), "tcl", "mini1.1.tcl")
     htmlroot <- file.path(.find.package(package = "Rpad"), "basehtml")
     tcl("source", tclfile)
-    tcl("server", htmlroot, port, defaultfile)
+    tcl("Httpd_Server", htmlroot, port, defaultfile)
     unlink(dir(pattern="Rpad_plot.*\.png")) # delete the Rpad graphics files in the dir
     unlink(dir(pattern="Rpad_plot.*\.eps"))
     if(interactive() && .Device == "null device") x11() # turn on the interactive plotting device so as not to confuse the command-line user if they later plot
@@ -69,8 +66,27 @@ function() {
     assign("RpadLocal",    FALSE, envir = .RpadEnv)
     unlink(dir(pattern="Rpad_plot.*\.png")) # delete the Rpad graphics files in the dir
     unlink(dir(pattern="Rpad_plot.*\.eps"))
-    .Tcl("close $config(listen)")
-    .Tcl("unset config")
+    .Tcl("close $Httpd(listen)")
+    .Tcl("unset Httpd")
 }
-    
 
+"restartRpadServer" <-
+function() {
+  stopRpadServer()
+  startRpadServer()
+}
+
+
+#library(Rpad)
+#library(tcltk)
+#tclfile <- file.path(.find.package(package = "Rpad"), "tcl", "mini1.1.tcl")
+#htmlroot <- file.path(.find.package(package = "Rpad"), "basehtml")
+#.Tcl("close $Httpd(listen)")
+#.Tcl("unset Httpd")
+#tcl("source", tclfile)
+#tcl("Httpd_Server", htmlroot, 8079, "index.html")
+#
+#
+#
+#
+#tcl("source","mini1.1.tcl")

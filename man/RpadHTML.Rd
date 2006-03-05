@@ -2,6 +2,9 @@
 \alias{ROutputFormat}
 \alias{HTMLon}     
 \alias{HTMLoff}    
+\alias{H}     
+\alias{HtmlTree}     
+\alias{HTML}     
 \alias{HTMLh1}     
 \alias{HTMLh2}     
 \alias{HTMLh3}     
@@ -17,6 +20,7 @@
 \alias{HTMLlink}       
 \alias{HTMLimg}        
 \alias{HTMLembed}      
+\alias{BR}     
 \alias{print.condition}
 \alias{HTML.data.frame}   
                    
@@ -28,40 +32,38 @@
   ROutputFormat(Format)
   HTMLon()
   HTMLoff()
+  HtmlTree(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE)
+  H(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE)
+  HTML(x,...)
+  BR
   HTMLh1(text)
   HTMLh2(text)
   HTMLh3(text)
   HTMLh4(text)
   HTMLh5(text)
-  HTMLargs(..., quoteChar = "'")
+  HTMLargs(x)
   HTMLtag(tagName, ...)
   HTMLetag(tagName)
   HTMLradio(variableName, commonName = "radio", text = "", ...)
   HTMLcheckbox(name, text = "", ...)
   HTMLselect(name, text, default = 1, size = 1, id = name, contenteditablewrapper = TRUE, optionvalue = text, ...)
-  HTMLinput(name, value = "", rpadtype = "Rvariable", contenteditablewrapper = TRUE, ...)
+  HTMLinput(name, value = "", rpadType = "Rvariable", contenteditablewrapper = TRUE, ...)
   HTMLlink(url, text, ...)
   HTMLimg(filename = RpadPlotName(), ...)
   HTMLembed(filename, width = 600, height = 600, ...)
-  HTML.data.frame(x, file = .HTML.file, Border = 1, innerBorder = 0,
-    classfirstline = "firstline", classfirstcolumn = "firstcolumn",
-    classcellinside = "cellinside",  append = TRUE , align = "center",
-    caption = "", captionalign = "bottom", classcaption = "captiondataframe",
-	classtable = "dataframe", digits = getOption("R2HTML.format.digits"),
-	nsmall = getOption("R2HTML.format.nsmall"),
-    big.mark = getOption("R2HTML.format.big.mark"),
-	big.interval = getOption("R2HTML.format.big.interval"),
-	decimal.mark = getOption("R2HTML.format.decimal.mark"),
-    sortableDF = getOption("R2HTML.sortableDF"), ...)
+  HTML.data.frame(x, ...)
   print.condition(x, ...)
 }
 
 \arguments{
   \item{Format}{ a string specifying the desired output format, like "html", "text", or "none" }
   \item{text}{ specifies the text to be displayed in the HTML output. }
-  \item{quoteChar} { specifies the quote character for HTML parameters. }
   \item{tagName}{ is a string specifying the HTML nodeName ("H1" or
     "DIV" for example). }
+  \item{standaloneTag}{ is a logical that specifies whether the HTML tag
+    is a standalone tag, meaning it has no ending tag (<br/> for example). }
+  \item{collapseContents}{ is a logical that specifies whether vector
+    tag contents are collapsed (merged).}
   \item{variableName, commonName}{ specify attributes of the radio
     element. \code{commonName} specifies the common radio elements that
     are grouped together (the name attribute of the radio element)--this gets translated into the R variable with
@@ -77,10 +79,9 @@
   \item{default, size, id, optionvalue}{ specify parameters of a select
     box. \code{default} specifies which of the options is selected initially.}
   \item{filename, width, height}{ are parameters of an IMG or EMBED object.}
-  \item{rpadtype}{ is the "rpad\_type" attribute of an INPUT
+  \item{rpadType}{ is the "rpadType" attribute of an INPUT
     element. Normal values are either "Rvariable" or "Rstring" but other
-    values of "rpad\_type" should also be possible. }
-  \item{file, Border, innerBorder, classfirstline, classfirstcolumn, classcellinside, append, align, caption, captionalign, classcaption, classtable, digits, nsmall, big.mark, big.interval, decimal.mark, sortableDF}{ Parameters to format a HTML table. }
+    values of "rpadType" should also be possible. }
   \item{x}{ == To define == }
   \item{...}{ arguments are passed on as HTML arguments for the given tag.}
 }
@@ -95,8 +96,14 @@ To turn HTML mode off, use \code{HTMLoff()} (which sends
 '<htmloff/>'). \code{HTMLon} and \code{HTMLoff} only apply to the
 existing Rpad input section; they don't carry over into the next.
 
-\code{HTMLtag} and \code{HTMLetag} generate HTML for an arbitrary HTML
-tag with the specified name and arguments. 
+\code{H} generates HTML (or other XML-like syntax) for an arbitrary tag
+with the specified name and arguments. Unnamed parameters to \code{H}
+are content, and named parameters are tag attributes. By using nesting,
+it's a good way to generate HTML (or any XML) with properly formed
+tags. If \code{tagName} is NULL, then the contents are created without a
+surrounding tag. For vectors, each vector element becomes surrounded by
+tags, so \code{H("div", c(1,2,3))} results in
+\code{<div>1</div><div>2</div><div>3</div>}. 
 
 \code{ROutputMode} changes how R behaves with automatic
 printing. Possible
@@ -113,7 +120,7 @@ several times.
 
 \value{
   All of the HTML code generation routines return a character string of
-  class HTMLchunk. With automatic printing, the string is sent to the
+  class HtmlTree. With automatic printing, the string is sent to the
   output (with \code{cat}). This has the effect that the HTML is
   displayed in Rpad. Note that if a HTML generation function is used
   inside of a loop or other scenario where the function results are not
@@ -130,23 +137,32 @@ several times.
 \seealso{\code{R2HTML} for other useful HTML routines that can be used in Rpad. }
 
 \examples{
-  #make some graphs (a default graphics device is already available)
-  x <- 1:10
-  y2 <- x^3
+  a <- data.frame(x = 1:10, y = (1:10)^3)
 
   # fancy HTML output
   HTMLon()
-  ROutputFormat('html')
-  summary(y2)
+  H(summary(a))
   HTMLoff()
-  ROutputFormat('text')
-  summary(y2)
+  summary(a)
 
   # generate some GUI elements
   # - normally done in an Rpad_input section with rpad_run="init"
   HTMLon() # switch to html mode
   data(state)
   HTMLselect("favoriteAmericanState", state.name) # generate the select box
+
+  H("div", "Hello world") # a simple div: "<div>Hello world</div>"
+  H("div", class="helloStyle", "Hello world") # a div with a class
+    # --> "<div class='helloStyle'>Hello world</div>"
+
+  # you can nest them:
+  H("div", class = "myClass", dojoType = "tree",
+    "This is some text in the div ",  
+    H("em", "emphasized"), "plus some more",
+    "and more",
+    H("div", class = "anotherClass",
+      "text in the div",
+      c(1,5,8)))
 }
 
 \keyword{ math }
