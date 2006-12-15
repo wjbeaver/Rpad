@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
 <html>
-<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions..com
-(c) Copyright 2005. by EPRI Solutions, Inc.
+<!-- by Tom Short, EPRI, tshort@epri.com
+(c) Copyright 2005. by EPRI
 
 Licence
 =======
@@ -30,14 +30,25 @@ General Public License'.
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
     djConfig = {
-//    	isDebug: true
+		isDebug: true
     };
+</script>
+<script type="text/javascript">
     rpadConfig = {
 //        rpadRun: "init"
     };
 </script>
 <script type="text/javascript" src="gui/dojo.js"></script>
 <script type="text/javascript" src="gui/Rpad.js"></script>
+<script>
+//alert(document.getElementById('Xinput'));
+function init() {
+  dojo.byId('Xinput').focus();
+  handleKeyUp(25);
+}
+dojo.addOnLoad(init);
+</script>
+  
   </head>
 
   <body>
@@ -152,18 +163,13 @@ function handleKeyUp(maxNumToShow)
 // end from http://www.somacon.com/aspdocs/page3003.php
 </script>
 
-  <script DEFER>
-//alert(document.getElementById('Xinput'));
-//document.getElementById('Xinput').focus();
-
-</script>
-  
 <p>Enter a search term here or click on a keyword at the right:</p>
 <span contenteditable="false">
 <form onSubmit="rpad.calculatePage();return false;">
 <input id="Xinput" onKeyUp="handleKeyUp(25);" type="text" name="Xinput" VALUE="" style="font-size:10pt;width:65ex;"><br>
 <select id="Xselect" onclick="rpad.calculatePage();rpad.gui2._scroll(dojo.widget.byId('mainPre').rpadResults);dojo.widget.byId('mainPre').domNode.focus();"
 name="Xselect" size="25" style="font-size:10pt;width:65ex;">
+<option value='loading...' > loading...</option>
 </select>
 <br><input type="button" onClick="handleKeyUp(9999999);" value="Load All" style="font-size:6pt;">
 </form><sub>Click <a href="UpdateRKeywords.Rpad">here</a> to update
@@ -290,7 +296,7 @@ if (length(idx)>0) {
 } else
     cat(paste(helpstr,collapse="\n"))
 </pre>
-<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+<br><br><br><sub>by Tom Short, tshort@epri.com, Copyright 2005. EPRI, license: GNU GPL v2 or greater</sub>
   </body>
 </html>
 

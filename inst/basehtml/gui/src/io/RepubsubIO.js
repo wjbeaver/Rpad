@@ -1,31 +1,27 @@
-/*
-	Copyright (c) 2004-2005, The Dojo Foundation
-	All Rights Reserved.
+//	Copyright (c) 2004 Friendster Inc., Licensed under the Academic Free
+//	License version 2.0 or later 
 
-	Licensed under the Academic Free License version 2.1 or above OR the
-	modified BSD license. For more information on Dojo licensing, see:
-
-		http://dojotoolkit.org/community/licensing.shtml
-*/
-
-dojo.require("dojo.event.Event");
-dojo.require("dojo.event.BrowserEvent");
+dojo.require("dojo.event.*");
 dojo.require("dojo.io.BrowserIO");
 
 dojo.provide("dojo.io.RepubsubIO");
-dojo.provide("dojo.io.repubsub");
-dojo.provide("dojo.io.repubsubTransport");
 
 dojo.io.repubsubTranport = new function(){
 	var rps = dojo.io.repubsub;
-	this.canHandle = function(kwArgs){
+	this.canHandle = function(/*dojo.io.Request*/kwArgs){
+		//summary: Tells dojo.io.bind() if this is a good transport to
+		//use for the particular type of request. This is a legacy transport
+		//and should not be used unless you are dealing with repubsub.
+		//Consider a comet transport instead.
 		if((kwArgs["mimetype"] == "text/javascript")&&(kwArgs["method"] == "repubsub")){
 			return true;
 		}
 		return false;
 	}
 
-	this.bind = function(kwArgs){
+	this.bind = function(/*dojo.io.Request*/kwArgs){
+		//summary: This is a legacy transport and should not be used unless you are dealing with repubsub.
+		//Consider a comet transport instead.
 		if(!rps.isInitialized){
 			// open up our tunnel, queue up requests anyway
 			rps.init();
@@ -57,7 +53,7 @@ dojo.io.repubsubTranport = new function(){
 			kwArgs.rpsLoad = function(evt){
 				kwArgs.load("load", evt);
 			}
-			rps.subscribe = function(kwArgs.url, kwArgs, "rpsLoad");
+			rps.subscribe(kwArgs.url, kwArgs, "rpsLoad");
 		}
 
 		if(kwArgs["content"]){

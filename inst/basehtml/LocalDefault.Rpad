@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
 <html>
-<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions.com
-(c) Copyright 2005 by EPRI Solutions, Inc.
+<!-- by Tom Short, EPRI, tshort@epri.com
+(c) Copyright 2005 by EPRI
 
 Licence
 =======
@@ -29,10 +29,6 @@ General Public License'.
     <title>Rpad Base Page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
-    djConfig = {
-//    	isDebug: true
-//        preventBackButtonFix: true
-    };
     rpadConfig = {
       rpadRun: "all",
       rpadHideSource: true
@@ -74,7 +70,7 @@ General Public License'.
                .rpadfiles)
 .rpadfiles = .threecolumns(.rpadfiles)
 HTMLon()
-HTML(.rpadfiles)
+Html(.rpadfiles)
 </pre>
 
 <p>*.Rdata R binary files  (click to load into R): </p>
@@ -87,7 +83,7 @@ HTML(.rpadfiles)
            .files)
 .files = .threecolumns(.files)
 HTMLon()
-HTML(.files)
+Html(.files)
 </pre>
 
 <p>*.R files  (click to source into R): </p>
@@ -100,7 +96,7 @@ HTML(.files)
            .files)
 .files = .threecolumns(.files)
 HTMLon()
-HTML(.files)
+Html(.files)
 </pre>
 
 <p>R objects: </p>
@@ -132,7 +128,7 @@ ls()
 
 </td></tr></table>
 
-<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright 2005. EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+<br><br><br><sub>by Tom Short, tshort@epri.com, Copyright 2005. EPRI, license: GNU GPL v2 or greater</sub>
   </body>
 </html>
 

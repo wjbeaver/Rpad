@@ -25,6 +25,6 @@ R_any_arch:
 		R CMD INSTALL -l $(debRlib) .
 		mkdir -p $(debPerllib)
 		cp -r inst/serverversion/Statistics-R_perl_interface/lib/Statistics $(debPerllib)
-		debian/installRpadWWW.sh /var/www/Rpad $(TREE)
+		$(CURDIR)/debian/installRpadWWW.sh /var/www/Rpad $(TREE)
 		rm -vf $(debRlib)/R.css $(debRlib)/$(cranName)/COPYING
 

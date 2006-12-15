@@ -12,7 +12,11 @@ body>#Rpad_topBar {position: fixed; }
 *[contentEditable=false] { -moz-user-modify: read-only; 
 -moz-user-input: auto; -moz-user-select: auto; }
 
-body { background-color: #eeeeee; font-family: georgia; padding:0; margin:0}
+html {margin: 0.5em}
+
+body { background-color: #eeeeee; font-family: georgia; padding:0;
+margin:0.5em;}
+
 .Rpad_input { background-color: white; font-family: monospace;
     margin-top:0.5em; margin-bottom:0em;
 }
@@ -24,8 +28,19 @@ INPUT[rpadType="Rstring"] {color:blue}
 
 #rpadPageLoadingMessage {border: solid gray; position: absolute;
   top: 20px; left: 300px; background: white; padding: 10px;;
-  font-size: 10pt;}
+  font-size: 10pt; z-index: 10;}
 
+/* http://www.gunlaug.no/contents/wd_additions_15.html */
+#rpadPageThrobber {
+  position: fixed;
+  _position: absolute;
+  top: 2px;
+  _top: expression(eval(document.compatMode &&
+                  document.compatMode=='CSS1Compat') ?
+                  documentElement.scrollTop : document.body.scrollTop);
+  z-index: 10;
+}
+  
 .mouseoverNode {background: #E0E0E0;}
 .activeNode {border: thin solid red; background: #D0E0E0;}
 
@@ -40,8 +55,52 @@ INPUT[rpadType="Rstring"] {color:blue}
                      text-align:right; padding:2px 2px 2px 2px; 
                      border: thin solid #CCC; }
 
-.RpadTableHolder .tablesort  {
+.RpadTableHolder .tableheaderrow  {
+/* 
     cursor: pointer ;
     behavior:url(js/tablesort.htc);
     -moz-binding: url(../js/moz-behaviors.xml#tablesort.htc);
+*/
+}
+
+.filteringtable {
+	font-family:Lucida Grande, Verdana;
+	font-size:0.8em;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+	cursor:default;
+}
+.filteringtable td,
+.filteringtable th{
+	font-weight:normal;
+}
+.filteringtable thead td, table thead th {
+    cursor: pointer ;
+    padding-left: 0.5em;
+    padding-right: 2em;
+	background-image:url(../img/ft-head.gif);
+	background-repeat:no-repeat;
+	background-position:top right;
+}
+.filteringtable thead td.selectedUp, table thead th.selectedUp {
+	background-image:url(../img/ft-headup.gif);
+}
+.filteringtable thead td.selectedDown, table thead th.selectedDown {
+	background-image:url(../img/ft-headdown.gif);
+}
+	
+.filteringtable tbody tr td{
+	border-bottom:1px solid #ddd;
+}
+.filteringtable tbody tr.alt td{
+	background: #e3edfa;
+}
+.filteringtable tbody tr.selected td{
+	background: yellow;
+}
+.filteringtable tbody tr:hover td{
+	background: #a6c2e7;
+}
+.filteringtable tbody tr.selected:hover td{
+	background:#ff9;
 }

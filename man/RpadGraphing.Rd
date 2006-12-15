@@ -1,5 +1,4 @@
 \name{RpadGraphing}
-\alias{fspdf}      
 \alias{graphoptions}   
 \alias{newgraph}   
 \alias{showgraph}
@@ -12,10 +11,11 @@
 }
 
 \usage{
-  fspdf(file = "Rplot.pdf", width = 4, height = 4, ...)
-  graphoptions(..., reset = FALSE, override.check = FALSE)
-  newgraph(name = "", type = graphoptions()$type, res = graphoptions()$res,
+  graphoptions(..., reset = FALSE, override.check = TRUE)
+  newgraph(name = "", extension = graphoptions()$extension,
+     type = graphoptions()$type, res = graphoptions()$res,
      width = graphoptions()$width, height = graphoptions()$height,
+     deviceUsesPixels = graphoptions()$deviceUsesPixels,
      pointsize = graphoptions()$pointsize, sublines = graphoptions()$sublines,
      toplines = graphoptions()$toplines, ratio = graphoptions()$ratio,
      leftlines = graphoptions()$leftlines, lwd = graphoptions()$lwd, ...)
@@ -24,15 +24,18 @@
 }
 
 \arguments{
-  \item{file}{ is the file name of the pdf file.}
-  \item{reset}{ == To define == }
-  \item{override.check}{ == To define == }
-  \item{name}{ is the name of the graph with the extension ('.png') left OFF.}
-  \item{type}{ is the ghostscript device. It
-    could be "png256", "pngalpha" (the default), "pdf", or any other
-    postscript device.}
+  \item{reset, override.check}{ logical arguments passed to \code{check.options}.  }
+  \item{name}{ is the name of the graph with the extension left OFF.}
+  \item{extension}{ is the file extension of the device (typically '.png').}
+  \item{type}{ is the graphics device, either a ghostscript device as a
+    character string, "Rpng" for R's builtin png device, or any R
+    graphics device function. For a ghostscript device, common
+    possibilities are "png256", "pngalpha" (the default), or "pdf".}
   \item{res}{ is the resolution of the bitmap in dots per inch.}
   \item{width, height}{ are the dimensions of the graph in inches.}
+  \item{deviceUsesPixels}{ is a logical specifying whether the R
+    graphics driver uses pixels. This only applies if \code{type} is
+    used to specify an R graphics driver. It defaults to TRUE.}
   \item{ratio}{ specifies the ratio of the graph if either the width or
     height is not specified.}
   \item{pointsize}{ is the font point size passed to the postscript
@@ -50,13 +53,6 @@
 }
 \details{
       
-\code{fspdf} is a device driver that generates a PDF file that opens in
-full-screen mode. The advantage of this is that it doesn't have all of
-the toolbars and other junk, so when a PDF is embedded in a page, it
-looks nice and fits nicely. Internally, it uses the postscript device
-along with ghostscript to generate the PDF. Note that many users do not
-have the PDF plug-in set up to display inline graphics.
-
 The \code{graphoptions}, \code{newgraph}, and \code{showgraph} set of functions
 allows quick setup and display of web-friendly graphics. The user can
 normally just use any of the plot commands followed by
@@ -74,13 +70,18 @@ problems are less likely. \code{graphoptions} is also available to change the
 defaults for subsequent graphs.
 
 Internally, \code{newgraph} uses the postscript device and ghostscript
-to generate the bitmap for the browser. The pngalpha device of
-ghostscript does
-anti-aliasing for smoother-looking PNG output. Also, this approach has the
-side-effect of creating an EPS file for each graph, so it's easy to add
-a link to allow the user to download the EPS file. Another approach is to
-use the \code{png} device directly (but on linux, this requires an X
-server, and results are not antialiased).
+to generate the bitmap for the browser. The pngalpha
+(\code{type="pngalpha"}) device of ghostscript does anti-aliasing for
+smoother-looking PNG output. Also, this approach has the side-effect of
+creating an EPS file for each graph, so it's easy to add a link to allow
+the user to download the EPS file. A second approach is to use R's
+\code{png} device directly by specifying \code{type="Rpng"} (but on
+linux, this requires an X server, and results are not antialiased). A
+third approach allows arbitrary R graphic's devices to be
+specified. Simon Urbanek's GDD or Cairo packages can be used to generate
+png (for both packages, see http://www.rosuda.org/R/). This allows
+high-quality png generation with anti-aliasing, and you don't need
+ghostscript or X11. 
 }
 
 \value{
@@ -89,7 +90,7 @@ server, and results are not antialiased).
   side effects. 
 }
 
-\author{ Tom Short, EPRI Solutions, Inc., (\email{tshort@eprisolutions.com}) }
+\author{ Tom Short, EPRI, (\email{tshort@epri.com}) }
 
 \seealso{ See also \code{bitmap}, \code{png}, and \code{pdf}. }
 
@@ -115,6 +116,15 @@ server, and results are not antialiased).
   newgraph("graph_B", width = 4, height = 6) # also adjust the width and height
   plot(x, y2)
   showgraph("graph_B")
+
+# an example with Simon Urbanek's GDD device:
+  if (require(GDD)) {
+    graphoptions(type = GDD, width = 4, height = 3) # note the use of inches
+    newgraph()
+    plot(x, y)
+    plot(x, y2)
+    showgraph()
+  }
 }
 
 \keyword{ math }

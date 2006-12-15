@@ -2,15 +2,18 @@
 
 ".onLoad" <-
 function(lib, pkg) {
-    require(graphics)
-    require(utils)
-    if (require(R2HTML)) { # no longer _required_, but try to load it if it's there
+    require("graphics")
+    require("utils")
+    require("tcltk")
+    if (require("R2HTML")) { # no longer _required_, but try to load it if it's there
       options(R2HTML.sortableDF = TRUE)
       options(R2HTML.format.digits = 3)
       options(R2HTML.format.nsmall = 0)
       options(R2HTML.format.big.mark = "")
       options(R2HTML.format.big.interval = 3)
       options(R2HTML.format.decimal.mark = Sys.localeconv()[["decimal_point"]])
+      #environment(HTML) <<- environment(R2HTML:::HTML)
+      .HTML.file <<- ""
     }
     # The following uses the environment variable DOCUMENT_ROOT with apache to find
 	# the directory of the R process. Change may be required for another server.
@@ -33,8 +36,6 @@ function(lib, pkg) {
 	options(R.output.format = "text") # do we need or want this anymore? If we do, why don't we put it in .RpadEnv?
 
     
-# 	.RpadEnv <<- environment()
-#    assign(".RpadEnv", environment(), sys.parent())
 	assign(".RpadGraphOptions",
            list(type = "pngalpha", extension = "png",
                 res = 120, width = 0, height = 0, deviceUsesPixels = TRUE, pointsize = 10,
@@ -42,7 +43,6 @@ function(lib, pkg) {
            envir = .RpadEnv)
     assign("RpadLocal", FALSE, envir = .RpadEnv)
     assign("RpadDir", RpadDir, envir = .RpadEnv)
-    .HTML.file <<- ""
     assign("Rpad.plot.counter",  0, envir = .RpadEnv)
 }
 

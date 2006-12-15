@@ -1,9 +1,9 @@
 /*
     Rpad.js  --  Rpad client-side functionality
 
-    by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions.com
+    by Tom Short, EPRI, tshort@epri.com
 
-    (c) Copyright 2005 - 2006. by EPRI Solutions, Inc.
+    (c) Copyright 2005 - 2006. by EPRI, Inc.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -87,7 +87,7 @@ var rpad = {};
 // Internal utility functions for Rpad
 // More are defined throughout this file
 
-rpad.utils = {}
+rpad.utils = {};
 rpad.utils.getTextContent = function(node) {
   if (node.nodeType == 3) { // text node
     if (node.parentNode.nodeName == "PRE") { // really should see if the style has "white-space: pre"
@@ -121,15 +121,22 @@ rpad.utils.getTextContent = function(node) {
 //    Rpad_output
    
 dojo.provide("dojo.widget.Rpad");
-dojo.provide("dojo.widget.HtmlRpad");
+//dojo.provide("dojo.widget.HtmlRpad");
    
-dojo.require("dojo.lang.*");
-dojo.require("dojo.io.*");
+//dojo.require("dojo.lang.*");
+//dojo.require("dojo.io.*");
+// dojo.require("dojo.widget.*");
+// dojo.require("dojo.event.*");
+// dojo.require("dojo.xml.*");
+// dojo.require("dojo.xml.Parse");
+// dojo.require("dojo.widget.Parse");
+
 dojo.require("dojo.widget.*");
+dojo.require("dojo.widget.HtmlWidget");
 dojo.require("dojo.event.*");
-dojo.require("dojo.xml.*");
-dojo.require("dojo.xml.Parse");
-dojo.require("dojo.widget.Parse");
+dojo.require("dojo.html.style");
+dojo.require("dojo.html.selection");
+dojo.require("dojo.debug.console");
 
 rpad.utils.parseNode = function(node) {
 // parse the block for other dojo stuff
@@ -138,12 +145,17 @@ rpad.utils.parseNode = function(node) {
     dojo.widget.getParser().createComponents(frag);
 }
 
-dojo.widget.HtmlRpad = function(){
-    dojo.widget.Widget.call(this);
-   
-    this.isContainer = false;
-//    this.templatePath = dojo.uri.dojoUri("src/widget/templates/Rpad.html");
-    this.templateString = 
+rpad.utils.parseNode = function(node) {
+// parse the block for other dojo stuff http://dojotoolkit.org/pipermail/dojo-interest/2006-August/014495.html
+     dojo.widget.createWidget(node);
+}
+
+
+dojo.widget.defineWidget(
+    "dojo.widget.Rpad",
+    dojo.widget.HtmlWidget,
+{
+    templateString:
         '<div dojoAttachPoint="rpadWrapper">                                                        '+
         '    <div dojoAttachPoint="rpadInputWrapper">                                               '+
         '        <span contentEditable = "false">                                                   '+
@@ -155,33 +167,27 @@ dojo.widget.HtmlRpad = function(){
         '            Results                                                                        '+
         '        </div>                                                                             '+
         '    </div>                                                                                 '+
-        '</div>                                                                                     ';
+        '</div>                                                                                     ',
                                                                                                    
 
 //    this.templateCssPath = dojo.uri.dojoUri("src/widget/templates/Rpad.css");
    
-    this.widgetType = "Rpad";
-    this.rpadType = rpadConfig.rpadType;
-    this.rpadOutput = rpadConfig.rpadOutput;
-    this.rpadRun = rpadConfig.rpadRun;
-    this.rpadHideSource = rpadConfig.rpadHideSource;
-    this.visible = true;
+//    widgetType: "Rpad",
+    rpadType: rpadConfig.rpadType,
+    rpadOutput: rpadConfig.rpadOutput,
+    rpadRun: rpadConfig.rpadRun,
+    rpadHideSource: rpadConfig.rpadHideSource,
+    visible: true,
    
-    // our DOM nodes:
-//    this.rpadWrapper = null;
-//    this.rpadInputWrapper = null;
-//    this.rpadInput = null;
-//    this.rpadResults = null;
+    tagName: "dojo:rpad",
    
-    this.tagName = "dojo:rpad";
-   
-    this.fillInTemplate = function(args, frag){
-        this.rpadInput = frag[this.tagName].nodeRef.cloneNode(true);
-        dojo.xml.htmlUtil.addClass(this.rpadInput, "Rpad_input");
-        this.rpadInput.dojotype = null;
-        this.rpadInput.removeAttribute("dojotype");
-        this.rpadInputWrapper.appendChild(this.rpadInput);
-        rpad.utils.parseNode(this.rpadInput);
+    fillInTemplate: function(args, frag){
+         this.rpadInput = frag[this.tagName].nodeRef.cloneNode(true);
+         dojo.html.addClass(this.rpadInput, "Rpad_input");
+         this.rpadInput.dojotype = null;
+         this.rpadInput.removeAttribute("dojotype");
+         this.rpadInputWrapper.appendChild(this.rpadInput);
+//         rpad.utils.parseNode(this.rpadInput);
    
         if (this.rpadInput.nodeName == "TEXTAREA" || this.rpadInput.nodeName == "INPUT") {
             this.rpadInputWrapper.setAttribute("contentEditable", false);
@@ -189,33 +195,33 @@ dojo.widget.HtmlRpad = function(){
         } else {
             this._isNormallyContentEditable = null;
         }
-    }
-    this.initialize = function() {
+    },
+    initialize: function() {
         this.domNode.rpadType = this.rpadType;
         this.domNode.setAttribute("rpadType", this.rpadType);
         this.domNode.setAttribute("rpadRun", this.rpadRun);
         if (this.rpadHideSource) this.hide();
         this.rpadInput.rpadWidget = this;
         this.domNode.rpadWidget = this;
-    }
-    this.show = function() {
+    },
+    show: function() {
         this.rpadInput.style.display = "";
         this.rpadInput.parentNode.contentEditable = this._isNormallyContentEditable; // broken in IE
         this.visible = true;
-    }
-    this.hide = function() {
+    },
+    hide: function() {
         this.rpadInput.style.display = "none";
         this.rpadInput.parentNode.contentEditable = false;
         this.visible = false;
-    }
-    this.toggleVisibility = function() {
+    },
+    toggleVisibility: function() {
         if (this.visible) {
             this.hide();
         } else {
             this.show();
         }
-    }
-    this.calculate = function() {
+    },
+    calculate: function() {
         var rpadResults = this.rpadResults;
         if (this.rpadOutput == "javascript") { // use for JSON or other server-side javascript
             rpadResults = "javascript";
@@ -224,10 +230,10 @@ dojo.widget.HtmlRpad = function(){
         }
         rpad.send(this.rpadType, rpad.utils.getTextContent(this.rpadInput), 
                   rpadResults, this.rpadInput);
-    } 
-    this.onReceive = function() { // stub available for attaching
-    }
-    this.getHtml = function() { // get a HTML representation of the widget
+    }, 
+    onReceive: function() { // stub available for attaching
+    },
+    getHtml: function() { // get a HTML representation of the widget
         var result = "<" + this.rpadInput.tagName.toLowerCase() + ' dojoType="Rpad"';
         if (this.rpadType != rpadConfig.rpadType)
             result += ' rpadType="' + this.rpadType + '"';
@@ -241,10 +247,10 @@ dojo.widget.HtmlRpad = function(){
                   "</" + this.rpadInput.tagName.toLowerCase() + ">";
         return result;
     }
-}  
+})  
    
-dojo.inherits(dojo.widget.HtmlRpad, dojo.widget.HtmlWidget);
-dojo.widget.tags.addParseTreeHandler("dojo:rpad");
+// dojo.inherits(dojo.widget.HtmlRpad, dojo.widget.HtmlWidget);
+// dojo.widget.tags.addParseTreeHandler("dojo:rpad");
 
 ////////////////////////////
 // NOT USED!!!
@@ -269,8 +275,8 @@ dojo.widget.RpadForm = function(){
     }
 }  
    
-dojo.inherits(dojo.widget.RpadForm, dojo.widget.HtmlWidget);
-dojo.widget.tags.addParseTreeHandler("dojo:rpadform");
+// dojo.inherits(dojo.widget.RpadForm, dojo.widget.HtmlWidget);
+// dojo.widget.tags.addParseTreeHandler("dojo:rpadform");
    
 ////////////////////////////
 // This provides the base Rpad class (it's not R specific)
@@ -284,23 +290,34 @@ rpad.dir = "";
 rpad._runState = "init";  
 rpad._activeWindow = window; 
    
-rpad.send = function(rpadType, commands, rpadResults, rpadInput){
+rpad.send = function(rpadType, commands, rpadResults, rpadInput, jsOnDone){
 // Send "commands" for processing. 
 // "commands" are script text of type "rpadType": "R", "file", ...
 // Put results received in the DOM node "rpadResults".
 // Send along the originating DOM node "rpadInput" in case it's needed.
-//dj_debug('SEND:'+commands+rpadInput.nodeName);
-//dj_debug('SEND:'+commands);
-    rpad.script.run(rpadType, commands, rpadResults, rpadInput)
+//dojo.debug('SEND:'+commands);
+    rpad.script.run(rpadType, commands, rpadResults, rpadInput, jsOnDone)
+    dojo.log.debug('SEND: '+commands);
 }  
    
-rpad.receive = function(rpadResults, data, rpadInput) {
+rpad.sendThenRun = function(rpadType, commands, jsOnDone){
+// NOT WORKING YET
+// Send "commands" for processing. 
+// "commands" are script text of type "rpadType": "R", "file", ...
+// Ignore results.
+// Eval the "jsOnDone" when results received.
+//dojo.debug('SEND:'+commands+rpadInput.nodeName);
+  rpad.script.run(rpadType, commands, rpadResults, rpadInput)
+}  
+   
+rpad.receive = function(rpadResults, data, rpadInput, jsOnDone) {
 // Receive the processed commands "data" (text/html).
 // Put results received in the DOM node "rpadResults".
-// Send along the originating DOM node "startNode" in case it's needed.
+// Send along the originating DOM node "rpadInput" in case it's needed.
 // if rpadResults == "javascript", exec the javascript instead of inserting results in the DOM
 //dj_debug("REC:"+rpadInput.nodeName+data);
 //dj_debug("REC:"+data);
+    dojo.log.debug('REC:\n'+data);
     if (rpadInput.onReceive) rpadInput.onReceive(); // fire an event inputs can attach to
     if (rpadInput.rpadWidget) {
         rpadInput.rpadWidget.onReceive(); // fire an event Rpad widgets can attach to
@@ -310,9 +327,10 @@ rpad.receive = function(rpadResults, data, rpadInput) {
         dj_eval(data);
     } else if (rpadResults != null) {
         rpadResults.style.display = "";
-        rpadOutputStyle
         rpad.updateResults(rpadResults, data, rpadOutputStyle);       
     }
+    if (jsOnDone) 
+        setTimeout(function() {dj_eval(jsOnDone)}, 50); // IE7 can die without the timeout
     if (rpad._doKeepGoing) { // this would be better separated, but connect was acting funny
         rpad.calculateNextNode(rpadInput);
     }
@@ -383,7 +401,7 @@ rpad.login = function() {
     dojo.io.bind({
         url: "server/Rpad_process.pl?command=login",
         load: rpad.afterLogin,
-        error: function(type, error){ dj_debug(error); },
+        error: function(type, error){ dojo.debug(error); },
         mimetype: "text/html"
     });
 }  
@@ -412,23 +430,24 @@ rpad.script.register = function(rpadType, run) {
 rpad.script.unregister = function(rpadType) {
     rpad.script._scripts[rpadType] = null;
 }  
-rpad.script.run = function(rpadType, commands, rpadResults, rpadInput) {
-    rpad.script._scripts[rpadType](commands, rpadResults, rpadInput); 
+rpad.script.run = function(rpadType, commands, rpadResults, rpadInput, jsOnDone) {
+    rpad.script._scripts[rpadType](commands, rpadResults, rpadInput, jsOnDone); 
 }  
 rpad.script.serverScript = function(url, getContent) {
 // Returns a js function that will send data to a server 
 // with the appropriate url.
 // "getContent" is a function with arguments (commands, rpadResults, node) that returns
 // the content to be passed to the server.
-    return function(commands, rpadResults, rpadInput) {    
+    return function(commands, rpadResults, rpadInput, jsOnDone) {    
         dojo.io.bind({
             url: url,
             content: getContent(commands, rpadInput),
             method: "POST",
             load: function(type, data, evt){
-                 rpad.receive(rpadResults, data, rpadInput)
+                 rpad.receive(rpadResults, data, rpadInput, jsOnDone)
             },
-            error: function(type, error){ dj_debug(error); },
+//            error: function(type, error){ dojo.debug(error); },
+            error: function(type, error){ props(error); dojo.debug(error.number); dojo.debug(error.message);},
             mimetype: "text/html"
         });
     }
@@ -453,29 +472,30 @@ rpad.processForm = function(nodes) {};
    
    
 rpad.calculatePage = function(){
+//dojo.debug('calcPage');
   rpad.calculateTree(rpad.base);  
 }  
 rpad.calculateTree = function(node) {
-//dj_debug("CALCTREE: "+node.tagName+node.parentNode.tagName+node.parentNode.parentNode.tagName);
+//dojo.debug("CALCTREE: "+node.tagName+node.parentNode.tagName+node.parentNode.parentNode.tagName);
   rpad._doKeepGoing = true;  // turn on page traversal
   rpad._serverTries = 0;
   rpad._startingNode = node;  // remember the starting point
   rpad.calculateNextNode(node);  
 }  
 rpad.afterPageCalculation = function() {
-//dj_debug("afterPageCalculation");
+//dojo.debug("afterPageCalculation");
     rpad._doKeepGoing = false;  // turn off page traversal
     rpad._runState = "normal";  
 }; 
-rpad.pageError = function() {dj_debug('page error')};
-   
+rpad.pageError = function() {dojo.debug('page error')};
+
 rpad.calculateNextNode = function(node, doit) { // non-recursive
 // Calculate the next Rpad element after or below the DOM node "node".
 // Traverses the DOM tree starting at the DOM node "node".
 // Keeps going until it finds and calculates a "calculatable" DOM node.
 // "doit" means calculate it regardless of rpad._runState and the status of node.rpadRun
 //  try {
-    while (node != null) {
+    while (typeof(node) != "undefined" && node != null) {
       if (node.firstChild != null) { // try children
         if (rpad.calculateNode(node.firstChild, doit)) {
           return;
@@ -483,8 +503,9 @@ rpad.calculateNextNode = function(node, doit) { // non-recursive
         node = node.firstChild;
       }
       else { // try siblings and parent's siblings
-        while (node.nextSibling == null && (node.nodeType != 1 || node.nodeName != 'BODY') && node != rpad._startingNode) 
+        while (node.nextSibling == null && (node.nodeType != 1 || node.nodeName != 'BODY') && node != rpad._startingNode) {
           node = node.parentNode;
+        }   
         if (node.nodeName == 'BODY' || node == rpad._startingNode) { // the end of the tree traversal
           rpad.afterPageCalculation();
           return;
@@ -542,11 +563,11 @@ rpad.calculateNode = function(node, doit) { // returns true if a "calculatable" 
                    (rpad._runState == "normal"  && (rrun == null || rrun == "" || rrun == "normal")) ||
                    (rrun == "all") ||
                    doit;
-    if (!isReady) return false;
-//dj_debug("CALCNODE: "+node.tagName+node.parentNode.tagName+node.parentNode.parentNode.tagName+node.rpadType);
-    if (typeof( node.rpadType ) != "undefined") {      
-        var widget = rpad.utils.getRpadWidget(node);
-        if (widget != null) {
+//    if (!isReady) return false;
+    if (typeof( node.rpadType ) != "undefined" && isReady) {      
+//dojo.debug("CALCNODE: "+node.tagName+node.parentNode.tagName+node.parentNode.parentNode.tagName+node.rpadType);
+        var widget = rpad.utils.getWidget(node);
+        if (typeof(widget) != "undefined" && widget.calculate != null) {
             widget.calculate();
             return true;
         }
@@ -597,6 +618,13 @@ rpad.handleEvents = function(e) {
         // e.charCode == 0 or undefined for function keys
         rpad.calculatePage();
         e.preventDefault();
+    }
+    if (keyEvent && e.keyCode == e.KEY_F11 && e.ctrlKey && !e.charCode) { 
+        // e.charCode distinguishes between function keys and characters, ie. F9 & 'x'
+        // e.charCode == 0 or undefined for function keys
+
+        // toggle debug:
+        djConfig.isDebug = !djConfig.isDebug;
     }
     if (keyEvent && e.keyCode == e.KEY_F12 && e.ctrlKey && !e.charCode) {
         // e.charCode distinguishes between function keys and characters, ie. F9 & 'x'
@@ -665,7 +693,8 @@ rpad.processRForm = function(nodes) {
     for (var i=0; i < nodes.length; i++) {
         var node = nodes[i];
         var name = node.getAttribute("name");
-        if (name == "") break;
+//dojo.debug(name+"X"+node.value);
+        if (name == "") continue;
         var command = "";
         if (node.type == "checkbox") {
           if (node.checked)
@@ -675,14 +704,14 @@ rpad.processRForm = function(nodes) {
         } else if (node.type == "radio") {
           if (node.checked) 
             command = name + " = '" + node.value + "'";
-        } else if (node.nodeName.toLowerCase() == "select")
+        } else if (node.nodeName.toLowerCase() == "select" && node.selectedIndex >= 0)
           command = name + " = '" + node[node.selectedIndex].text.replace(/'/g,"\\\'") + "'"
-        else if (node.value != "" & (node.type == "text" || node.type == "hidden"))
-          if (node.getAttribute("rpadType") == "Rstring") {
-              command = name + " = '" + node.value.replace(/'/g,"\\\'") + "'";
-          }
-          else 
+        else if (node.type == "text" || node.type == "hidden")
+          if (node.getAttribute("rpadType") == "Rvariable" && node.value != "") {
             command = name + " = " + node.value; 
+          }
+          else
+            command = name + " = '" + node.value.replace(/'/g,"\\\'") + "'";
         commands = commands + command + "\n";
     }
     if (commands != "") {
@@ -697,8 +726,10 @@ rpad.loginR = function() {
     dojo.io.bind({
         url: "server/R_process.pl?ID="+rpad.dir+"&command=login",
         load: rpad.afterLoginR,
-        error: function(type, error){ dj_debug(error); },
-        mimetype: "text/html"
+        error: function(type, error){ dojo.debug(error); },
+        mimetype: "text/html",
+        timeoutSeconds: 3,         // added to make R "load-and-go" to make it work better with CGI
+        timeout: rpad.afterLoginR  // just assume it worked okay
     });
 }  
 rpad.afterLoginR = function() {
@@ -715,6 +746,7 @@ dojo.event.connect(dojo, "loaded", rpad, "addLoadingDotDot");
 // we need both of these to happen, but we don't know which will happen first:
 dojo.event.connect(rpad, "afterLogin", rpad, "loginR");
 dojo.event.connect(rpad, "calculatePage", rpad, "removeLoadingDotDot");
+dojo.event.connect(rpad, "afterPageCalculation", rpad, "removeLoadingDotDot");
 
 ////////////////////////////
 // Initialization
@@ -734,6 +766,7 @@ rpad.login(); // login right away -- don't wait for the page to finish loading
 rpad.init = function(e) {
     rpad.currentGui = "none";
     rpad.pageIsLoaded = true;
+//    rpad.calcIfReadyR();
     rpad.base = document.body; // reference point for all calculations
     //rpad.login(e);
     var events = ["onkeydown", "onkeypress"];
@@ -768,9 +801,128 @@ rpad.script.register("file",
 rpad.script.register("javascript", 
     function(commands, rpadResults, rpadInput) { 
         rpad.receive(rpadResults,
-                          eval(commands).toString(), rpadInput)
+                          eval(commands).toString(), rpadInput);
     });
       
+
+////////////////////////////
+// Throbber to show a page (or tree) calculation in progress
+// 
+   
+rpad.addPageThrobber = function() {
+    rpad.throbber = document.createElement('div');
+    rpad.throbber.innerHTML = "<img src='gui/wait.gif'>";
+    rpad.throbber.id = "rpadPageThrobber"
+    document.body.appendChild(rpad.throbber);
+}   
+rpad.hidePageThrobber = function() {
+    if (rpad.throbber)
+        rpad.throbber.style.display = "none";
+}   
+rpad.showPageThrobber = function() {
+    if (rpad.throbber)
+        rpad.throbber.style.display = "";
+}
+
+dojo.event.connect(dojo, "loaded", rpad, "addPageThrobber");
+dojo.event.connect(rpad, "calculatePage", rpad, "showPageThrobber");
+dojo.event.connect(rpad, "calculateTree", rpad, "showPageThrobber");
+dojo.event.connect(rpad, "afterPageCalculation", rpad, "hidePageThrobber");
+
+////////////////////////////
+// A drag and drop widget - each drop zone creates a list in R containing the 
+// contents of the dropped objects.
+   
+dojo.widget.defineWidget(
+    "dojo.widget.RpadDropZone",
+    dojo.widget.HtmlWidget,
+{
+    isContainer: true,
+    listName: "browserList",
+    dropsAllowed: "*",
+    tagName: "dojo:rpaddropzone",
+    onDrop: function(e) {},
+    afterDrop: function(e) {},
+    rpadType: "R",
+    rpadRun: rpadConfig.rpadRun,
+    
+    initialize: function() {
+        this.dropTarget = new dojo.dnd.HtmlDropTarget(this.domNode, this.dropsAllowed.split(','));
+        dojo.event.connect(this.dropTarget, "onDrop", this, "onDrop");
+        dojo.event.connect(this, "onDrop", this, "afterDrop");
+        this.domNode.rpadType = this.rpadType;
+        this.domNode.setAttribute("rpadType", this.rpadType);
+        this.domNode.setAttribute("rpadRun", this.rpadRun);
+    },
+    calculate: function() {
+        var command = this.listName + "= list("; 
+        var isListStarted = false;
+        for (var i = 0; i < this.domNode.childNodes.length; i++) {
+          var chld = this.domNode.childNodes[i];
+          if (chld.nodeType != 1) continue;
+          var widget = rpad.utils.getWidget(chld);
+          if (widget.varValue != null) {
+            if (isListStarted) 
+              command += ",";
+            if (widget.varName != null)
+              command += widget.varName + "=";
+            command += "'" + widget.varValue.replace(/'/g,"\\\'") + "'"; //"
+            isListStarted = true;
+          }
+        }
+        command += ")";
+        rpad.send(this.rpadType, command, null, this.domNode);
+    }
+})  
+
+dojo.widget.defineWidget(
+    "dojo.widget.RpadDropZoneSingle",
+    dojo.widget.RpadDropZone,
+{
+    baseZone: "",
+    onDrop: function(e) {
+        // move all but the dragSource to the baseZone
+        var srcNode = e.dropTarget.parentNode;
+        var destNode = dojo.byId(this.baseZone);
+        while (srcNode.hasChildNodes() && srcNode.firstChild != e.dragSource.domNode) {
+            destNode.appendChild(srcNode.firstChild);
+        }
+        while (e.dragSource.domNode.nextSibling) {
+            destNode.appendChild(e.dragSource.domNode.nextSibling);
+        }
+        rpad.calculatePage();
+    }
+});
+
+dojo.widget.defineWidget(
+    "dojo.widget.RpadDragVariable",
+    dojo.widget.HtmlWidget,
+{
+    varName: null,
+    varValue: "varvalue",
+    dragName: "drag1",
+    tagName: "dojo:rpaddragvariable",
+    dropsAllowed: "",
+    dropTarget: null,
+    initialize: function() {
+        this.dragSource = new dojo.dnd.HtmlDragSource(this.domNode, this.dragName);
+        this.domNode.innerHTML = this.varValue + " ";
+        if (this.dropsAllowed != "") {
+          this.dropTarget = new dojo.dnd.HtmlDropTarget(this.domNode, this.dropsAllowed.split(','));
+          if (this.onDrop != null)
+            this.dropTarget.onDrop = this.onDrop;
+        }
+    }
+}); 
+
+
+
+
+
+
+
+
+
 
 
    
@@ -1510,7 +1662,7 @@ rpad.gui2.init = function() {
     rpad.gui2.widgetBarNode = document.createElement("div");
     rpad.gui2.widgetBarNode.rpadIgnore = "true";
     document.body.appendChild(rpad.gui2.widgetBarNode);
-    rpad.gui2.widgetBar = dojo.widget.fromScript("RpadMenu", {}, rpad.gui2.widgetBarNode);
+    rpad.gui2.widgetBar = dojo.widget.createWidget("dojo:RpadMenu", {}, rpad.gui2.widgetBarNode);
     rpad.gui2.activateNode(rpad.gui2.nodeRight(rpad.base));
 }
 
@@ -1543,7 +1695,7 @@ if (rpadConfig.gui == "alternate") {
 //    appendNew(): append another Rpad widget of the same type
 //    beginEdit(), saveEdit(), endEdit(): enable, save, and disable editing
 //    updateTextarea(): readjust sizing of textarea
-dojo.lang.extend(dojo.widget.HtmlRpad, {
+dojo.lang.extend(dojo.widget.Rpad, {
     textValue: "",
     minHeight: 30,
     maxHeight: 500,
@@ -1564,9 +1716,9 @@ dojo.lang.extend(dojo.widget.HtmlRpad, {
 
         ee.style.display = "";
         ee.value = rpad.utils.getTextContent(this.rpadInput);
-        ee.style.fontSize = dojo.style.getStyle(this.rpadInput, "font-size");
-        ee.style.fontWeight = dojo.style.getStyle(this.rpadInput, "font-weight");
-        ee.style.fontStyle = dojo.style.getStyle(this.rpadInput, "font-style");
+        ee.style.fontSize = dojo.html.getStyle(this.rpadInput, "font-size");
+        ee.style.fontWeight = dojo.html.getStyle(this.rpadInput, "font-weight");
+        ee.style.fontStyle = dojo.html.getStyle(this.rpadInput, "font-style");
         //this.text.style.fontFamily = dojo.dom.getStyle(this.rpadInput, "font-family");
 
         ee.style.width = "100%";
@@ -1635,7 +1787,7 @@ rpad.gui2.startRichtextEdit = function(e) {
     rpad.gui2.deactivateNode(rpad.gui2.activeNode);
     rpad.gui2.activateNode(rpad.gui2.editorWrapper);
     if (!rpad.gui2.richEditor) {
-        rpad.gui2.richEditor = dojo.widget.fromScript("Editor", {}, rpad.gui2.editorWrapper);
+        rpad.gui2.richEditor = dojo.widget.createWidget("Editor", {}, rpad.gui2.editorWrapper);
         setTimeout(function(){  // wait for the editor to be ready
             rpad.gui2.richText = rpad.gui2.richEditor._richText;
             rpad.gui2.richToolbarContainer = rpad.gui2.richEditor._toolbarContainer;
@@ -1655,7 +1807,7 @@ rpad.gui2.startRichtextEdit = function(e) {
 
     } else {
         rpad.gui2.richToolbarContainer.domNode.style.display = "";
-        rpad.gui2.richText = dojo.widget.fromScript("RichText", {}, rpad.gui2.editorWrapper);
+        rpad.gui2.richText = dojo.widget.createWidget("RichText", {}, rpad.gui2.editorWrapper);
 		dojo.html.insertBefore(rpad.gui2.richToolbarContainer.domNode, rpad.gui2.richText.domNode);
         rpad.gui2.richEditor.setRichText(rpad.gui2.richText);
     }
@@ -1863,8 +2015,8 @@ rpad.utils.rpadParentNode = function(node) {
 
 rpad.gui2._scroll = function(node) {
 // this could be better!
-    var y = dojo.style.getAbsoluteY(node);
-    window.scrollTo(0, dojo.style.getAbsoluteY(node) - dojo.html.getViewportHeight()/2);
+    var y = dojo.html.getAbsoluteY(node);
+    window.scrollTo(0, dojo.html.getAbsoluteY(node) - dojo.html.getViewportHeight()/2);
 }
 
 rpad.gui2.activateNode = function(node) {
@@ -1886,7 +2038,7 @@ rpad.gui2.deactivateNode = function(node) {
 
 rpad.utils.isInvisible = function(node) {
     if (node) {    
-        return (dojo.style.getContentHeight(node) <= 1);
+        return (dojo.html.getContentHeight(node) <= 1);
     } else {
         return null;
     }
@@ -1955,13 +2107,10 @@ rpad.gui2.goLeft = function() {
     rpad.gui2.activateNode(rpad.gui2.nodeLeft(rpad.gui2.activeNode));
 }
 
-dojo.widget.RpadMenu = function(){
-	dojo.widget.HtmlWidget.call(this);
-}
-
-dojo.inherits(dojo.widget.RpadMenu, dojo.widget.HtmlWidget);
-
-dojo.lang.extend(dojo.widget.RpadMenu, {
+dojo.widget.defineWidget(
+    "dojo.widget.RpadMenu",
+    dojo.widget.HtmlWidget,
+{
 	widgetType: "RpadMenu",
 	isContainer: true,
     templatePath: dojo.uri.dojoUri("rpaddivmenu.html"),
@@ -2003,7 +2152,7 @@ dojo.lang.extend(dojo.widget.RpadMenu, {
 //        this.bar.style.left = dojo.style.totalOffsetLeft(w.domNode) + 
 //                              dojo.style.getInnerWidth(w.domNode) - 
 //                              450 + "px";
-        this.bar.style.left = dojo.style.totalOffsetLeft(w.domNode) + 
+        this.bar.style.left = dojo.html.totalOffsetLeft(w.domNode) + 
                               100 + "px";
         // set up the drag handle on the 
         var drag = new dojo.dnd.HtmlDragSource(rpad.gui2.activeRpadWidget.domNode);
@@ -2026,8 +2175,8 @@ dojo.lang.extend(dojo.widget.RpadMenu, {
         this.popup.style.display = "";
         this.popup.style.position = "absolute";
         this.popup.style.top = 
-            dojo.style.totalOffsetTop(rpad.gui2.activeRpadWidget.domNode) + 20 + "px";
-        this.popup.style.left = dojo.style.totalOffsetLeft(rpad.gui2.activeRpadWidget.domNode) + 
+            dojo.html.totalOffsetTop(rpad.gui2.activeRpadWidget.domNode) + 20 + "px";
+        this.popup.style.left = dojo.html.totalOffsetLeft(rpad.gui2.activeRpadWidget.domNode) + 
                                 300 + "px";
     },
     hide: function() {
@@ -2057,4 +2206,52 @@ function _dump2(evt) {
   }
 } 
 
+function props(e, onePerLine){
+  if (e === null) {
+    dojo.debug("props called with null argument", "error");
+    return;
+  }
+  if (e === undefined) {
+    dojo.debug("props called with undefined argument", "error");
+    return;
+  }
+  var ns = ["Methods", "Fields", "Unreachables"];
+  var as = [[], [], []]; // array of (empty) arrays of arrays!
+  var p, j, i; // loop variables, several used multiple times
+  var protoLevels = 0;
+  for (p = e; p; p = p.__proto__)  {
+    for (i=0; i<ns.length; ++i)
+      as[i][protoLevels] = [];
+    ++protoLevels;
+  }
+  for(var a in e)  {
+    // Shortcoming: doesnt check that VALUES are the same in object and prototype.
+    var protoLevel = -1;
+    try    {
+      for (p = e; p && (a in p); p = p.__proto__)
+        ++protoLevel;
+    }
+    catch(er) { protoLevel = 0; } // "in" operator throws when param to props() is a string
+    var type = 1;
+    try    {
+      if ((typeof e[a]) == "function")
+        type = 0;
+    }    catch (er) { type = 2; }
+    as[type][protoLevel].push(a);
+  }
+  function times(s, n) { return n ? s + times(s, n-1) : ""; }
+  for (j=0; j<protoLevels; ++j)
+    for (i=0;i<ns.length;++i)
+      if (as[i][j].length)
+        dojo.debug(
+          ns[i] + times(" of prototype", j), 
+          (onePerLine ? "\n\n" : "") + as[i][j].sort().join(onePerLine ? "\n" : ", ") + (onePerLine ? "\n\n" : ""), 
+          "propList");
+}
 
+R = function(R_commands){
+// Send "R_commands" for processing. Return results as a string
+    djConfig.isDebug = true;
+    rpad.script.run("R", R_commands, null, document, "djConfig.isDebug = false");
+}
+   

@@ -4,6 +4,7 @@
 
 "processRpadCommands" <-
 function() {
+  require("tcltk")
   commands <- tclvalue(.Tcl("set user(R_commands)"))
   textcommands <- textConnection(commands)
   .dev.active <- dev.cur()
@@ -26,7 +27,8 @@ function() {
   dev.set(.dev.active)
   formattedresults <- paste(results,"\n",sep="",collapse="")
 #  cat(formattedresults)
-  .Tcl(paste("set RpadTclResults {", formattedresults, "}", sep=""))
+  escapeBrackets <- function(x) gsub("(\\{|\\})", "\\\\\\1", x)
+  .Tcl(paste("set RpadTclResults {", escapeBrackets(formattedresults), "}", sep=""))
 }
 
 
@@ -38,12 +40,13 @@ function(file = "", defaultfile = "LocalDefault.Rpad", port = 8079) {
 
 "startRpadServer" <-
 function(defaultfile = "LocalDefault.Rpad", port = 8079) {
+    require("tcltk")
     # This is the main function that starts the server
 	# This function implements a basic http server on 'port'
  	# The server is written in Tcl.
     # This way it is not blocking the R command-line!
 
-    require(tcltk)
+    if (!require("tcltk")) stop("package tcltk required for the local Rpad http server")
     assign("RpadLocal", TRUE, envir = .RpadEnv)
     assign("RpadDir",   ".",  envir = .RpadEnv)
     assign("RpadPort",  port, envir = .RpadEnv)
@@ -63,6 +66,7 @@ function(defaultfile = "LocalDefault.Rpad", port = 8079) {
 
 "stopRpadServer" <-
 function() {
+    require("tcltk")
     assign("RpadLocal",    FALSE, envir = .RpadEnv)
     unlink(dir(pattern="Rpad_plot.*\.png")) # delete the Rpad graphics files in the dir
     unlink(dir(pattern="Rpad_plot.*\.eps"))

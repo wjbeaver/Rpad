@@ -1,5 +1,5 @@
 /*
-	Copyright (c) 2004-2005, The Dojo Foundation
+	Copyright (c) 2004-2006, The Dojo Foundation
 	All Rights Reserved.
 
 	Licensed under the Academic Free License version 2.1 or above OR the
@@ -12,18 +12,15 @@ dojo.provide("dojo.widget.Toggler");
 dojo.require("dojo.widget.*");
 dojo.require("dojo.event.*");
 
-// clicking on this node shows/hides another widget
+dojo.widget.defineWidget(
+	"dojo.widget.Toggler",
+	dojo.widget.HtmlWidget,
+{
+	// summary:
+	//		clicking on this widget shows/hides another widget
 
-dojo.widget.Toggler = function(){
-	dojo.widget.DomWidget.call(this);
-}
-
-dojo.inherits(dojo.widget.Toggler, dojo.widget.DomWidget);
-
-dojo.lang.extend(dojo.widget.Toggler, {
-	widgetType: "Toggler",
-	
-	// Associated widget 
+	// targetId: String
+	//		Id of widget to show/hide when this widget is clicked
 	targetId: '',
 	
 	fillInTemplate: function() {
@@ -31,10 +28,9 @@ dojo.lang.extend(dojo.widget.Toggler, {
 	},
 	
 	onClick: function() {
-		var pane = dojo.widget.getWidgetById(this.targetId);
-		if ( !pane || !pane.toggle ) { return; }
+		var pane = dojo.widget.byId(this.targetId);
+		if(!pane){ return; }
 		pane.explodeSrc = this.domNode;
-		pane.doToggle();
+		pane.toggleShowing();
 	}
 });
-dojo.widget.tags.addParseTreeHandler("dojo:toggler");

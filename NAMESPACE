@@ -1,7 +1,3 @@
-#importFrom(grDevices, check.options, dev.cur, dev.off, x11, png)
-#importFrom(utils, browseURL)
-#importFrom(lattice, lset, trellis.device)
-
 import(graphics)
 import(utils)
 
@@ -10,9 +6,10 @@ export(processRpadCommands,
        startRpadServer,
        stopRpadServer,
        ROutputFormat,
+       Html,
        H,
        HtmlTree,
-       HTML,
+       HfromHTML,
        BR,
        HTMLon,
        HTMLoff,
@@ -38,12 +35,21 @@ export(processRpadCommands,
        RpadURL,
        RpadBaseURL,
        RpadBaseFile,
-       RpadIsLocal
+       RpadIsLocal,
+       json
 )
 
-S3method(HTML, data.frame)
-S3method(HTML, matrix)
-S3method(HTML, default)
+S3method(json, default)
+S3method(json, data.frame)
+S3method(json, list)
+S3method(json, NULL)
+S3method(json, character)
+S3method(json, logical)
+S3method(json, numeric)
+S3method(Html, data.frame)
+S3method(Html, matrix)
+S3method(Html, default)
 S3method(HtmlTree, HtmlTree)
 S3method(HtmlTree, default)
 S3method(print, HtmlTree)
+S3method(print, json)

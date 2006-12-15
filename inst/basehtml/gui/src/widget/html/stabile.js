@@ -1,5 +1,5 @@
 /*
-	Copyright (c) 2004-2005, The Dojo Foundation
+	Copyright (c) 2004-2006, The Dojo Foundation
 	All Rights Reserved.
 
 	Licensed under the Academic Free License version 2.1 or above OR the
@@ -8,11 +8,11 @@
 		http://dojotoolkit.org/community/licensing.shtml
 */
 
-// Maintain state of widgets when user hits back/forward button
-
 dojo.provide("dojo.widget.html.stabile");
 
 dojo.widget.html.stabile = {
+	// summary: Maintain state of widgets when user hits back/forward button
+
 	// Characters to quote in single-quoted regexprs
 	_sqQuotables: new RegExp("([\\\\'])", "g"),
 
@@ -28,25 +28,22 @@ dojo.widget.html.stabile = {
 	depthLimit: 2
 };
 
-
-
-
-
 //// PUBLIC METHODS
 
-// Get the state stored for the widget with the given ID, or undefined
-// if none.
-// 
 dojo.widget.html.stabile.getState = function(id){
+	// summary
+	//	Get the state stored for the widget with the given ID, or undefined
+	//	if none.
+
 	dojo.widget.html.stabile.setup();
 	return dojo.widget.html.stabile.widgetState[id];
 }
 
-
-// Set the state stored for the widget with the given ID.  If isCommit
-// is true, commits all widget state to more stable storage.
-// 
 dojo.widget.html.stabile.setState = function(id, state, isCommit){
+	// summary
+	//		Set the state stored for the widget with the given ID.  If isCommit
+	//		is true, commits all widget state to more stable storage.
+
 	dojo.widget.html.stabile.setup();
 	dojo.widget.html.stabile.widgetState[id] = state;
 	if(isCommit){
@@ -54,37 +51,41 @@ dojo.widget.html.stabile.setState = function(id, state, isCommit){
 	}
 }
 
-
-// Sets up widgetState: a hash keyed by widgetId, maps to an object
-// or array writable with "describe".  If there is data in the widget
-// storage area, use it, otherwise initialize an empty object.
-// 
 dojo.widget.html.stabile.setup = function(){
+	// summary
+	//		Sets up widgetState: a hash keyed by widgetId, maps to an object
+	//		or array writable with "describe".  If there is data in the widget
+	//		storage area, use it, otherwise initialize an empty object.
+
 	if(!dojo.widget.html.stabile.widgetState){
-		var text = dojo.widget.html.stabile.getStorage().value;
+		var text = dojo.widget.html.stabile._getStorage().value;
 		dojo.widget.html.stabile.widgetState = text ? dj_eval("("+text+")") : {};
 	}
 }
 
-
-// Commits all widget state to more stable storage, so if the user
-// navigates away and returns, it can be restored.
-// 
 dojo.widget.html.stabile.commit = function(state){
-	dojo.widget.html.stabile.getStorage().value = dojo.widget.html.stabile.description(state);
+	// summary
+	//		Commits all widget state to more stable storage, so if the user
+	//		navigates away and returns, it can be restored.
+
+	dojo.widget.html.stabile._getStorage().value = dojo.widget.html.stabile.description(state);
 }
 
-
-// Return a JSON "description string" for the given value.
-// Supports only core JavaScript types with literals, plus Date,
-// and cyclic structures are unsupported.
-// showAll defaults to false -- if true, this becomes a simple symbolic
-// object dumper, but you cannot "eval" the output.
-//
 dojo.widget.html.stabile.description = function(v, showAll){
+	// summary
+	//		Return a JSON "description string" for the given value.
+	//		Supports only core JavaScript types with literals, plus Date,
+	//		and cyclic structures are unsupported.
+	//		showAll defaults to false -- if true, this becomes a simple symbolic
+	//		object dumper, but you cannot "eval" the output.
+
 	// Save and later restore dojo.widget.html.stabile._depth;
 	var depth = dojo.widget.html.stabile._depth;
 
+	var describeThis = function() {
+		 return this.description(this, true);
+	} 
+	
 	try {
 
 		if(v===void(0)){
@@ -161,7 +162,7 @@ dojo.widget.html.stabile.description = function(v, showAll){
 				}else{
 					d += ", ";
 				}
-				kd = key;
+				var kd = key;
 				// If the key is not a legal identifier, use its description.
 				// For strings this will quote the stirng.
 				if(!kd.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)){
@@ -174,6 +175,8 @@ dojo.widget.html.stabile.description = function(v, showAll){
 
 		if(showAll){
 			if(dojo.widget.html.stabile._recur){
+				// Save the original definitions of toString;
+				var objectToString = Object.prototype.toString;
 				return objectToString.apply(v, []);
 			}else{
 				dojo.widget.html.stabile._recur = true;
@@ -196,9 +199,10 @@ dojo.widget.html.stabile.description = function(v, showAll){
 
 //// PRIVATE TO MODULE
 
-// Gets an object (form field) with a read/write "value" property.
-// 
-dojo.widget.html.stabile.getStorage = function(){
+dojo.widget.html.stabile._getStorage = function(){
+	// summary
+	//	Gets an object (form field) with a read/write "value" property.
+
 	if (dojo.widget.html.stabile.dataField) {
 		return dojo.widget.html.stabile.dataField;
 	}

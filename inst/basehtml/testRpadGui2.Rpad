@@ -5,9 +5,6 @@
 <title>Rpad GUI test</title>
    
 <script type="text/javascript">
-    djConfig = {
-//    	isDebug: true
-    };
     rpadConfig = {
         gui: "alternate"
     };

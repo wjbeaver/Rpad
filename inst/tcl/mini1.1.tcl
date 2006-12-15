@@ -303,7 +303,7 @@ proc HttpdRespond {sock} {
             R_eval "processRpadCommands()"
             puts $sock "HTTP/1.$data(version) 200 Data follows"
             puts $sock "Content-Type: text/plain"
-            puts $sock "Content-Length: [string length $RpadTclResults]"
+            puts $sock "Content-Length: [string length [subst -novariables -nocommands $RpadTclResults]]"
             ## Should also close socket if recvd connection close header
             set close [expr {$data(left) == 0}]
 #            set close 1
@@ -318,7 +318,7 @@ proc HttpdRespond {sock} {
 #            fconfigure $sock  -translation crlf
             fconfigure $sock  -translation lf
             puts $sock ""
-            puts -nonewline $sock $RpadTclResults
+            puts -nonewline $sock [subst -novariables -nocommands $RpadTclResults]
             flush $sock
 #            HttpdSockDone $sock 1  
             HttpdSockDone $sock $close

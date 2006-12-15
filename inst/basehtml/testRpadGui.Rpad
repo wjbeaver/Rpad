@@ -4,10 +4,6 @@
 <title>Rpad GUI test</title>
    
 <script type="text/javascript">
-    djConfig = {
-    	isDebug: true
-//        preventBackButtonFix: true
-    };
     rpadConfig = {
         gui: "standard"
     };

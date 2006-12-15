@@ -1,3 +1,31 @@
+**************  Version 1.2.1, 2006-12-15
+
+	Made the login to R more "load and go". This fixes a bug for CGI
+	server installations where the page loading message never goes
+	away.
+
+	Added the function "R" to execute R commands from the FireBug
+	console -- handy for debugging pages on servers.
+
+**************  Version 1.2.0, 2006-12-12
+
+	Updated Dojo to 0.4.1. This is a more stable release and supports
+	more useful widgets like a sortable table.
+
+	Fixes to make Rpad more compatible with R2HTML.
+
+	Added json generation to facilitate transfering R data to the browser.
+
+	Added the capability (still imperfect though) to use other
+	graphics devices (like GDD) with Rpad.
+
+	Improvements to the "H" code generation.
+
+	Added a throbber that activates when Rpad is communicating with
+	the server.
+
+	Added a drag-and-drop utility. See the DataModeling.Rpad file.
+	
 **************  Version 1.1.1, 2006-03-05
 
 	Fix to RpadUtil.Rd to prevent the example from leaving behind 

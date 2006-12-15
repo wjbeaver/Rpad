@@ -5,13 +5,13 @@
 #
 #
 
-"HTML" <- function(x,...) { 
-  UseMethod("HTML") 
+"Html" <- function(x,...) { 
+  UseMethod("Html") 
 }
 
-"HTML.default" <- function(x,...) as.character(x)
+"Html.default" <- function(x,...) as.character(x)
 
-"HtmlTree" <- function(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE) {  
+"HtmlTree" <- function(tagName, ...) {  
   UseMethod("HtmlTree") 
 }
 
@@ -51,6 +51,10 @@
 "HtmlTree.default" <- function(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE) {
   # named arguments are attributes; unnamed are content
   args <- list(...)
+  methodsOfHtml <- setdiff(c(gsub("^Html.","",(methods("Html"))), "HtmlTree"), "character")
+  # if we can apply "html" to tagName, and it's by itself, do it (for non-character classes)
+  if (length(args) == 0 && !is.character(tagName) && class(tagName) %in% methodsOfHtml)
+    return(Html(tagName))
   if (length(names(args)) > 0) {
     tagContents <- args[names(args) == ""]    # unnamed arguments
     tagAttributes <- args[names(args) != ""]  # named arguments
@@ -61,13 +65,7 @@
   pasteList <- function(x) {
     str <- ""
     for (i in seq(along=x)) {
-      if (is.list(x[[i]]) && class(x[[i]]) != "HtmlTree") {
-        for (j in seq(along=x[[i]])) {
-          str <- paste(str, HTML(x[[i]][[j]]), sep = " ")
-        }
-      } else {
-        str <- paste(str, HTML(x[[i]]), sep = " ")
-      }
+        str <- paste(str, Html(x[[i]]), sep = " ")
     }
     str
   }
@@ -90,7 +88,7 @@
   str
 }
 
-"HtmlTree.data.frame" <- "HTML.data.frame" <- "HTML.matrix" <- function(x, ...) {
+"Html.data.frame" <- "Html.matrix" <- function(x, ...) {
 ## 
 ## Make an HtmlTree out of a data frame.
 ## First "format" then convert to a matrix.
@@ -106,7 +104,7 @@
       H("tbody",
         H("tr",                           # HEADER ROW
           H("th", 
-            H("div", class = "tablesort", 
+            H("div", class = "tableheaderrow", 
               colnames(x), collapseContents = FALSE))), # collapseContents keeps the <th><div></div></th><th><div></div></th> nested pair
         H(NULL, # NULL groups consecutive tags together
           apply(x.formatted, MARGIN = 1,    # MAIN BODY - sweep the rows
@@ -115,37 +113,46 @@
                 H("td", x)))))))
 }
 
-"asDojoSortableTable" <- function(x, ...) {
+
+"asFilteringTable" <- function(x, ...) {
 ## 
-## The Dojo sortable table has a bit different layout
+## The Dojo filtering table has a bit different layout
 ## than the default for HtmlTree.data.frame, so
 ## we'll just rewrite it.
 ## I've left out styling. Do that in CSS.
 ## It still needs some more smarts to tag column headers with the appropriate sort type.
-  
   x.formatted <- as.matrix(format(x, ...))
   x.formatted[is.na(x) | is.nan(x)] <- " "
   x.formatted[grep("^ *(NA|NaN) *$", x.formatted)] <- " "
-
-  H("table", dojoType="sortableTable", enableAlternateRows="true",
+  mapColumnType <- function(x) {
+    jsMapping <- c(Date = "Date", POSIXct = "Date", numeric = "Number",
+                   factor = "String", character = "String")
+    rowClass <- sapply(x, class)
+    jsClass <- jsMapping[rowClass]
+    jsClass[is.na(jsClass)] <- "String"
+    names(jsClass) <- NULL
+    jsClass
+  }
+  H("table", dojoType="filteringTable", class="filteringtable", enableAlternateRows="true",
     H("thead",
       H("tr",                             # HEADER ROW
-        H("td", names(x)))),
+        H("th", dataType = mapColumnType(x),
+                field = gsub("\\.", "_", names(x)), # get rid of "." - causes col's to disappear
+          names(x)))),
     H("tbody",
-      H(NULL, # NULL groups consecutive tags together
+      H("tr", value = 1:NROW(x.formatted),
         apply(x.formatted, MARGIN = 1,    # MAIN BODY - sweep the rows
-          FUN = function (x)
-            H("tr", 
-              H("td", x))))))
+          FUN = function (x, idx)
+            H("td", x)))))
 }
 
 # broken:
-#"HtmlTree.list" <- "HTML.list" <- function (x, first = TRUE, ...) {
+#"HtmlTree.list" <- "Html.list" <- function (x, first = TRUE, ...) {
 #  res = rep(H("dum"), length = 2*length(x))
 #  res[seq(1, 2*length(x), by = 2)] = H(NULL, names(x), collapseContents = FALSE)
 #  res[seq(2, 2*length(x), by = 2)] = sapply(x, FUN = function(x)
 #       H("ul",
-#         HTML(x, first = FALSE)))
+#         Html(x, first = FALSE)))
 #  if (first)  # IE needs contenteditable off
 #    H("div", contentEditable='false',
 #      H("ul",
@@ -294,5 +301,11 @@
 	}
 }
 
-
+"HfromHTML" <- function(x) {
+  if(require("R2HTML")) {
+    res <- capture.output(HTML(x))
+    class(res) <- "HtmlTree"
+    res
+  }
+}
                      

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
 <html>
-<!-- by Tom Short, EPRI Solutions, Inc., tshort@eprisolutions.com
-(c) Copyright 2005 by EPRI Solutions, Inc.
+<!-- by Tom Short, EPRI, tshort@epri.com
+(c) Copyright 2005 by EPRI
 
 Licence
 =======
@@ -53,7 +53,7 @@ summary(dataset)
 
 <textarea dojoType="Rpad" rows="4" cols="50">
 HTMLon()
-HTML(head(dataset))
+Html(head(dataset))
 </textarea>
 
 </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> <td>
@@ -86,8 +86,8 @@ showgraph()
 
 </td></tr></table>
 
-<br><br><br><sub>by Tom Short, tshort@eprisolutions.com, Copyright
-  2005 EPRI Solutions, Inc., license: GNU GPL v2 or greater</sub>
+<br><br><br><sub>by Tom Short, tshort@epri.com, Copyright
+  2005 EPRI, license: GNU GPL v2 or greater</sub>
   </body>
 </html>
 

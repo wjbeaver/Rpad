@@ -5,15 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">   
 <title>Rpad GUI test</title>
    
-<script type="text/javascript">
-    djConfig = {
-//    	isDebug: true
-    };
-    rpadConfig = {
-        gui: "none"
-//        sourceHidden: true
-    };
-</script>
 <script type="text/javascript" src="gui/dojo.js"></script>
 <script type="text/javascript" src="gui/Rpad.js"></script>
 
@@ -37,7 +28,7 @@ cat("a = ",a)
 # this block runs when the select box is updated
 HTMLon()
 HTMLh2(sname)
-HTML(state.x77[sname,,drop=FALSE])
+Html(state.x77[sname,,drop=FALSE])
 a = a + 10
 cat("a = ",a)
 </pre>
@@ -74,11 +65,11 @@ dojo.event.connect(dojo.widget.byId("rpad1"), "onReceive",
 // this makes all Rpad updates to output boxes "yellowfade" in
 dojo.event.connect(rpad, "updateResults", 
     function (rpadResults, data) {
-        dojo.fx.html.colorFade(rpadResults, 1500,
-            dojo.graphics.color.extractRGB("#FFFF70"),  // from color - bright yellow
-            dojo.graphics.color.extractRGB("#FFFFE0")); // to color
+        dojo.lfx.html.highlight(rpadResults, 
+            dojo.gfx.color.extractRGB("#FFFF40")).play(1000);  // from color - bright yellow
+        // #FFFFE0
     });
-
+dojo.debug("hello");
 " ";
 </pre>
 

@@ -1,3 +1,12 @@
+
+#
+#
+# NOTE -- many of these may be out of date or broken. 2006/12/15
+#
+
+
+
+
 "HTML.list" <- function (x, file = .HTML.file, first = TRUE,  
                          append = TRUE, collapsed = TRUE, align="left", ...)  
 # This replaces the HTML.list in R2HTML.  

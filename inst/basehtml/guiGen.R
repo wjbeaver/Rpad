@@ -82,7 +82,7 @@ HTML.guiCombobox <- function(p, varname) {
   cat("</td>\n")
 }
 HTML.guiLogical <- function(p, varname) {
-  HTML(guiInput(p$name, choices = c(TRUE, FALSE), guiType="guiCombobox"), varname)
+  Html(guiInput(p$name, choices = c(TRUE, FALSE), guiType="guiCombobox"), varname)
 }
 HTML.guiPickPch <- function(p, varname) {
   cat("<td>",p$name,"</td><td>")
@@ -138,7 +138,7 @@ HTML.guiCommand <- function(cmd,varname=make.names(deparse(substitute(cmd))),
     name <- p
     fullname <- paste(varname,'[[',idx,']]$',names(gC$params[i]),sep="")
     cat("<tr>\n")
-    HTML(p, fullname)
+    Html(p, fullname)
     cat("</tr>\n")
   }
   cat("<td></td>")
