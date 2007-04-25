@@ -53,7 +53,7 @@ General Public License'.
 
   <p>Rpad is available in two versions: a local
   version and an intranet/internet version. The local version works
-  through the user's local installation of R with through the user's web
+  through the user's local installation of R through the user's web
   browser. The intranet/internet
   version works in client-server fashion with the user accessing a remote
   server through a standard web browser.</p>
@@ -64,7 +64,7 @@ General Public License'.
       script regions. Scripts can be inside of div, span, or textareas.
       Scripts can be R, shell, or javascript. Server-side shell scripts
       are useful for using other scripting or command-lines (python,
-      octave, imagemagik, and so on). Javascript is useful for local
+      octave, imagemagick, and so on). Javascript is useful for local
       processing, interactivity, or for debugging Rpad problems.</p>
 
       <p>To "run" or "calculate" a page, press the F9 key or use the
@@ -80,17 +80,23 @@ General Public License'.
       default in-page editing. As such, Rpad pages are normally
       created with an external text or HTML editor. In-browser editing is still too
       immature. There are two page-editing gui's that can be
-      enabled:</p>
+      enabled.  Consider both of these as experimental:</p>
 
       <ul>
         <li><em>Basic editing gui --</em> The whole page is editable as a
         simple WYSIWYG html editor on browsers that support the
         contentEditable feature (Internet Explorer and Mozila with the
         Mozile plugin). This is much like the "lite"
-        editor in Rpad 0.9.6. The page has a top bar with a menu and  </li>
-        <li><em>Alternate editing gui --</em> The whole page is editable as a
-        simple WYSIWYG html editor. This is much like the "lite"
-        editor in Rpad 0.9.6. The page has a top bar with a menu and  </li>
+        editor in Rpad 0.9.6. The page has a top bar with a menu.
+        </li>
+
+        <li><em>Alternate editing gui --</em> The cursor or mouse can
+      be used to highlight sections of the page. Rpad code blocks can be
+      edited, and the source code visibility can be toggled. Other
+      parts of the page can be edited with a WYSIWYG html editor. The
+      page also operates somewhat like a command line: the last
+      command can be executed while advancing to a new code block by
+      hitting alt-enter. </li>
       </ul>
 
       <p>These builtin page editors are somewhat limited. They may not
@@ -119,7 +125,8 @@ General Public License'.
 
 <h3>Rpad sections</h3>
 
-<p>Within the body of an HTML file, any element can be tagged
+<p>Within the body of an HTML file, any tag can be made into an Rpad
+script tag 
 with 'dojoType="Rpad"'. Normally, this is a pre or textarea. Here's a
 simple example:</p>
 
@@ -129,7 +136,7 @@ ls()
 &lt;/pre>
 </pre>
 
-Rpad input blocks have several optional tags to control
+Rpad input blocks have several optional attributes to control
 behavior. Here's a more detailed example with options specifying that
 the block runs only initially and the source is hidden:
 
@@ -141,7 +148,7 @@ ls()
 
 
 <h4>rpadType</h4>
-      <p>There are several kinds of Rpad input variations. The tag
+      <p>There are several kinds of Rpad input variations. The attribute
       'rpadType' specifies the options, which include:</p>
 
 <dl>
@@ -252,7 +259,7 @@ and hitting the back button).</dd>
 <h3>HTML Form Elements</h3>
 
 <p>HTML form elements (input, select, radio, and checkbox) with a name
-tag are automatically sent to R when calculate is run. The 'name' is
+attribute are automatically sent to R when calculate is run. The 'name' is
 translated into an R variable name. To make the GUI elements
 selectable, they must be surrounded by &lt;span
 contenteditable=&quot;false&quot;&gt;&lt;/span&gt; (also for url links
@@ -262,11 +269,11 @@ and buttons). </p>
 read as an R expression. To have the input treated as a string,
 specify rpadType="Rstring" in the declaration of the input.</p>
 
-<p>Radio buttons have two names: commonName is the the name of the
+<p>Radio buttons have two name attributes: commonName is the the name of the
 radio button set, and variableName is the specific name of this radio
 button.</p>
 
-<p>If you have several input elements together, it is best to wrap
+<p>If you have several input tags together, it is best to wrap
 them in a &lt;form> element. Then, all elements are passed to R
 together rather than one at a time, so the page is more responsive.</p>
 
@@ -327,11 +334,11 @@ functions that can be used in an Rpad HTML file are:</p>
 <p>In Rpad_input
 sections, everything must be valid HTML,
 so <code>"&lt;-"</code> must be <code>"&amp;lt;-"</code>. Also,
-&lt;br/&gt; tags are needed for line breaks in div sections (they are
-not needed in textarea or pre sections). </p>
+&lt;br/&gt; tags are needed for line breaks in div tags (they are
+not needed for textarea or pre tags). </p>
 
-<h3>Rpad 1.1.0 (Dojo port) incompatibilities</h3>
-<p>The Dojo port (1.1.0) has introduced some
+<h3>Rpad 1.1.x (Dojo port) incompatibilities</h3>
+<p>The Dojo port (>1.1.x) has introduced some
 incompatibilities at the *.Rpad level relative to version
 0.9.6. Basically, here's what is different:</p>
 
@@ -467,7 +474,7 @@ help reduce the resource usage on the server. </p>
       client-server version. See the Rpad functions RpadURL,
       RpadBaseURL, and RpadBaseFile for convenience utilities to make
       pages portable between the local version and the client-server
-      verstion.</p>
+      version.</p>
 
       <p>In the local version of Rpad, the default graphics device is
       R's builtin png device. On the client-server version, the

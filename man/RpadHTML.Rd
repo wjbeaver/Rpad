@@ -35,7 +35,7 @@
   HTMLoff()
   HtmlTree(tagName, ...)
   H(tagName, ...)
-  HtmlTree.default(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE)
+  \method{HtmlTree}{default}(tagName, ..., standaloneTag = FALSE, collapseContents = TRUE)
   Html(x, ...)
   BR
   HTMLh1(text)

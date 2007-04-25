@@ -12,7 +12,6 @@
         rpadRun: "all"
     };
 </script>
-<script type="text/javascript" src="gui/dojo.js"></script>
 <script type="text/javascript" src="gui/Rpad.js"></script>
 	<style type="text/css">
 .Rpad_results {

@@ -6,6 +6,12 @@
 ## all of the default packages have loaded,
 ## including the Rpad package.
 
+## Uncomment the following to load R2HTML
+## by default. Add other packages as
+## needed.
+
+# require(R2HTML)
+
 
 ## Uncomment the following to switch the
 ## default graphics from the ghostscript-based

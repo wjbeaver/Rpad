@@ -4,15 +4,14 @@
 function(lib, pkg) {
     require("graphics")
     require("utils")
-    require("tcltk")
-    if (require("R2HTML")) { # no longer _required_, but try to load it if it's there
+    isR2HMTLAvailable <- length(.find.package("R2HTML", quiet = TRUE)) != 0
+    if (isR2HMTLAvailable) { 
       options(R2HTML.sortableDF = TRUE)
       options(R2HTML.format.digits = 3)
       options(R2HTML.format.nsmall = 0)
       options(R2HTML.format.big.mark = "")
       options(R2HTML.format.big.interval = 3)
       options(R2HTML.format.decimal.mark = Sys.localeconv()[["decimal_point"]])
-      #environment(HTML) <<- environment(R2HTML:::HTML)
       .HTML.file <<- ""
     }
     # The following uses the environment variable DOCUMENT_ROOT with apache to find

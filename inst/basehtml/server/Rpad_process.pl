@@ -6,10 +6,12 @@
 #http://localhost/Rpad/server/Rpad_process.pl?command=login
 #http://localhost/Rpad/server/Rpad_process.pl?command=savefile&ID=testtesttest&filename=test.txt&content=hellothere
 use strict ;
-use CGI qw/:standard send_http_header/;
+use CGI qw/:standard/;
 use File::Path;
 use utf8; # the decoding stuff is from spell-check-logic.cgi in the htmlarea spellcheck plugin
 use Encode;
+
+CGI::initialize_globals();
 
 binmode STDIN, ':utf8';
 binmode STDOUT, ':utf8';
@@ -20,6 +22,8 @@ chdir $dir;
 
 my $p_command = param('command');
 chomp($p_command);
+
+print STDERR $p_command;
 
 if ($p_command eq "login") {
   # make a randomly-named directory for the user
@@ -41,7 +45,7 @@ elsif ($p_command eq "logout") {
   rmtree $dirname;
 # print # send_http_header('text/plain');
   print "Content-type: text/plain\n\n";
-  print 'Logged out'; # for some reason, need to return something here or IE hangs sometimes
+  print 'XXLogged out'; # for some reason, need to return something here or IE hangs sometimes
 }
 elsif ($p_command eq "savefile") {
   my $dirname = param('ID');

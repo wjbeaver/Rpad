@@ -9,7 +9,10 @@
   UseMethod("Html") 
 }
 
-"Html.default" <- function(x,...) as.character(x)
+"Html.default" <- function(x, ...) as.character(x)
+
+"Html.integer" <- "Html.numeric" <- function(x, ...) paste(format(x), collapse = ", ")
+
 
 "HtmlTree" <- function(tagName, ...) {  
   UseMethod("HtmlTree") 
@@ -303,9 +306,41 @@
 
 "HfromHTML" <- function(x) {
   if(require("R2HTML")) {
-    res <- capture.output(HTML(x))
+    res <- capture.output({HTML(x);cat("\n")}) # the \n makes sure to get a complete line
     class(res) <- "HtmlTree"
     res
+  } else {
+    Html(x)
   }
 }
                      
+"dojoTree" <- function(x, first = TRUE, ...) {
+  x <- as.list(x)
+  res <- sapply(seq(len = length(x)), 
+    function(i)
+      H("div", dojoType="TreeNodeV3", ..., 
+        title = names(x)[i],
+        if (is.list(x[[i]]) && !(any(class(x[[i]]) %in% gsub("^Html.","",methods(Html)))))
+          dojoTree(x[[i]], first = FALSE)
+        else
+          H("div", dojoType="TreeNodeV3", title = Html(x[[i]]))))
+  res <- paste(res, collapse="") # combine the list elements
+  if (first) {
+    H(NULL,
+      H("div", dojoType = "TreeBasicControllerV3", widgetId="controller"),
+      H("div", dojoType="TreeV3", listeners="controller",
+        res))
+   } else {
+     res
+   }
+}
+
+## ##tests for dojoTree
+## x = list(a = 1:2, 44, b = list(a = 3:4, b = 6:5), c = data.frame(a=1:5, b = 11:15))
+## HTMLon()
+## H("p", "A simple tree:")
+## dojoTree(x)
+## H("p", "An expanded version:")
+## dojoTree(x, expandLevel = 2)
+## H("p", "A bigger tree:")
+## dojoTree(as.list(lm(1:10 ~ rnorm(10))))

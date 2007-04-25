@@ -76,9 +76,9 @@ Html(.rpadfiles)
 <p>*.Rdata R binary files  (click to load into R): </p>
 <pre dojoType="Rpad">
 .files = grep('\\.RData$', dir(), ignore.case = TRUE, value = TRUE)
-.files = H("a", href = paste("javascript:rpad.send('R', 'load(\\\'",
+.files = H("a", href = paste('javascript:rpad.send("R", "load(\\\\"',
                              .files,
-                             "\\\')')", sep = ""),
+                             '\\\\")")', sep = ""),
            collapseContents = FALSE,
            .files)
 .files = .threecolumns(.files)
@@ -89,9 +89,9 @@ Html(.files)
 <p>*.R files  (click to source into R): </p>
 <pre dojoType="Rpad">
 .files = grep('\\.R$', dir(), ignore.case = TRUE, value = TRUE)
-.files = H("a", href = paste("javascript:rpad.send('R', 'source(\\\'",
+.files = H("a", href = paste('javascript:rpad.send("R", "source(\\\\"',
                              .files,
-                             "\\\')')", sep = ""),
+                             '\\\\")")', sep = ""),
            collapseContents = FALSE,
            .files)
 .files = .threecolumns(.files)

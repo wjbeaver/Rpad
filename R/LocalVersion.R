@@ -55,8 +55,8 @@ function(defaultfile = "LocalDefault.Rpad", port = 8079) {
     htmlroot <- file.path(.find.package(package = "Rpad"), "basehtml")
     tcl("source", tclfile)
     tcl("Httpd_Server", htmlroot, port, defaultfile)
-    unlink(dir(pattern="Rpad_plot.*\.png")) # delete the Rpad graphics files in the dir
-    unlink(dir(pattern="Rpad_plot.*\.eps"))
+    unlink(dir(pattern="Rpad_plot.*\\.png")) # delete the Rpad graphics files in the dir
+    unlink(dir(pattern="Rpad_plot.*\\.eps"))
     if(interactive() && .Device == "null device") x11() # turn on the interactive plotting device so as not to confuse the command-line user if they later plot
     dev <- dev.cur() 
     newgraph()
@@ -68,8 +68,8 @@ function(defaultfile = "LocalDefault.Rpad", port = 8079) {
 function() {
     require("tcltk")
     assign("RpadLocal",    FALSE, envir = .RpadEnv)
-    unlink(dir(pattern="Rpad_plot.*\.png")) # delete the Rpad graphics files in the dir
-    unlink(dir(pattern="Rpad_plot.*\.eps"))
+    unlink(dir(pattern="Rpad_plot.*\\.png")) # delete the Rpad graphics files in the dir
+    unlink(dir(pattern="Rpad_plot.*\\.eps"))
     .Tcl("close $Httpd(listen)")
     .Tcl("unset Httpd")
 }
@@ -81,16 +81,3 @@ function() {
 }
 
 
-#library(Rpad)
-#library(tcltk)
-#tclfile <- file.path(.find.package(package = "Rpad"), "tcl", "mini1.1.tcl")
-#htmlroot <- file.path(.find.package(package = "Rpad"), "basehtml")
-#.Tcl("close $Httpd(listen)")
-#.Tcl("unset Httpd")
-#tcl("source", tclfile)
-#tcl("Httpd_Server", htmlroot, 8079, "index.html")
-#
-#
-#
-#
-#tcl("source","mini1.1.tcl")

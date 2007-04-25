@@ -28,17 +28,6 @@ General Public License'.
   <head>
     <title>R Keyword Search</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script type="text/javascript">
-    djConfig = {
-		isDebug: true
-    };
-</script>
-<script type="text/javascript">
-    rpadConfig = {
-//        rpadRun: "init"
-    };
-</script>
-<script type="text/javascript" src="gui/dojo.js"></script>
 <script type="text/javascript" src="gui/Rpad.js"></script>
 <script>
 //alert(document.getElementById('Xinput'));

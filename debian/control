@@ -1,7 +1,7 @@
 Source: rpad
 Section: math 
 Priority: optional
-Maintainer: Tom Short <tshort@eprisolutions.com>
+Maintainer: Tom Short <tshort@epri.com>
 Build-Depends: debhelper (>> 4.1.0), r-base-dev (>> 2.0.0), cdbs
 
 Package: rpad 

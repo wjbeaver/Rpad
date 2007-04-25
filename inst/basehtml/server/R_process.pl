@@ -10,6 +10,8 @@ use Cwd ;
 use utf8; # the decoding stuff is from spell-check-logic.cgi in the htmlarea spellcheck plugin
 use Encode;
 
+CGI::initialize_globals();
+
 binmode STDIN, ':utf8';
 binmode STDOUT, ':utf8';
 
@@ -43,7 +45,8 @@ elsif ($p_command eq 'R_commands') {
   $R->send($R_commands) ; 
   $ret = $R->read ;
 }
-#  print send_http_header('text/plain');
-print "Content-type: text/plain\n\n";
+#print send_http_header('text/plain');
+#print "Content-type: text/plain\n\n";
+print header;
 print $ret . " ";  
 

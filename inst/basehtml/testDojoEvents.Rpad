@@ -5,7 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">   
 <title>Rpad GUI test</title>
    
-<script type="text/javascript" src="gui/dojo.js"></script>
 <script type="text/javascript" src="gui/Rpad.js"></script>
 
   <body>
