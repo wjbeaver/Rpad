@@ -4,8 +4,8 @@
 function(lib, pkg) {
     require("graphics")
     require("utils")
-    isR2HMTLAvailable <- length(.find.package("R2HTML", quiet = TRUE)) != 0
-    if (isR2HMTLAvailable) { 
+    isR2HMTLAvailable <- length(find.package("R2HTML", quiet = TRUE)) != 0
+    if (isR2HMTLAvailable) {
       options(R2HTML.sortableDF = TRUE)
       options(R2HTML.format.digits = 3)
       options(R2HTML.format.nsmall = 0)
@@ -34,7 +34,7 @@ function(lib, pkg) {
 
 	options(R.output.format = "text") # do we need or want this anymore? If we do, why don't we put it in .RpadEnv?
 
-    
+
 	assign(".RpadGraphOptions",
            list(type = "pngalpha", extension = "png",
                 res = 120, width = 0, height = 0, deviceUsesPixels = TRUE, pointsize = 10,

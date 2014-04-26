@@ -1,12 +1,12 @@
-# 
+#
 #
 #
 #
 #
 #
 
-"Html" <- function(x,...) { 
-  UseMethod("Html") 
+"Html" <- function(x,...) {
+  UseMethod("Html")
 }
 
 "Html.default" <- function(x, ...) as.character(x)
@@ -14,8 +14,8 @@
 "Html.integer" <- "Html.numeric" <- function(x, ...) paste(format(x), collapse = ", ")
 
 
-"HtmlTree" <- function(tagName, ...) {  
-  UseMethod("HtmlTree") 
+"HtmlTree" <- function(tagName, ...) {
+  UseMethod("HtmlTree")
 }
 
 "H" <- HtmlTree
@@ -31,10 +31,10 @@
   # cat(jsQuote("alert('hello')")) #-> "alert('hello')"
   # cat(jsQuote("alert(\"he\'l'lo\")")) #-> 'alert("he\'l\'lo")'
   has_single_quote <- grep("'", string)
-  if (!length(has_single_quote)) 
+  if (!length(has_single_quote))
     return(paste("'", string, "'", sep = ""))
   has_double_quote <- grep('"', string)
-  if (!length(has_double_quote)) 
+  if (!length(has_double_quote))
     return(paste('"', string, '"', sep = ""))
   # default - single-quote emphasis
   paste("'", gsub("'", "\\\\\'", string), "'", sep = "")
@@ -44,8 +44,10 @@
   # returns a string with the arguments as a="arg1", b="arg2", and so on
   names <- names(x)
   if (length(x) > 0) str <- " " else str <- ""
-  for (i in seq(along = x))
+  for (i in seq(along = x)) {
     str <- paste(str, names[i], "=", jsQuote(x[[i]]), " ", sep = "")
+    }
+    str
 }
 
 "print.HtmlTree" <- function(x, file = "", ...)
@@ -92,12 +94,12 @@
 }
 
 "Html.data.frame" <- "Html.matrix" <- function(x, ...) {
-## 
+##
 ## Make an HtmlTree out of a data frame.
 ## First "format" then convert to a matrix.
 ## "..." arguments are passed directly to format.
-## 
-  
+##
+
   x.formatted <- as.matrix(format(x, ...))
   x.formatted[is.na(x) | is.nan(x)] <- " "
   x.formatted[grep("^ *(NA|NaN) *$", x.formatted)] <- " "
@@ -106,19 +108,19 @@
     H("table",
       H("tbody",
         H("tr",                           # HEADER ROW
-          H("th", 
-            H("div", class = "tableheaderrow", 
+          H("th",
+            H("div", class = "tableheaderrow",
               colnames(x), collapseContents = FALSE))), # collapseContents keeps the <th><div></div></th><th><div></div></th> nested pair
         H(NULL, # NULL groups consecutive tags together
           apply(x.formatted, MARGIN = 1,    # MAIN BODY - sweep the rows
             FUN = function (x)
-              H("tr", 
+              H("tr",
                 H("td", x)))))))
 }
 
 
 "asFilteringTable" <- function(x, ...) {
-## 
+##
 ## The Dojo filtering table has a bit different layout
 ## than the default for HtmlTree.data.frame, so
 ## we'll just rewrite it.
@@ -166,15 +168,15 @@
 #      H(NULL, res))
 #}
 
-"HTMLbutton" <- function(label = "Calculate", js = "rpad.calculatePage()", ...) 
+"HTMLbutton" <- function(label = "Calculate", js = "rpad.calculatePage()", ...)
   # Other useful js parameters:
   #   js = "rpad.calculateNext(this)"  # calculate the next Rpad block
   #   js = "rpad.send('put commands here')"
   H("input", onclick = paste("javascript:", js, sep=""),
           value = label, type = "button", ...)
 
-"HTMLradio" <- function(variableName, commonName = "radio", text = "", ...) 
-  # outputs an HTML radio button wrapped in a contentEditable=false 
+"HTMLradio" <- function(variableName, commonName = "radio", text = "", ...)
+  # outputs an HTML radio button wrapped in a contentEditable=false
   H("span", contentEditable="false",
     H("input", type = 'radio', name = commonName, value = variableName, id = variableName, ...),
     H("label", "for" = variableName,
@@ -189,7 +191,7 @@
 "HTMLinput" <- function(name, value = "", rpadType = "Rvariable", contenteditablewrapper = TRUE, ...) {
   res <- H("input", name = name, value = value, rpadType = rpadType, standaloneTag = TRUE, ...)
   if (contenteditablewrapper)
-    H("span", contentEditable = "false", 
+    H("span", contentEditable = "false",
       res)
   else
     res
@@ -202,8 +204,8 @@
   options =
     H("option", value = optionvalue,
       text, collapseContents = FALSE)
-  
-  if (default > 1 & default <= length(text)) 
+
+  if (default > 1 & default <= length(text))
     options[default] =
       H("option", value = optionvalue[default], selected = "selected",
         text[default])
@@ -219,15 +221,15 @@
     res
 }
 
-"HTMLlink" <- function(url, text, ...) 
+"HTMLlink" <- function(url, text, ...)
   H("span", contentEditable="false",
     H("a", href = url, ...,
       text))
 
-"HTMLimg" <- function(filename = RpadPlotName(), ...) 
+"HTMLimg" <- function(filename = RpadPlotName(), ...)
   H("img", src = RpadURL(filename), ...)
 
-"HTMLembed" <- function(filename, width = 600, height = 600, ...) 
+"HTMLembed" <- function(filename, width = 600, height = 600, ...)
   H("embed", src = filename, width = width, height = height, ...)
 
 "HTMLjs" <- function(js)
@@ -240,12 +242,12 @@
   # Runs a javascript snippet by attaching it to an error handler for an image.
   # HTML must be enabled.
   # see also: # http://24ways.org/advent/have-your-dom-and-script-it-too
-  #   <img src="g.gif?randomnum" alt="" 
+  #   <img src="g.gif?randomnum" alt=""
   #        onload="alert('Now that I have your attention...');this.parentNode.removeChild(this);" />
   H("img", src = "", alt = "", style = "display:none",
     onerror = paste(js, ";this.parentNode.removeChild(this);"))
 
-"HTMLSetInnerHtml" <- function(id, html) 
+"HTMLSetInnerHtml" <- function(id, html)
   # Sets the innerHTML of the element "id" to "html".
   # Runs a bit of javascript to do it. HTML must be enabled.
   # It's probably better to do this sort of thing on the javascript side.
@@ -313,12 +315,12 @@
     Html(x)
   }
 }
-                     
+
 "dojoTree" <- function(x, first = TRUE, ...) {
   x <- as.list(x)
-  res <- sapply(seq(len = length(x)), 
+  res <- sapply(seq(len = length(x)),
     function(i)
-      H("div", dojoType="TreeNodeV3", ..., 
+      H("div", dojoType="TreeNodeV3", ...,
         title = names(x)[i],
         if (is.list(x[[i]]) && !(any(class(x[[i]]) %in% gsub("^Html.","",methods(Html)))))
           dojoTree(x[[i]], first = FALSE)
